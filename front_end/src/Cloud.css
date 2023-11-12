@@ -1,0 +1,81 @@
+.Cloud {
+  position: relative;
+  background-color: #9AD8DA;
+}
+
+.med_girl img{
+  width: 550px;
+}
+
+.med_girl{
+  padding: 10% 0 0 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.w_circle img{
+  width: 550px; /* Adjust the width as needed */
+
+}
+
+.w_circle{
+  padding: 4% 0 0 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.Meditation_Circle {
+  padding: 4% 0 0 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.Meditation_Circle img {
+
+  width: 680px; /* Adjust the width as needed */
+}
+
+.Big_cloud {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.Big_cloud img {
+  padding: 10% 0 0 0;
+  width: 100%; /* Adjust the width as needed */
+  height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .Meditation_Circle img {
+    animation: Meditation_Circle-spin infinite 20s linear;
+    
+  }
+}
+
+
+@keyframes Meditation_Circle-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* .cloud_cont{
+  background-color: #8EAFDC;
+  height: 1000px;
+} */
