@@ -1,0 +1,133 @@
+.Top {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #9AD8DA;
+  z-index: -1;
+}
+
+.Meditation_Circle img,
+.w_circle img,
+.med_girl img,
+.clock img,
+.sun img,
+.sun_big img,
+.cloud_small img,
+.news_box img,
+.bottle img,
+.airplane img {
+  position: absolute;
+}
+
+.Meditation_Circle{
+  position: relative;
+  top: 650px;
+}
+
+.Meditation_Circle img {
+  width: 700px;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.w_circle{
+  position: relative;
+  top: 650px;
+}
+
+.w_circle img {
+  width: 600px;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.med_girl{
+  position: relative;
+  top: 650px;
+}
+
+.med_girl img {
+  width: 600px;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.Big_cloud {
+  position: relative;
+  background-image: url('../assets/images/clouds_big.svg');
+  top: 250px;
+  height: 900px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  z-index: 0;
+}
+
+
+.clock{
+  position: relative;
+  top: -700px;
+  left: 1300px;
+}
+
+.clock img {
+  width: 200px;
+
+}
+
+.sun{
+  top: -400px;
+  left: 500px;
+  position: relative;
+}
+
+.sun img {
+  width: 100px;
+}
+
+.sun_big{
+  top: -670px;
+  left: 500px;
+  position: relative;
+
+}
+.sun_big img {
+  width: 250px;
+  z-index: -2;
+}
+
+.cloud_small{
+  position: relative;
+  top: -900px;
+  left: 900px;
+}
+.cloud_small img {
+
+  width: 400px;
+}
+
+.news_box{
+  position: relative;
+  top: -500px;
+  right: -100px;
+
+}
+.news_box img {
+  width: 500px;
+}
+
+.bottle img {
+  width: 100px;
+  top: 35%;
+  left: 20%;
+}
+
+.airplane img {
+  width: 10vw;
+  top: 20%;
+  left: 10%;
+}
