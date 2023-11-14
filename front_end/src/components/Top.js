@@ -27,8 +27,9 @@ function Top() {
           <img className='news_box' src={news_box} alt="" />
           <img className='airplane' src={airplane} alt="" />
           <img className='clock' src={clock} alt="" />
-          <div className='big_cloud_cont'>
+          
           </div>
+          <div className='big_cloud_cont'>
         </div>
 
     </div>

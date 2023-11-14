@@ -12,7 +12,7 @@
 .Big_cloud {
   position: relative;
   background-image: url('../assets/images/clouds_big.svg');
-  top: 15vw;
+  top: 10vw;
   height: 45vw;
   background-repeat: no-repeat;
   background-position: center;
@@ -23,29 +23,29 @@
 
 .gradient_circle{
   position: absolute;
-  height: 40vw;
+  height: 35vw;
   top: 1vw;
-  left: 29vw;
+  left: 32vw;
 }
 
 .w_circle{
   position: absolute;
-  height: 34vw;
+  height: 29vw;
   top: 4.1vw;
-  left: 31.8vw;
+  left: 34.8vw;
 }
 
 .med_girl{
   position: absolute;
-  height: 35vw;
+  height: 30vw;
   top: 7vw;
-  left: 29vw;
+  left: 32vw;
 }
 
 .cloud_small{
   position: absolute;
   height: 20vw;
-  top: -15vw;
+  top: -12vw;
   left: 32vw;
 }
 .cloud_small_1{
@@ -58,44 +58,58 @@
 .sun{
   position: absolute;
   height: 5vw;
-  top: 10vw;
-  left: 25vw;
+  top: 15vw;
+  left: 27vw;
 }
 
 .sun_big{
+
   position: absolute;
-  height: 12vw;
-  top: 12vw;
+  height: 11vw;
+  top: 8vw;
   left: 27vw;
   z-index: -1;
 }
 
 .news_box{
   position: absolute;
-  height: 15vw;
-  top: 5vw;
+  height: 12vw;
+  top: 8vw;
   left: 1vw;
 }
 
 .airplane{
   position: absolute;
-  height: 5vw;
-  top: -10vw;
+  height: 3vw;
+  top: -8vw;
   left: 5vw;
 }
 
 .clock{
   position: absolute;
-  height: 12vw;
-  top: -10vw;
+  height: 10vw;
+  top: -6vw;
   left: 60vw;
 }
 
-/* .big_cloud_cont
+.big_cloud_cont
 {
   height: 5000px;
   background-color: #8EAFDC;
   z-index: 0;
-} */
+}
 
+@media (prefers-reduced-motion: no-preference) {
+  .gradient_circle {
+    animation: gradient_circle-spin infinite 10s linear;
 
+  }
+}
+@keyframes gradient_circle-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
