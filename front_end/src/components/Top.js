@@ -15,50 +15,22 @@ function Top() {
   return (
     
     <div className="Top">
-
-        <div className='Meditation_Circle'>
-          <img  src={gradient_circle} alt="gradient_circle"></img>
-        </div>
-
-        <div className='w_circle'>
-          <img  src={w_circle} alt="circle" />
-        </div>
-
-        <div className='med_girl'>
-          < img  src={med_girl} alt="girl" />
-        </div>
-
+      <img className='sun_big' src={sun_big} alt="" />
         <div className='Big_cloud'>
+          <img className='gradient_circle' src={gradient_circle} alt="alt" />
+          <img className='w_circle' src={w_circle} alt="" />
+          <img className='med_girl' src={med_girl} alt="" />
+          <img className='cloud_small' src={cloud_small} alt="" />
+          <img className='cloud_small_1' src={cloud_small} alt="" />
+          <img className='sun' src={sun} alt="" />
+          
+          <img className='news_box' src={news_box} alt="" />
+          {/* <img className='bottle' src={bottle} alt="" /> */}
+          <img className='airplane' src={airplane} alt="" />
+          <img className='clock' src={clock} alt="" />
         </div>
-
-        <div className='clock'>
-          <img src={clock} alt="clock" />
+        <div className='big_cloud_cont'>
         </div>
-
-        <div className='sun'>
-          <img src={sun} alt="sun" />
-        </div>
-
-        <div className='sun_big'>
-          <img src={sun_big} alt="sun_big" />
-        </div>
-
-        <div className='cloud_small'>
-          <img src={cloud_small} alt="cloud_small" />
-        </div>
-
-        <div className='news_box'>
-          <img src={news_box} alt="news_box" />
-        </div>
-
-        <div className='bottle'>
-          <img src={bottle} alt="bottle" />
-        </div>
-
-        <div className='airplane'>
-          <img src={airplane} alt="airplane" />
-        </div>
-
     </div>
 
   );
