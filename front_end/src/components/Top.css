@@ -2,7 +2,7 @@
  {
   position: relative;
   width: 100vw;
-  height: 300vh;
+  height: 100vh;
   background-color: #9AD8DA;
   z-index: -1;
 }
@@ -23,23 +23,23 @@
 
 .gradient_circle{
   position: absolute;
-  height: 35vw;
+  height: 30vw;
   top: 1vw;
-  left: 32vw;
+  left: 35vw;
 }
 
 .w_circle{
   position: absolute;
-  height: 29vw;
+  height: 24vw;
   top: 4.1vw;
-  left: 34.8vw;
+  left: 38vw;
 }
 
 .med_girl{
   position: absolute;
-  height: 30vw;
+  height: 25vw;
   top: 7vw;
-  left: 32vw;
+  left: 35.5vw;
 }
 
 .cloud_small{

@@ -8,6 +8,7 @@ function Bottom() {
     return(
         
         <div className="Bottom">
+            
             <div className='table'></div>
             <img className='bowl' src={bowl} alt="" />
             <img className='bowl_1' src={bowl_1} alt="" />

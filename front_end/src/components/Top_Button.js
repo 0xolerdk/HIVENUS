@@ -1,8 +1,15 @@
+import '../components/Top_Button.css';
 
+
+function startButton(){
+    
+}
 
 function Top_Button() {
     return(
-        <div></div>
+        <button className="button_start" onClick={startButton}>  
+            START
+        </button>
 
     );
 }

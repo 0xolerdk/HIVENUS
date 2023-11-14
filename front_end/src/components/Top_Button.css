@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Koulent-s';
+    src: local('Koulent-s'), url('../assets/fonts/Koulen-Regular.ttf') format('ttf');
+    /* Add more src lines for different file formats if needed */
+    font-weight: normal;
+    font-style: normal;
+  }
+
+
+.button_start{
+    height: 5vw;
+    width: 18vw;
+    position: relative;
+    top: 31vw;
+    left: 41vw;
+    z-index: 4;
+    border-radius: 10vw;
+    font-size: 3vw;
+    font-family: 'Koulent-s';
+}
