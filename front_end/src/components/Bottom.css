@@ -1,0 +1,46 @@
+.Bottom{
+    background-image: url(../assets/images/tabel.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    position: sticky;
+    z-index: 3;
+    height: 1.7vw;
+    width: 1000vw;
+    margin-left: -100px;
+    bottom: 0;
+  
+  }
+
+  .bottle{
+    position: absolute;
+    width: 5vw;
+    z-index: 4;
+    top: -10.40vw;
+    left: 12vw;
+  }
+
+  .bowl{
+    position: absolute;
+    width: 15vw;
+    z-index: 4;
+    top: -7vw;
+    left: 24vw;
+  }
+
+  .bowl_1{
+    position: absolute;
+    width: 15vw;
+    z-index: 4;
+    top: -8vw;
+    left: 65vw;
+    z-index: -1;
+  }
+
+  .dumb_bell{
+    position: absolute;
+    width: 15vw;
+    z-index: 4;
+    top: -10.1vw;
+    left: 85vw;
+  }

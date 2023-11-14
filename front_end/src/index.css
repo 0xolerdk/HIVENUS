@@ -3,8 +3,7 @@
 
 
 body {
-  min-width: 600px; /* Set your desired minimum width */
-  min-height: 400px; /* Set your desired minimum height */
+  overflow-x: hidden;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

@@ -1,7 +1,8 @@
-.Top {
+.back
+ {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 300vh;
   background-color: #9AD8DA;
   z-index: -1;
 }
@@ -89,5 +90,12 @@
   top: -10vw;
   left: 60vw;
 }
+
+/* .big_cloud_cont
+{
+  height: 5000px;
+  background-color: #8EAFDC;
+  z-index: 0;
+} */
 
 

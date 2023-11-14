@@ -6,15 +6,16 @@ import cloud_small from '../assets/images/cloud_small.svg';
 import sun from '../assets/images/sun.svg';
 import sun_big from '../assets/images/sun_big.svg';
 import news_box from '../assets/images/news_box.svg';
-import bottle from '../assets/images/bottle.svg';
 import airplane from '../assets/images/airplane.svg';
 import clock from '../assets/images/clock.svg';
 import '../components/Top.css';
+import Bottom from './Bottom';
+
 
 function Top() {
   return (
-    
-    <div className="Top">
+    <div className='Top'>
+    <div className="back">
       <img className='sun_big' src={sun_big} alt="" />
         <div className='Big_cloud'>
           <img className='gradient_circle' src={gradient_circle} alt="alt" />
@@ -23,16 +24,16 @@ function Top() {
           <img className='cloud_small' src={cloud_small} alt="" />
           <img className='cloud_small_1' src={cloud_small} alt="" />
           <img className='sun' src={sun} alt="" />
-          
           <img className='news_box' src={news_box} alt="" />
-          {/* <img className='bottle' src={bottle} alt="" /> */}
           <img className='airplane' src={airplane} alt="" />
           <img className='clock' src={clock} alt="" />
+          <div className='big_cloud_cont'>
+          </div>
         </div>
-        <div className='big_cloud_cont'>
-        </div>
-    </div>
 
+    </div>
+    <Bottom />
+    </div>
   );
 }
 
