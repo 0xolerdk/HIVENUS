@@ -1,4 +1,4 @@
-package com.example.back_end;
+package com.hivenus.back_end;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
