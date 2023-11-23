@@ -1,4 +1,3 @@
-import clouds_big from '../assets/images/clouds_big.svg';
 import med_girl from '../assets/images/meditation_girl.svg';
 import gradient_circle from '../assets/images/gradient_circle.svg';
 import w_circle from '../assets/images/white_circle.svg';
@@ -28,12 +27,9 @@ function Top() {
           <img className='sun' src={sun} alt="" />
           <img className='news_box' src={news_box} alt="" />
           <img className='airplane' src={airplane} alt="" />
-          <img className='clock' src={clock} alt="" />
-          
-          </div>
-          
-        
-          <div className='big_cloud_cont'></div>
+          <img className='clock' src={clock} alt="" />  
+        </div>
+        <div className='big_cloud_cont'></div>
     
     <Bottom />
     </div>
