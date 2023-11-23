@@ -2,7 +2,7 @@ import '../components/Top_Button.css';
 
 
 function startButton(){
-    
+    console.log("pressed");
 }
 
 function Top_Button() {
