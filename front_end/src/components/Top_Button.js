@@ -1,15 +1,16 @@
 import '../components/Top_Button.css';
+import LogReg from '../pages/LogReg/LogReg';
 
-
-function startButton() {
-    console.log("pressed");
-}
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 function Top_Button() {
     return (
-        <div class="center"> 
-            <a class="my-button" href="#"><span></span>START</a>
-        </div>
+            <div className="center"> 
+                <Link className="my-button" to="/logreg"><span></span>START</Link>
+                <Routes>
+                    <Route path="/logreg" element={<LogReg />} />
+                </Routes>
+            </div>
     );
 }
 

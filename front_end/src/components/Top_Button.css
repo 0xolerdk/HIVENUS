@@ -27,12 +27,11 @@ a.my-button {
   font-family: 'Koulen';
   font-style: normal;
   font-weight: 400;
-  font-size: 50px;
-  line-height: 116px;
+  font-size: 5vw;
+  line-height: 10wv;
   text-decoration: none;
   padding: 14px 49px;
   border: 0px solid #000;
-  border-radius: 40px;
   display: inline-flex;
   justify-content: center;
   align-items: center;

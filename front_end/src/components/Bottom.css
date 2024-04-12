@@ -1,45 +1,49 @@
 .Bottom{
-    background-image: url(../assets/images/tabel.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    position: sticky;
-    z-index: 3;
-    height: 1.7vw;
-    width: 107.8vw;
-    margin-left: -100px;
-    bottom: 0;
-  }
+  background-image: url(../assets/images/tabel.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: fixed; /* Змінено на fixed, щоб елемент завжди залишався унизу */
+  z-index: 3;
+  height: 1.7vw;
+  width: 110vw;
+  bottom: 0;
+  left: 50%; /* Центруємо по горизонталі */
+  transform: translateX(-50%); /* Зміщуємо на половину ширини, щоб центрувати */
+  display: flex; /* Використовуємо flex для центрування вмісту */
+  justify-content: center; /* Центруємо вміст по горизонталі */
+  align-items: center; /* Центруємо вміст по вертикалі */
+}
 
-  .bottle{
-    position: absolute;
-    width: 5vw;
-    z-index: 4;
-    top: -10.40vw;
-    left: 12vw;
-  }
+.bottle{
+  position: absolute;
+  width: 5vw;
+  z-index: 4;
+  top: -10.40vw;
+  left: 12vw;
+}
 
-  .bowl{
-    position: absolute;
-    width: 15vw;
-    z-index: -1;
-    top: -7vw;
-    left: 24vw;
-  }
+.bowl{
+  position: absolute;
+  width: 15vw;
+  z-index: -1;
+  top: -7vw;
+  left: 24vw;
+}
 
-  .bowl_1{
-    position: absolute;
-    width: 15vw;
-    z-index: 4;
-    top: -8vw;
-    left: 70vw;
-    z-index: -1;
-  }
+.bowl_1{
+  position: absolute;
+  width: 15vw;
+  z-index: 4;
+  top: -8vw;
+  left: 70vw;
+  z-index: -1;
+}
 
-  .dumb_bell{
-    position: absolute;
-    width: 15vw;
-    z-index: 4;
-    top: -10.1vw;
-    left: 85vw;
-  }
+.dumb_bell{
+  position: absolute;
+  width: 15vw;
+  z-index: 4;
+  top: -10.1vw;
+  left: 85vw;
+}
