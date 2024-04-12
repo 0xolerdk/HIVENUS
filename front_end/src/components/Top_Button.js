@@ -1,16 +1,15 @@
 import '../components/Top_Button.css';
 
 
-function startButton(){
+function startButton() {
     console.log("pressed");
 }
 
 function Top_Button() {
-    return(
-        <button className="button_start" onClick={startButton}>  
-            START
-        </button>
-
+    return (
+        <div class="center"> 
+            <a class="my-button" href="#"><span></span>START</a>
+        </div>
     );
 }
 

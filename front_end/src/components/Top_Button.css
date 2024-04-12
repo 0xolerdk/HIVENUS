@@ -1,42 +1,56 @@
 @font-face {
-    font-family: 'Koulent-s';
-    src: local('Koulent-s'), url('../assets/fonts/Koulen-Regular.ttf') format('ttf');
-    /* Add more src lines for different file formats if needed */
-    font-weight: normal;
-    font-style: normal;
-  }
-
-.button_start{
-    height: 5vw;
-    width: 18vw;
-    position: relative;
-    top: 31vw;
-    left: 41vw;
-    z-index: 4;
-    border-radius: 10vw;
-    font-size: 3vw;
-    font-family: 'Koulent-s';
+  font-family: 'Koulent-s';
+  src: local('Koulent-s'), url('../assets/fonts/Koulen-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/* CSS */
-.button-34 {
-  background: #5E5DF0;
-  border-radius: 999px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: fit-content;
-  word-break: break-word;
-  border: 0;
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+
+
+a.my-button {
+  top: 42vw;
+  position: absolute;
+  height: 2.5vw;
+  width: 12vw;
+  z-index: 4;
+  border-radius: 10vw;
+  background-color: #F8A89A; /* Changed to light coral color */
+  color: white; /* Changed to white color */
+  font-family: 'Koulen';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 116px;
+  text-decoration: none;
+  padding: 14px 49px;
+  border: 0px solid #000;
+  border-radius: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px #c37568;
+}
+
+a.my-button span {
+  position: absolute;
+  height: 5vw;
+  width: 20vw;
+  z-index: 4;
+  transform: rotate(0deg);
+}
+
+a.my-button:hover {
+  background-color: darksalmon; /* Changed to a darker shade of coral for hover effect */
+}
+
+a.my-button:active {
+  transform: scale(0.95);
 }

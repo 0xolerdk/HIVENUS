@@ -1,3 +1,10 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust as needed */
+}
+
 .back
  {
   position: relative;
@@ -44,7 +51,7 @@
   position: absolute;
   height: 20vw;
   top: -12vw;
-  left: 32vw;
+  left: 7vw;
 }
 .cloud_small_1{
   position: absolute;

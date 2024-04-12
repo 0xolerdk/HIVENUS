@@ -9,7 +9,6 @@ import airplane from '../assets/images/airplane.svg';
 import clock from '../assets/images/clock.svg';
 import '../components/Top.css';
 import Bottom from './Bottom';
-import Top_Button from './Top_Button.js';
 
 
 function Top() {
@@ -18,15 +17,17 @@ function Top() {
     <div className="back">
       <img className='sun_big' src={sun_big} alt="" />
         <div className='Big_cloud'>
+          <div className="center">
           <img className='gradient_circle' src={gradient_circle} alt="alt" />
-          <Top_Button />
           <img className='w_circle' src={w_circle} alt="" />
           <img className='med_girl' src={med_girl} alt="" />
+          </div>
+          
           <img className='cloud_small' src={cloud_small} alt="" />
           <img className='cloud_small_1' src={cloud_small} alt="" />
           <img className='sun' src={sun} alt="" />
           <img className='news_box' src={news_box} alt="" />
-          <img className='airplane' src={airplane} alt="" />
+          {/* <img className='airplane' src={airplane} alt="" /> */}
           <img className='clock' src={clock} alt="" />  
         </div>
         <div className='big_cloud_cont'></div>
