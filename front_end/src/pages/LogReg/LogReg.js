@@ -1,8 +1,8 @@
 import Bottom from '../../components/Bottom.js';
-import back_button from '../../assets/images/back_button.svg'
-import Home from '../Home/Home.js'
+import Statistic from '../Statistic/Statistic.js';
 import './LogReg.css';
-import { BrowserRouter as Link } from 'react-router-dom';
+import { BrowserRouter as Route, Routes, Link } from 'react-router-dom';
+
 
 
 
@@ -17,6 +17,12 @@ function LogReg() {
             </a></Link> */}
             <button className="sign-in">Sign In</button>
             <button className="sign-up">Sign Up</button>
+            <div className="center">  
+            <Link className="my-button" to="/statistic"><span></span>Statistic</Link>
+                {/* <Routes>
+                    <Route path="/statistic" element={<Statistic />} />
+                </Routes> */}
+                </div>
           </div>
         </div>
             <Bottom />

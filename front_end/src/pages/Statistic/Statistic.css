@@ -1,0 +1,8 @@
+body{
+background: rgba(0, 0, 0, 0.8);
+}
+
+.center{
+    align-items: flex;
+    height: 50vh;
+}
