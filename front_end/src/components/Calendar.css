@@ -1,0 +1,25 @@
+
+
+
+
+.calendar{
+  height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .month{
+    top: 50px;
+    font-size: 30px;
+    position: absolute;
+    color: white;
+    cursor: pointer;
+    /* padding-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+  }
+
+  
+  

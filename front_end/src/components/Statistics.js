@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Calendar.css"
+import "./Statistics.css"
 import Donut from './Donut';
 
 const data = {
@@ -68,10 +68,10 @@ const options1 = {
 function Calendar() {
     return (
         
-        <div className="center"> 
-            <Donut data={data} options={options1} />
-            <Donut data={data2} options={options2} />
-            <Donut data={data3} options={options3} />
+        <div className="statistics"> 
+            <Donut data={data} options={options1} text="Calories Intake" link="/calories_intake" font_size={1.7}/>
+            <Donut data={data2} options={options2} text="Energy"/>
+            <Donut data={data3} options={options3} text="Sport"/>
             <div>
                 
             </div>

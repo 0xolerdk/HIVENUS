@@ -1,32 +1,25 @@
-import React from 'react';
-import "../Statistic/Statistic.css"
-import Top_Bar from '../../components/Top_Bar';
-import Donut from '../../components/Donut';
-import Calendar from '../../components/Calendar';
-import Statistics from "../../components/Statistics"
-
+import React from "react";
+import "../Statistic/Statistic.css";
+import Top_Bar from "../../components/Top_Bar";
+import Calendar from "../../components/Calendar";
+import Statistics from "../../components/Statistics";
+import { BrowserRouter as Route, Routes, Link } from 'react-router-dom';
 
 
 function Statistic() {
-    return (<div className=''>
-
-    <div className="center"> 
-                <Top_Bar />
-                <Calendar />
-                
-        </div>
-        <div>
+  return (
+    <div className="">
+      <div className="top_bar">
+        <Top_Bar />
+      </div>
+      <div className="calendar">
+        <Calendar />
+      </div>
+      <div>
         <Statistics />
-        <Statistics />
-        </div>
-        
-    
-        
+      </div>
     </div>
-        
-        
-);
-
+  );
 }
 
 export default Statistic;
