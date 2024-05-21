@@ -1,13 +1,20 @@
 import { Chart, ArcElement, DoughnutController } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import "./Donut.css";
-import { text } from "d3";
 import { BrowserRouter as Route, Routes, Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+
 
 
 Chart.register(ArcElement, DoughnutController);
 
 function Donut({ data, options, width, height, text, font_size, link }) {
+  const textRef = useRef(text);
+
+  useEffect(() => {
+    textRef.current = text;
+  }, [text]);
+
   const plugins = [
     {
       beforeDraw: function (chart) {
@@ -24,8 +31,8 @@ function Donut({ data, options, width, height, text, font_size, link }) {
         ctx.font = fontSize + "em sans-serif";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "white";
-        var txt = text,
-          textX = Math.round((width - ctx.measureText(text).width) / 2),
+        var txt = textRef.current, // Use the current value of the ref here
+          textX = Math.round((width - ctx.measureText(txt).width) / 2),
           textY = height / 2;
 
         ctx.fillText(txt, textX, textY);
@@ -36,19 +43,17 @@ function Donut({ data, options, width, height, text, font_size, link }) {
 
   return (
     <div>
-       <Link to={link}> <div
-      className="donut"
-      style={{ width: width, height: height }}
-      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-    >
-
-      <Doughnut data={data} options={options} plugins={plugins} />
-    </div></Link>
-     
+      <Link to={link}>
+        <div
+          className="donut"
+          style={{ width: width, height: height }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <Doughnut data={data} options={options} plugins={plugins} key={text}/>
+        </div>
+      </Link>
     </div>
-    
-    
   );
 }
 

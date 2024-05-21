@@ -1,7 +1,7 @@
 import React from "react";
 import "../Statistic/Statistic.css";
 import Top_Bar from "../../components/Top_Bar";
-import Calendar from "../../components/Calendar";
+import Calendar from "../../components/Calendar/Calendar";
 import Statistics from "../../components/Statistics";
 import { BrowserRouter as Route, Routes, Link } from 'react-router-dom';
 
