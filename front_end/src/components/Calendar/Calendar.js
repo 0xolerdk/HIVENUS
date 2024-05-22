@@ -12,9 +12,9 @@ function Calendar() {
   return (
     <div className="center">
       <div className="month">
-        <CalendarDialogue onDateChange={setSelectedDate}/>
+        <CalendarDialogue selectedDate={selectedDate} onDateChange={setSelectedDate}/>
       </div>
-      <Calendar_Bottom date={selectedDate} />
+      <Calendar_Bottom selectedDate={selectedDate} onDateChange={setSelectedDate} />
       <div>
       </div>
     </div>

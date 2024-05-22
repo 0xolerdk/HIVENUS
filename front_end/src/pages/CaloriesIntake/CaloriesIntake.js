@@ -1,7 +1,7 @@
 import React from "react";
 import "./CaloriesIntake.css";
 import Donut from "../../components/Donut";
-import Top_Bar from "../../components/Top_Bar";
+import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useRef, useState } from "react";

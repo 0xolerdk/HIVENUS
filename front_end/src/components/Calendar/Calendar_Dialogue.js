@@ -44,19 +44,16 @@ function ButtonDatePicker(props) {
   );
 }
 
-export default function PickerWithButtonField({ onDateChange }) {
-  const [value, setValue] = React.useState(dayjs());
-
+export default function PickerWithButtonField({ selectedDate, onDateChange }) {
   const handleDateChange = (newValue) => {
-    setValue(newValue);
     onDateChange(newValue);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ButtonDatePicker
-        label={value.format('MMMM')}
-        value={value}
+        label={selectedDate.format('MMMM')}
+        value={selectedDate}
         onChange={handleDateChange}
       />
     </LocalizationProvider>

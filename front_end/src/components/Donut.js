@@ -8,7 +8,7 @@ import React, { useEffect, useRef } from 'react';
 
 Chart.register(ArcElement, DoughnutController);
 
-function Donut({ data, options, width, height, text, font_size, link }) {
+function Donut({ data, options, width, height, text, font_size, link }, onClick) {
   const textRef = useRef(text);
 
   useEffect(() => {
