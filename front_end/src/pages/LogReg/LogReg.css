@@ -1,46 +1,90 @@
-
-.LogReg{
-    background-color: #8EAFDC;
+.background {
+  background-color: #8eafdc;
+  height: 100vh;
 }
 
-.top{
-    padding-bottom: 100vh;
+.back-button {
+  z-index: 4;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: transform 0.3s ease-in-out; /* Додаємо плавний перехід */
 }
 
-a.my-button {
-    position: absolute;
-    height: 2.5vw;
-    width: 12vw;
-    z-index: 4;
-    border-radius: 10vw;
-    background-color: #F8A89A; /* Changed to light coral color */
-    color: white; /* Changed to white color */
-    font-family: 'Koulen';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 5vw;
-    line-height: 10wv;
-    text-decoration: none;
-    border: 0px solid #000;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 0px 10px 0px #c37568;
+@keyframes hoverGrow {
+  from {
+    transform: scale(1);
   }
-  
-  a.my-button span {
-    position: absolute;
-    height: 5vw;
-    width: 20vw;
-    z-index: 4;
-    transform: rotate(0deg);
+  to {
+    transform: scale(1.05);
   }
-  
-  a.my-button:hover {
-    background-color: darksalmon; /* Changed to a darker shade of coral for hover effect */
+}
+
+@keyframes hoverShrink {
+  from {
+    transform: scale(1.05);
   }
-  
-  a.my-button:active {
-    transform: scale(0.95);
+  to {
+    transform: scale(1);
   }
-  
+}
+
+.back-button:hover {
+  animation: hoverGrow 0.3s forwards;
+}
+
+.back-button:not(:hover) {
+  animation: hoverShrink 0.3s forwards;
+}
+
+.circle {
+  position: absolute;
+  height: 800px;
+  top: 20px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.login, .reg {
+  margin-top: 78px;
+  z-index: 1;
+}
+
+.login {
+  margin-right: -148px; /* Відстань між .login та .reg */
+}
+
+.icon {
+  transition: filter 0.3s ease-in-out; /* Додаємо плавний перехід */
+}
+
+.icon:hover {
+  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.2)); /* Ефект тіні при наведенні мишкою */
+}
+
+.login-text, .reg-text {
+  position: absolute;
+  z-index: 2;
+  font-family: 'Koulen';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 115px;
+  line-height: 208px;
+  color: #FFFFFF;
+  transform: rotate(59deg);
+  pointer-events: none; /* Текст не впливає на події миші */
+}
+
+.login-text {
+  top: 50%;
+  margin-left: -400px;
+}
+
+.reg-text {
+  top: 32%;
+  margin-left: 400px;
+}
