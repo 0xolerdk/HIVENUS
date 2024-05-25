@@ -6,8 +6,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useRef, useState } from "react";
 import _ from "lodash";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 
 
 const data3 = {
@@ -62,41 +60,38 @@ function CaloriesIntake() {
         });
         setOptions(updatedOptions);
       });
-  }, 300); // Debounce time in milliseconds
+  }, 200); // Debounce time in milliseconds
 
   const onInputChange = (event, value, reason) => {
     if (value) {
       getData(value);
+
+        
     } else {
       setOptions([]);
     }
   };
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-  });
 
   return (
     <div>
-        <ThemeProvider theme={darkTheme}>
+       
       {/* <CssBaseline /> */}
 
-      <Top_Bar />
-      <div className="donut">
+      <Top_Bar pageValue={1} />
+      <div className="donuts">
         {" "}
-        <Donut
+        <Donut 
           data={data3}
           options={options1}
           text={""}
           height={"500px"}
           width={"500px"}
+          
         />
       </div>
       <div className="search-box">
         <Autocomplete 
-         theme={darkTheme}
           id="combo-box-demo"
           options={options}
           onInputChange={onInputChange}
@@ -110,7 +105,6 @@ function CaloriesIntake() {
       </div>
       <div className="search-box"> {selectedProduct && <div>{selectedProduct.title}</div>}</div>
       <div></div>
-    </ThemeProvider>
     </div>
   );
 }

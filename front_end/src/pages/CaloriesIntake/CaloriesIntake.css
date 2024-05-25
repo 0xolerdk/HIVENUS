@@ -1,7 +1,10 @@
-.donut{
+.donuts{
+    padding-top: 100px;
+    top: 100px;
     display: flex;
     justify-content: center;
 }
+
 
 .search-box{
     display: flex;

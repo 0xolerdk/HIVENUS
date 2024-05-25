@@ -1,46 +1,50 @@
 
-.LogReg{
-    background-color: #8EAFDC;
+
+
+
+
+.login_circle{
+  position: relative;
+  top: 70px;
+  z-index: 2;
+  scale: 0.98;
 }
 
-.top{
-    padding-bottom: 100vh;
+.login-button {
+  position: absolute;
+  margin-top: 600px;
+  height: 30px;
+  width: 150px;
+  z-index: 4;
+  border-radius: 10vw;
+  background-color: #F8A89A; /* Changed to light coral color */
+  color: white; /* Changed to white color */
+  font-family: 'Koulen';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 10wv;
+  text-decoration: none;
+  padding: 14px 49px;
+  border: 0px solid #000;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px #c37568;
 }
 
-a.my-button {
-    position: absolute;
-    height: 2.5vw;
-    width: 12vw;
-    z-index: 4;
-    border-radius: 10vw;
-    background-color: #F8A89A; /* Changed to light coral color */
-    color: white; /* Changed to white color */
-    font-family: 'Koulen';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 5vw;
-    line-height: 10wv;
-    text-decoration: none;
-    border: 0px solid #000;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 0px 10px 0px #c37568;
-  }
-  
-  a.my-button span {
-    position: absolute;
-    height: 5vw;
-    width: 20vw;
-    z-index: 4;
-    transform: rotate(0deg);
-  }
-  
-  a.my-button:hover {
-    background-color: darksalmon; /* Changed to a darker shade of coral for hover effect */
-  }
-  
-  a.my-button:active {
-    transform: scale(0.95);
-  }
-  
+.login-button span {
+  position: absolute;
+  height: 5vw;
+  width: 20vw;
+  z-index: 5;
+  transform: rotate(0deg);
+}
+
+.login-button:hover {
+  background-color: darksalmon; /* Changed to a darker shade of coral for hover effect */
+}
+
+.login-button:active {
+  transform: scale(0.95);
+}

@@ -69,12 +69,14 @@ function Calendar() {
     return (
         
         <div className="statistics"> 
-            <Donut data={data} options={options1} text="Calories Intake" link="/calories_intake" font_size={1.7}/>
-            <Donut data={data2} options={options2} text="Energy"/>
-            <Donut data={data3} options={options3} text="Sport"/>
-            <div>
-                
-            </div>
+        <div className='row'><Donut  data={data} options={options1} text="Food Intake" link="/calories_intake" font_size={1.7}/>
+            <Donut data={data2} options={options2} text="Activity "/>
+            <Donut data={data3} options={options3} text="Calories Burned" font_size={1.7}/></div>
+        <div className='row'><Donut data={data} options={options1} text="Sleep" link="/sleep_track"/>
+            <Donut data={data2} options={options2} text="Water Intake" font_size={1.7}/>
+            <Donut data={data3} options={options3} text="Weight"/>
+          </div>    
+            
         </div>
 );
 
