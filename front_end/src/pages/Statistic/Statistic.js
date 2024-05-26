@@ -3,7 +3,6 @@ import "../Statistic/Statistic.css";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import Calendar from "../../components/Calendar/Calendar";
 import Statistics from "../../components/Statistics";
-import Add from "../../components/Add"
 
 function Statistic() {
   return (
