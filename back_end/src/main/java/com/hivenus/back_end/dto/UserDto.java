@@ -1,26 +1,28 @@
 package com.hivenus.back_end.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hivenus.back_end.entity.User;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto
-{
-    private Long id;
-    @NotEmpty
-    private String firstName;
-    @NotEmpty
-    private String lastName;
-    @NotEmpty(message = "Email should not be empty")
-    @Email
+import java.util.List;
+
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserDto {
+
+    private int statusCode;
+    private String error;
+    private String message;
+    private String token;
+    private String refreshToken;
+    private String expirationTime;
+    private String name;
+    private String role;
     private String email;
-    @NotEmpty(message = "Password should not be empty")
     private String password;
+    private User ourUsers;
+    private List<User> ourUsersList;
+
 }
