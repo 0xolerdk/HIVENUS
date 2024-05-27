@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 function Top_Button() {
     return (
             <div className="center"> 
-                <Link className="my-button" to="/logreg"><span></span>START</Link>
+                <Link className="my-button" to="/auth"><span></span>START</Link>
                 <Routes>
-                    <Route path="/logreg" element={<LogReg />} />
+                    <Route path="/auth" element={<LogReg />} />
                 </Routes>
             </div>
     );

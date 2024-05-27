@@ -2,7 +2,7 @@ package com.hivenus.back_end.service;
 
 import com.hivenus.back_end.config.JWTAuthFilter;
 import com.hivenus.back_end.dto.UserDto;
-import com.hivenus.back_end.entity.User;
+import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,28 +28,36 @@ public class UsersManagementService {
 
 
     public UserDto register(UserDto registrationRequest){
-        UserDto resp = new UserDto();
+    UserDto resp = new UserDto();
 
-        try {
-            User ourUser = new User();
-            ourUser.setEmail(registrationRequest.getEmail());
-            ourUser.setCity(registrationRequest.getCity());
-            ourUser.setRole(registrationRequest.getRole());
-            ourUser.setName(registrationRequest.getName());
-            ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-            User ourUsersResult = usersRepo.save(ourUser);
-            if (ourUsersResult.getId()>0) {
-                resp.setOurUsers((ourUsersResult));
-                resp.setMessage("User Saved Successfully");
-                resp.setStatusCode(200);
-            }
-
-        }catch (Exception e){
-            resp.setStatusCode(500);
-            resp.setError(e.getMessage());
+    try {
+        // Check if a user with the same email already exists
+        Optional<OurUser> existingUser = usersRepo.findByEmail(registrationRequest.getEmail());
+        if (existingUser.isPresent()) {
+            resp.setStatusCode(400);
+            resp.setMessage("A user with this email already exists");
         }
-        return resp;
+        else{
+            OurUser ourUser = new OurUser();
+        ourUser.setEmail(registrationRequest.getEmail());
+        ourUser.setRole(registrationRequest.getRole());
+        ourUser.setName(registrationRequest.getName());
+        ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+        OurUser ourUsersResult = usersRepo.save(ourUser);
+        if (ourUsersResult.getId()>0) {
+            resp.setOurUsers((ourUsersResult));
+
+            resp.setMessage("User Saved Successfully");
+            resp.setStatusCode(200);
+        }
+        }
+    }catch (Exception e){
+        resp.setStatusCode(500);
+        resp.setError(e.getMessage());
     }
+    return resp;
+}
+
 
 
     public UserDto login(UserDto loginRequest){
@@ -83,7 +91,7 @@ public class UsersManagementService {
         UserDto response = new UserDto();
         try{
             String ourEmail = jwtUtils.extractUsername(refreshTokenReqiest.getToken());
-            User users = usersRepo.findByEmail(ourEmail).orElseThrow();
+            OurUser users = usersRepo.findByEmail(ourEmail).orElseThrow();
             if (jwtUtils.isTokenValid(refreshTokenReqiest.getToken(), users)) {
                 var jwt = jwtUtils.generateToken(users);
                 response.setStatusCode(200);
@@ -107,7 +115,7 @@ public class UsersManagementService {
         UserDto userDto = new UserDto();
 
         try {
-            List<User> result = usersRepo.findAll();
+            List<OurUser> result = usersRepo.findAll();
             if (!result.isEmpty()) {
                 userDto.setOurUsersList(result);
                 userDto.setStatusCode(200);
@@ -128,7 +136,7 @@ public class UsersManagementService {
     public UserDto getUsersById(Integer id) {
         UserDto userDto = new UserDto();
         try {
-            User usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
+            OurUser usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
             userDto.setOurUsers(usersById);
             userDto.setStatusCode(200);
             userDto.setMessage("Users with id '" + id + "' found successfully");
@@ -143,7 +151,7 @@ public class UsersManagementService {
     public UserDto deleteUser(Integer userId) {
         UserDto userDto = new UserDto();
         try {
-            Optional<User> userOptional = usersRepo.findById(userId);
+            Optional<OurUser> userOptional = usersRepo.findById(userId);
             if (userOptional.isPresent()) {
                 usersRepo.deleteById(userId);
                 userDto.setStatusCode(200);
@@ -159,12 +167,12 @@ public class UsersManagementService {
         return userDto;
     }
 
-    public UserDto updateUser(Integer userId, User updatedUser) {
+    public UserDto updateUser(Integer userId, OurUser updatedUser) {
         UserDto userDto = new UserDto();
         try {
-            Optional<User> userOptional = usersRepo.findById(userId);
+            Optional<OurUser> userOptional = usersRepo.findById(userId);
             if (userOptional.isPresent()) {
-                User existingUser = userOptional.get();
+                OurUser existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
                 existingUser.setName(updatedUser.getName());
                 existingUser.setRole(updatedUser.getRole());
@@ -175,7 +183,7 @@ public class UsersManagementService {
                     existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
                 }
 
-                User savedUser = usersRepo.save(existingUser);
+                OurUser savedUser = usersRepo.save(existingUser);
                 userDto.setOurUsers(savedUser);
                 userDto.setStatusCode(200);
                 userDto.setMessage("User updated successfully");
@@ -194,7 +202,7 @@ public class UsersManagementService {
     public UserDto getMyInfo(String email){
         UserDto userDto = new UserDto();
         try {
-            Optional<User> userOptional = usersRepo.findByEmail(email);
+            Optional<OurUser> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
                 userDto.setOurUsers(userOptional.get());
                 userDto.setStatusCode(200);

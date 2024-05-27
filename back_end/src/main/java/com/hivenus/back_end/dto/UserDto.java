@@ -2,7 +2,7 @@ package com.hivenus.back_end.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hivenus.back_end.entity.User;
+import com.hivenus.back_end.entity.OurUser;
 import lombok.Data;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserDto {
     private String role;
     private String email;
     private String password;
-    private User ourUsers;
-    private List<User> ourUsersList;
+    private OurUser ourUsers;
+    private List<OurUser> ourUsersList;
 
 }

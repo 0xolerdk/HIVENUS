@@ -1,6 +1,6 @@
 package com.hivenus.back_end.controller;
 
-import com.hivenus.back_end.entity.User;
+import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.dto.UserDto;
 import com.hivenus.back_end.service.UsersManagementService;
 
@@ -50,7 +50,7 @@ public class UserManagementController {
     }
 
     @PutMapping("/admin/update/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody User reqres){
+    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody OurUser reqres){
         return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
     }
 

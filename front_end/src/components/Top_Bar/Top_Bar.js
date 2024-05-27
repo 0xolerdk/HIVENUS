@@ -32,42 +32,42 @@ function Top_Bar({pageValue=0}) {
             aria-label="dashboard" 
             style={{ marginRight: 'auto', left: "50%", transform:" translateX(-50%)" }}
             component={Link} 
-            to="/statistic"
+            to="/main"
           />
           <Tab 
             icon={<LocalDining />} 
             aria-label="Intake" 
             style={{ right: 0 }}
             component={Link} 
-            to="/calories_intake"
+            to="/main/calories_intake"
           />
           <Tab 
             icon={<FitnessCenter />} 
             aria-label="Use" 
             style={{ left: 0 }}
             component={Link} 
-            to="/activity"
+            to="/main/activity"
           />
           <Tab 
             icon={<MonitorWeight />} 
             aria-label="Use" 
             style={{ left: 90 }}
             component={Link} 
-            to="/weight"
+            to="/main/weight"
           />
           <Tab 
             icon={<LocalDrink />} 
             aria-label="Use" 
             style={{ left: 90 }}
             component={Link} 
-            to="/water_intake"
+            to="/main/water_intake"
           />
           <Tab 
             icon={<Hotel />} 
             aria-label="Use" 
             style={{ left: 90 }}
             component={Link} 
-            to="/sleep_track"
+            to="/main/sleep_track"
           />
           <Tab 
           
@@ -75,7 +75,7 @@ function Top_Bar({pageValue=0}) {
             aria-label="settings" 
             style={{ marginLeft: 'auto' }}
             component={Link} 
-            to="/settings"
+            to="/main/settings"
           />
         </Tabs>
       </div>

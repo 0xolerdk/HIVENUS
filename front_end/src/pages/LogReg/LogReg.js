@@ -17,7 +17,7 @@ export default function LogReg() {
             
         
             <div className='login'>
-            <Link className="" to="/login"><img className='login-img icon' src={login} alt="" /></Link>
+            <Link className="" to="/auth/login"><img className='login-img icon' src={login} alt="" /></Link>
                 
                 
             </div>
@@ -25,7 +25,7 @@ export default function LogReg() {
                     SIGN IN
                 </div>
             <div className='reg'>
-            <Link className="" to="/reg"><img className='reg-img icon' src={reg} alt="" /></Link>
+            <Link className="" to="/auth/reg"><img className='reg-img icon' src={reg} alt="" /></Link>
 
                 
             </div>

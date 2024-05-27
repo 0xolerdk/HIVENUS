@@ -1,12 +1,12 @@
 package com.hivenus.back_end.repository;
 
-import com.hivenus.back_end.entity.User;
+import com.hivenus.back_end.entity.OurUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<OurUser, Integer> {
 
-    Optional<User> findByEmail(String email);
+    Optional<OurUser> findByEmail(String email);
 
 }
