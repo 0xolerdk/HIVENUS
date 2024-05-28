@@ -46,7 +46,6 @@ public class UserManagementController {
     @GetMapping("/admin/get-users/{userId}")
     public ResponseEntity<UserDto> getUSerByID(@PathVariable Integer userId){
         return ResponseEntity.ok(usersManagementService.getUsersById(userId));
-
     }
 
     @PutMapping("/admin/update/{userId}")

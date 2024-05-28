@@ -1,18 +1,19 @@
-package com.hivenus.back_end.entity;
+package com.hivenus.back_end.dto;
 
-
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hivenus.back_end.entity.OurUser;
 import lombok.Data;
 
-@Table(name = "product")
+import java.util.List;
+
 @Data
-@Entity
-public class Product {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ProductDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    private int statusCode;
+    private String error;
     private String name;
     private double protein;
     private double totalLipid;
@@ -26,7 +27,5 @@ public class Product {
     private double vitaminA;
     private double vitaminC;
     private double cholesterol;
-
-
 
 }
