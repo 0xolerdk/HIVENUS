@@ -14,6 +14,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
+import dayjs from 'dayjs';
+import DailyLog from "../../service/DailyLogService";
+import UserService from "../../service/logRegLogic";
+
 
 
 const data3 = {
@@ -62,7 +66,7 @@ function CaloriesIntake() {
   const getData = async (searchTerm) => {
     const foods = await FCD.find(searchTerm);
     const updatedOptions = foods.map((food) => {
-      return { title: food.description, fdcId: food.fdcId };
+      return { name: food.description, fdcId: food.fdcId };
     });
     setOptions(updatedOptions);
   };
@@ -76,7 +80,30 @@ function CaloriesIntake() {
   };
 
   const handleConfirm = async () => {
-  };
+    const token = localStorage.getItem('token')
+    const data = {
+        date: dayjs().format('YYYY-MM-DD'),
+        products: [{
+          "name" : selectedProduct.name,
+          "fdcId" : selectedProduct.fdcId,
+          "portion": selectedPortion,
+          "quantity": quantity,
+          "gram": grams,
+        }
+          
+        ],
+        activities: []
+    };
+
+    const response = DailyLog.addLog(data, token)
+
+    if (response.ok) {
+        console.log('Data posted successfully');
+    } else {
+        console.error('Error posting data:', response.status, response.statusText);
+    }
+};
+
 
   useEffect(() => {
     if (selectedProduct) {
@@ -137,7 +164,7 @@ function CaloriesIntake() {
           onChange={async (event, value) => {
             setSelectedProduct(value);
           }}
-          getOptionLabel={(option) => option.title}
+          getOptionLabel={(option) => option.name}
           style={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Search Prduct" variant="outlined" />
