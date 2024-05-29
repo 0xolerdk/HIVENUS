@@ -12,7 +12,7 @@ public class ProductSearchingController {
     @Autowired
     private FCDService fcdService;
 
-    @PostMapping("")
-
-    @GetMapping("")
+//    @PostMapping("")
+//
+//    @GetMapping("")
 }
