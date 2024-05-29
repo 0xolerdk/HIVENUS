@@ -1,5 +1,6 @@
 package com.hivenus.back_end.controller;
 
+import com.hivenus.back_end.dto.DailyLogDto;
 import com.hivenus.back_end.service.FCDService;
 import com.hivenus.back_end.entity.DailyLog;
 import com.hivenus.back_end.service.DailyLogManagmentService;
@@ -17,26 +18,26 @@ public class DailyLogController {
     private DailyLogManagmentService dailyLogManagmentService;
 
     @GetMapping
-    public ResponseEntity<List<DailyLog>> getAllDailyLogs() {
-        List<DailyLog> dailyLogs = dailyLogManagmentService.getAllDailyLogs();
+    public ResponseEntity<List<DailyLogDto>> getAllDailyLogs() {
+        List<DailyLogDto> dailyLogs = dailyLogManagmentService.getAllDailyLogs();
         return ResponseEntity.ok(dailyLogs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DailyLog> getDailyLogById(@PathVariable Long id) {
-        DailyLog dailyLog = dailyLogManagmentService.getDailyLogById(id);
+    public ResponseEntity<DailyLogDto> getDailyLogById(@PathVariable Long id) {
+        DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogById(id);
         return ResponseEntity.ok(dailyLog);
     }
 
     @PostMapping
-    public ResponseEntity<DailyLog> createDailyLog(@RequestBody DailyLog dailyLog) {
-        DailyLog createdDailyLog = dailyLogManagmentService.createDailyLog(dailyLog);
+    public ResponseEntity<DailyLogDto> createDailyLog(@RequestBody DailyLogDto dailyLog) {
+        DailyLogDto createdDailyLog = dailyLogManagmentService.createDailyLog(dailyLog);
         return ResponseEntity.ok(createdDailyLog);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DailyLog> updateDailyLog(@PathVariable Long id, @RequestBody DailyLog dailyLog) {
-        DailyLog updatedDailyLog = dailyLogManagmentService.updateDailyLog(id, dailyLog);
+    public ResponseEntity<DailyLogDto> updateDailyLog(@PathVariable Long id, @RequestBody DailyLogDto dailyLog) {
+        DailyLogDto updatedDailyLog = dailyLogManagmentService.updateDailyLog(id, dailyLog);
         return ResponseEntity.ok(updatedDailyLog);
     }
 
