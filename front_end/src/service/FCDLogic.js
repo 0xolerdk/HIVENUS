@@ -33,7 +33,7 @@ class FCD {
         }, {});
     }
 
-    static async calculate_nutrients(ndbno, portion_description) {
+    static async calculate_nutrients(ndbno, portion_description, quantity) {
         const report = await this.get_report(ndbno);
         const food_nutrients = report.foodNutrients;
         const food_portions = report.foodPortions;
@@ -48,7 +48,7 @@ class FCD {
         const nutrients_for_chosen_portion = food_nutrients.map(nutrient => {
             const nutrient_name = nutrient.nutrient.name;
             const nutrient_unit = nutrient.nutrient.unitName;
-            const nutrient_amount_per_100g = nutrient.amount;
+            const nutrient_amount_per_100g = nutrient.amount*quantity;
 
             const nutrient_amount_per_gram = nutrient_amount_per_100g / 100;
             const nutrient_amount_for_chosen_portion = nutrient_amount_per_gram * chosen_gram_weight;
@@ -60,7 +60,31 @@ class FCD {
             };
         });
 
+
+        
+
         return nutrients_for_chosen_portion;
+    }
+    static async calculate_nutrients_gram(ndbno, grams) {
+        const report = await this.get_report(ndbno);
+        const food_nutrients = report.foodNutrients;
+    
+        const nutrients_for_given_grams = food_nutrients.map(nutrient => {
+            const nutrient_name = nutrient.nutrient.name;
+            const nutrient_unit = nutrient.nutrient.unitName;
+            const nutrient_amount_per_100g = nutrient.amount;
+    
+            const nutrient_amount_per_gram = nutrient_amount_per_100g / 100;
+            const nutrient_amount_for_given_grams = nutrient_amount_per_gram * grams;
+    
+            return {
+                intake: nutrient_amount_for_given_grams.toString(),
+                label: nutrient_name,
+                unit: nutrient_unit
+            };
+        });
+    
+        return nutrients_for_given_grams;
     }
 }
 

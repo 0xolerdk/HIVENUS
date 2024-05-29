@@ -13,19 +13,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private int fdcId;
     private String name;
-    private double protein;
-    private double totalLipid;
-    private double carbohydrate;
-    private double energy;
-    private double sugars;
-    private double dietaryFiber;
-    private double calcium;
-    private double iron;
-    private double sodium;
-    private double vitaminA;
-    private double vitaminC;
-    private double cholesterol;
+    private String portion;
+    private int quantity;
+    private int gram;
 
 
 

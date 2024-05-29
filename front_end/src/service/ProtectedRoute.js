@@ -10,6 +10,7 @@ const ProtectedComponent = ({ children }) => {
   useEffect(() => {
 
     if (!isAuthenticated) {
+      console.log("you are not logined")
       navigate('/auth');
     }
   }, [navigate]);
