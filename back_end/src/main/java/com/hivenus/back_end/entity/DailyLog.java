@@ -9,16 +9,15 @@ import java.util.List;
 
 @Entity
 @Data
-
+@Table(name = "our_dailyLogs")
 public class DailyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Temporal(TemporalType.DATE)
     private Date date;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Product> products;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Activity> activities;
-    // getters and setters
 }

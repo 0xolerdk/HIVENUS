@@ -27,11 +27,18 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
         return ResponseEntity.ok(createdProduct);
     }
+
+    @PostMapping("/create/batch")
+    public ResponseEntity<List<Product>> createProducts(@RequestBody List<Product> products) {
+        List<Product> createdProducts = productService.createProducts(products);
+        return ResponseEntity.ok(createdProducts);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {

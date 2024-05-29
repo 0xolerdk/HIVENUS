@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,6 +31,21 @@ public class DailyLogController {
         DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogById(id);
         return ResponseEntity.ok(dailyLog);
     }
+
+    @PostMapping("/date")
+    public ResponseEntity<DailyLogDto> getDailyLogByDate(@RequestBody String date) {
+        // parse the date string into a Date object
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateObj = formatter.parse(date);
+            DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogByDate(dateObj);
+            return ResponseEntity.ok(dailyLog);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
     @PostMapping
     public ResponseEntity<DailyLogDto> createDailyLog(@RequestBody DailyLogDto dailyLog) {

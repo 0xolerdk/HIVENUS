@@ -27,6 +27,10 @@ public class ProductManagmentService {
         return productRepository.save(product);
     }
 
+    public List<Product> createProducts(List<Product> products) {
+        return productRepository.saveAll(products);
+    }
+
     public Product updateProduct(Long id, Product productDetails) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if(optionalProduct.isPresent()) {

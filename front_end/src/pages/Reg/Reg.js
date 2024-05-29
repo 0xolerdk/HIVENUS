@@ -67,7 +67,7 @@ const handleSubmit = async (e) => {
         }
         else{
           alert('User registered successfully');
-          navigate('/auth');
+          navigate('/main');
         }
 
 

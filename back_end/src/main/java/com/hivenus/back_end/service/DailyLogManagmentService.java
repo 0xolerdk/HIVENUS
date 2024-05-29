@@ -6,6 +6,7 @@ import com.hivenus.back_end.repository.DailyLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,4 +70,8 @@ public class DailyLogManagmentService {
         return dailyLog;
     }
 
+    public DailyLogDto getDailyLogByDate(Date date) {
+        Optional<DailyLog> dailyLog = dailyLogRepository.findByDate(date);
+        return dailyLog.map(this::convertToDto).orElse(null);
+    }
 }

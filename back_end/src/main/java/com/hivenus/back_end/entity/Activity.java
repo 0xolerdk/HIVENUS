@@ -1,10 +1,10 @@
 package com.hivenus.back_end.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
+@Table(name = "our_activity")
 @Entity
 public class Activity {
     @Id

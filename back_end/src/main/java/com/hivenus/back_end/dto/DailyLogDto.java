@@ -19,6 +19,7 @@ public class DailyLogDto {
     private String error;
     private String message;
     private Date date;
+
     private List<Product> products;
     private List<Activity> activities;
     private DailyLog dailyLog;
