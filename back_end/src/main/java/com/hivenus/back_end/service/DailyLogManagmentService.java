@@ -74,4 +74,12 @@ public class DailyLogManagmentService {
         Optional<DailyLog> dailyLog = dailyLogRepository.findByDate(date);
         return dailyLog.map(this::convertToDto).orElse(null);
     }
+
+    public List<DailyLogDto> getDailyLogsByDate(Date dateObj) {
+        List<DailyLog> dailyLogs = dailyLogRepository.findAllByDate(dateObj);
+        return dailyLogs.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
 }

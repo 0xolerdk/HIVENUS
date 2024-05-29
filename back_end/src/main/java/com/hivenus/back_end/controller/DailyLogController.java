@@ -33,18 +33,19 @@ public class DailyLogController {
     }
 
     @PostMapping("/date")
-    public ResponseEntity<DailyLogDto> getDailyLogByDate(@RequestBody String date) {
+    public ResponseEntity<List<DailyLogDto>> getDailyLogsByDate(@RequestBody String date) {
         // parse the date string into a Date object
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date dateObj = formatter.parse(date);
-            DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogByDate(dateObj);
-            return ResponseEntity.ok(dailyLog);
+            List<DailyLogDto> dailyLogs = dailyLogManagmentService.getDailyLogsByDate(dateObj);
+            return ResponseEntity.ok(dailyLogs);
         } catch (ParseException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
+
 
 
     @PostMapping
