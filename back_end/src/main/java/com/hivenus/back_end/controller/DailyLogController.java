@@ -1,16 +1,19 @@
 package com.hivenus.back_end.controller;
 
 import com.hivenus.back_end.dto.DailyLogDto;
-import com.hivenus.back_end.service.FCDService;
-import com.hivenus.back_end.entity.DailyLog;
+import com.hivenus.back_end.dto.UserDto;
 import com.hivenus.back_end.service.DailyLogManagmentService;
+import com.hivenus.back_end.service.OurUserDetailsService;
+import com.hivenus.back_end.service.UsersManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,48 +22,68 @@ public class DailyLogController {
 
     @Autowired
     private DailyLogManagmentService dailyLogManagmentService;
+    @Autowired
+    private UsersManagementService usersManagementService;
+    @Autowired
+    private OurUserDetailsService ourUserDetailsService;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<DailyLogDto>> getAllDailyLogs() {
         List<DailyLogDto> dailyLogs = dailyLogManagmentService.getAllDailyLogs();
         return ResponseEntity.ok(dailyLogs);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<DailyLogDto> getDailyLogById(@PathVariable Long id) {
         DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogById(id);
         return ResponseEntity.ok(dailyLog);
     }
 
-    @PostMapping("/date")
-    public ResponseEntity<List<DailyLogDto>> getDailyLogsByDate(@RequestBody String date) {
-        // parse the date string into a Date object
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    @GetMapping(value = "/date", produces = "application/json")
+    public ResponseEntity<List<DailyLogDto>> getDailyLogsByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         try {
-            Date dateObj = formatter.parse(date);
-            List<DailyLogDto> dailyLogs = dailyLogManagmentService.getDailyLogsByDate(dateObj);
+            List<DailyLogDto> dailyLogs = dailyLogManagmentService.getDailyLogsByDate(userDto.getOurUsers().getId(), date);
             return ResponseEntity.ok(dailyLogs);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
-
-
-    @PostMapping("/{userId}")
-    public ResponseEntity<DailyLogDto> createDailyLog(@RequestBody DailyLogDto dailyLog,@PathVariable Integer userId) {
+    @PostMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<DailyLogDto> createDailyLog(@RequestBody DailyLogDto dailyLog, @PathVariable Long userId) {
         DailyLogDto createdDailyLog = dailyLogManagmentService.createDailyLog(dailyLog, userId);
         return ResponseEntity.ok(createdDailyLog);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DailyLogDto> updateDailyLog(@PathVariable Long id, @RequestBody DailyLogDto dailyLog) {
-        DailyLogDto updatedDailyLog = dailyLogManagmentService.updateDailyLog(id, dailyLog);
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<DailyLogDto> addDailyLog(@RequestBody DailyLogDto dailyLog) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        DailyLogDto updatedDailyLog = dailyLogManagmentService.createDailyLog(dailyLog, userDto.getOurUsers().getId());
         return ResponseEntity.ok(updatedDailyLog);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Void> deleteDailyLog(@PathVariable Long id) {
         dailyLogManagmentService.deleteDailyLog(id);
         return ResponseEntity.ok().build();

@@ -39,17 +39,17 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/get-users/{userId}")
-    public ResponseEntity<UserDto> getUSerByID(@PathVariable Integer userId){
+    public ResponseEntity<UserDto> getUSerByID(@PathVariable Long userId){
         return ResponseEntity.ok(usersManagementService.getUsersById(userId));
     }
 
     @PutMapping("/admin/update/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody OurUser reqres){
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody OurUser reqres){
         return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
     }
 
    @GetMapping("/public/get-profile")
-public ResponseEntity<UserDto> getMyProfile(){
+    public ResponseEntity<UserDto> getMyProfile(){
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -64,7 +64,7 @@ public ResponseEntity<UserDto> getMyProfile(){
 
 
     @DeleteMapping("/admin/delete/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Integer userId){
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId){
         return ResponseEntity.ok(usersManagementService.deleteUser(userId));
     }
 

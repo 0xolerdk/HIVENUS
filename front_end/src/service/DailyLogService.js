@@ -1,27 +1,28 @@
 import axios from 'axios';
-import UserService from './logRegLogic';
 
-class DailyLog {
+const DailyLogService = {
+  BASE_URL: 'http://localhost:8080',
 
-    static BASE_URL = "http://localhost:8080"
+  async addLog(data, token) {
+    const response = await axios.post(`${this.BASE_URL}/dailylogs`, data,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }});
+    return response;
+  },
 
-
-    static async addLog(data, token){
-        try{
-            const id = localStorage.getItem("user_id");
-            console.log(id);
-            const response = await axios.post(`${DailyLog.BASE_URL}/dailylogs/${id}`, data,{
-                headers: {Authorization: `Bearer ${token}`}
-            })
-            return response;
-
-        }catch(err){
-            throw err;
+  async getLogByDate(date, token) {
+    const response = await axios.get(
+      `${this.BASE_URL}/dailylogs/date?date=${date}`, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-    }
+      }
+    );
+    return response;
+  }
+};
 
-
-
-}
-
-export default DailyLog;
+export default DailyLogService;

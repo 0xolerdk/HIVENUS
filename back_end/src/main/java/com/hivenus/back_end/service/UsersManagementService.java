@@ -145,7 +145,7 @@ public class UsersManagementService {
     }
 
 
-    public UserDto getUsersById(Integer id) {
+    public UserDto getUsersById(Long id) {
         UserDto userDto = new UserDto();
         try {
             OurUser usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
@@ -160,7 +160,7 @@ public class UsersManagementService {
     }
 
 
-    public UserDto deleteUser(Integer userId) {
+    public UserDto deleteUser(Long userId) {
         UserDto userDto = new UserDto();
         try {
             Optional<OurUser> userOptional = usersRepo.findById(userId);
@@ -179,7 +179,7 @@ public class UsersManagementService {
         return userDto;
     }
 
-    public UserDto updateUser(Integer userId, OurUser updatedUser) {
+    public UserDto updateUser(Long userId, OurUser updatedUser) {
         UserDto userDto = new UserDto();
         try {
             Optional<OurUser> userOptional = usersRepo.findById(userId);

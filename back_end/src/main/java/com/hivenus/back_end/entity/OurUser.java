@@ -1,5 +1,7 @@
 package com.hivenus.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,23 +16,28 @@ import java.util.List;
 @Entity
 @Table(name = "our_user")
 @Data
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class,
+  property = "id")
 public class OurUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(unique=true, nullable=false)
     private String email;
 
-    private String name;
-    private String password;
+
+    private String username;
     private String role;
+        private String name;
 
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+
+    private String password;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<DailyLog> dailyLogs;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
