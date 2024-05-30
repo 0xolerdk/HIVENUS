@@ -2,6 +2,7 @@ package com.hivenus.back_end.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hivenus.back_end.entity.DailyLog;
 import com.hivenus.back_end.entity.OurUser;
 import lombok.Data;
 
@@ -24,5 +25,6 @@ public class UserDto {
     private String password;
     private OurUser ourUsers;
     private List<OurUser> ourUsersList;
+    private List<DailyLog> dailyLogs;
 
 }

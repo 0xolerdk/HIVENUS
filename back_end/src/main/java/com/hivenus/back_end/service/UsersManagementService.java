@@ -2,7 +2,9 @@ package com.hivenus.back_end.service;
 
 import com.hivenus.back_end.config.JWTAuthFilter;
 import com.hivenus.back_end.dto.UserDto;
+import com.hivenus.back_end.entity.DailyLog;
 import com.hivenus.back_end.entity.OurUser;
+import com.hivenus.back_end.repository.DailyLogRepository;
 import com.hivenus.back_end.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,38 +27,47 @@ public class UsersManagementService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private DailyLogRepository dailyLogRepository;
 
 
     public UserDto register(UserDto registrationRequest){
-    UserDto resp = new UserDto();
+        UserDto resp = new UserDto();
 
-    try {
-        // Check if a user with the same email already exists
-        Optional<OurUser> existingUser = usersRepo.findByEmail(registrationRequest.getEmail());
-        if (existingUser.isPresent()) {
-            resp.setStatusCode(400);
-            resp.setMessage("A user with this email already exists");
-        }
-        else{
-            OurUser ourUser = new OurUser();
+        try {
+            // Check if a user with the same email already exists
+            Optional<OurUser> existingUser = usersRepo.findByEmail(registrationRequest.getEmail());
+            if (existingUser.isPresent()) {
+                resp.setStatusCode(400);
+                resp.setMessage("A user with this email already exists");
+            }
+            else{
+                OurUser ourUser = new OurUser();
+                // set fields...
+
+
+                // create a new DailyLog for the user
+                DailyLog dailyLog = new DailyLog();
         ourUser.setEmail(registrationRequest.getEmail());
         ourUser.setRole(registrationRequest.getRole());
         ourUser.setName(registrationRequest.getName());
         ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-        OurUser ourUsersResult = usersRepo.save(ourUser);
-        if (ourUsersResult.getId()>0) {
-            resp.setOurUsers((ourUsersResult));
 
-            resp.setMessage("User Saved Successfully");
-            resp.setStatusCode(200);
+
+                resp.setOurUsers(ourUser);
+                resp.setMessage("User Saved Successfully");
+                resp.setStatusCode(200);
+
+                OurUser savedUser = usersRepo.save(ourUser);
+                dailyLog.setUser(savedUser);
+                dailyLogRepository.save(dailyLog);
+            }
+        }catch (Exception e){
+            resp.setStatusCode(500);
+            resp.setError(e.getMessage());
         }
-        }
-    }catch (Exception e){
-        resp.setStatusCode(500);
-        resp.setError(e.getMessage());
+        return resp;
     }
-    return resp;
-}
 
 
 

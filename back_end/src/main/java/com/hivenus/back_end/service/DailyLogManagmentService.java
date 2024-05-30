@@ -2,7 +2,9 @@ package com.hivenus.back_end.service;
 
 import com.hivenus.back_end.dto.DailyLogDto;
 import com.hivenus.back_end.entity.DailyLog;
+import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.repository.DailyLogRepository;
+import com.hivenus.back_end.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class DailyLogManagmentService {
 
     @Autowired
     private DailyLogRepository dailyLogRepository;
+        @Autowired
+    private UserRepository usersRepo;
 
     public List<DailyLogDto> getAllDailyLogs() {
         List<DailyLog> dailyLogs = dailyLogRepository.findAll();
@@ -29,10 +33,17 @@ public class DailyLogManagmentService {
         return dailyLog.map(this::convertToDto).orElse(null);
     }
 
-    public DailyLogDto createDailyLog(DailyLogDto dailyLogDto) {
-        DailyLog dailyLog = convertToEntity(dailyLogDto);
-        DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
-        return convertToDto(savedDailyLog);
+    public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Integer userId) {
+        Optional<OurUser> optionalUser = usersRepo.findById(userId);
+        if(optionalUser.isPresent()) {
+            OurUser user = optionalUser.get();
+            DailyLog dailyLog = convertToEntity(dailyLogDto);
+            dailyLog.setUser(user);
+            DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
+            return convertToDto(savedDailyLog);
+        } else {
+            return null;
+        }
     }
 
     public DailyLogDto updateDailyLog(Long id, DailyLogDto dailyLogDto) {

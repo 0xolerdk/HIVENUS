@@ -16,7 +16,7 @@ public class OurUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer user_id;
 
     @Column(unique=true, nullable=false)
     private String email;
@@ -25,8 +25,8 @@ public class OurUser implements UserDetails {
     private String password;
     private String role;
 
-//    @OneToOne
-//    private DailyLog dailyLog;
+    @OneToMany(mappedBy = "user")
+    private List<DailyLog> dailyLogs;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

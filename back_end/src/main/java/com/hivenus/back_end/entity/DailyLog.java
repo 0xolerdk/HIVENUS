@@ -20,4 +20,8 @@ public class DailyLog {
     private List<Product> products;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Activity> activities;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private OurUser user;
 }

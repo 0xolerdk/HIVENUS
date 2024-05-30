@@ -66,6 +66,7 @@ const handleSubmit = async (e) => {
           alert('A user with this email already exists');
         }
         else{
+          localStorage.setItem('token', data.token);
           alert('User registered successfully');
           navigate('/main');
         }
