@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class OurUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+    private Integer id;
 
     @Column(unique=true, nullable=false)
     private String email;
@@ -26,6 +28,7 @@ public class OurUser implements UserDetails {
     private String role;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<DailyLog> dailyLogs;
 
     @Override

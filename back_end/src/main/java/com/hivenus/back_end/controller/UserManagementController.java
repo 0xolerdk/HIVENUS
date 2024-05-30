@@ -1,21 +1,16 @@
 package com.hivenus.back_end.controller;
-
 import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.dto.UserDto;
 import com.hivenus.back_end.service.UsersManagementService;
 
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 @RestController
 public class UserManagementController {
@@ -37,7 +32,7 @@ public class UserManagementController {
         return ResponseEntity.ok(usersManagementService.refreshToken(req));
     }
 
-    @GetMapping("/admin/get-all-users")
+    @GetMapping("/public/get-all-users")
     public ResponseEntity<UserDto> getAllUsers(){
         return ResponseEntity.ok(usersManagementService.getAllUsers());
 
@@ -53,13 +48,20 @@ public class UserManagementController {
         return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
     }
 
-    @GetMapping("/adminuser/get-profile")
-    public ResponseEntity<UserDto> getMyProfile(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        UserDto response = usersManagementService.getMyInfo(email);
-        return  ResponseEntity.status(response.getStatusCode()).body(response);
+   @GetMapping("/public/get-profile")
+public ResponseEntity<UserDto> getMyProfile(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    String email = authentication.getName();
+    UserDto response = usersManagementService.getMyInfo(email);
+    if (response == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    return ResponseEntity.status(response.getStatusCode()).body(response);
+}
+
 
     @DeleteMapping("/admin/delete/{userId}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable Integer userId){

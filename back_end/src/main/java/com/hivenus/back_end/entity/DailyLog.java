@@ -1,5 +1,6 @@
 package com.hivenus.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,5 +24,6 @@ public class DailyLog {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private OurUser user;
 }

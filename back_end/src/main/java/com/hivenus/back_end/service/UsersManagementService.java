@@ -43,15 +43,12 @@ public class UsersManagementService {
             }
             else{
                 OurUser ourUser = new OurUser();
-                // set fields...
 
-
-                // create a new DailyLog for the user
                 DailyLog dailyLog = new DailyLog();
-        ourUser.setEmail(registrationRequest.getEmail());
-        ourUser.setRole(registrationRequest.getRole());
-        ourUser.setName(registrationRequest.getName());
-        ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+                ourUser.setEmail(registrationRequest.getEmail());
+                ourUser.setRole(registrationRequest.getRole());
+                ourUser.setName(registrationRequest.getName());
+                ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
 
                 resp.setOurUsers(ourUser);
@@ -59,6 +56,10 @@ public class UsersManagementService {
                 resp.setStatusCode(200);
 
                 OurUser savedUser = usersRepo.save(ourUser);
+                var user = usersRepo.findByEmail(savedUser.getEmail()).orElseThrow();
+                var jwt = jwtUtils.generateToken(user);
+                resp.setToken(jwt);
+                resp.setExpirationTime("24Hrs");
                 dailyLog.setUser(savedUser);
                 dailyLogRepository.save(dailyLog);
             }

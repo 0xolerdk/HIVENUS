@@ -67,6 +67,8 @@ const handleSubmit = async (e) => {
         }
         else{
           localStorage.setItem('token', data.token);
+          localStorage.setItem('user_id', data.user_id);
+
           alert('User registered successfully');
           navigate('/main');
         }

@@ -38,7 +38,7 @@ class UserService{
 
     static async getYourProfile(token){
         try{
-            const response = await axios.get(`${UserService.BASE_URL}/adminuser/get-profile`, 
+            const response = await axios.get(`${UserService.BASE_URL}/public/get-profile`, 
             {
                 headers: {Authorization: `Bearer ${token}`}
             })

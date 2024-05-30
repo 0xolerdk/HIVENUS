@@ -29,6 +29,7 @@ export default function Login() {
       const data = await UserService.login(formData.email, formData.password);
       if (data.statusCode === 200) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user_id', data.user_id);
         alert('User logged in successfully');
         navigate('/main');
       } else {
