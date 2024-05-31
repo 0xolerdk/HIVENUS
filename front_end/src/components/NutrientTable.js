@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const nutrientLabels = [
   "Protein",
@@ -21,9 +22,9 @@ const nutrientLabels = [
   "Cholesterol",
 ];
 
-function NutrientTable({ nutrients }) {
+function NutrientTable({ nutrients, totalNutrients, selectedProduct }) {
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
@@ -33,13 +34,13 @@ function NutrientTable({ nutrients }) {
         </TableHead>
         <TableBody>
           {nutrientLabels.map((label) => {
-            const nutrient = nutrients[label];
-            return nutrient ? (
+            const nutrient = selectedProduct ? nutrients[label] : totalNutrients[label];
+            return nutrient !== undefined ? (
               <TableRow key={label}>
                 <TableCell component="th" scope="row">
                   {label}
                 </TableCell>
-                <TableCell align="right">{nutrient}</TableCell>
+                <TableCell align="right">{parseFloat(nutrient).toFixed(2)}</TableCell>
               </TableRow>
             ) : null;
           })}

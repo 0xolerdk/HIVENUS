@@ -42,11 +42,13 @@ public class DailyLogManagmentService {
         Optional<OurUser> optionalUser = usersRepo.findById(userId);
         if (optionalUser.isPresent()) {
             OurUser user = optionalUser.get();
-            DailyLog dailyLog = convertToEntity(dailyLogDto);
-            dailyLog.setUser(user);
+            Optional<DailyLog> optionalExistingLog = dailyLogRepository.findByUserIdAndDate(userId, dailyLogDto.getDate());
 
-            // Save all products if they are not already saved
-            List<Product> savedProducts = dailyLog.getProducts().stream()
+            DailyLog dailyLog;
+            if (optionalExistingLog.isPresent()) {
+                dailyLog = optionalExistingLog.get();
+                // Append new products to the existing list of products
+                List<Product> newProducts = dailyLogDto.getProducts().stream()
                     .map(product -> {
                         if (product.getId() == null) {
                             return productRepository.save(product);
@@ -55,8 +57,25 @@ public class DailyLogManagmentService {
                         }
                     })
                     .collect(Collectors.toList());
+                dailyLog.getProducts().addAll(newProducts);
+            } else {
+                // Create a new DailyLog if none exists for the given date
+                dailyLog = convertToEntity(dailyLogDto);
+                dailyLog.setUser(user);
 
-            dailyLog.setProducts(savedProducts);
+                // Save all products if they are not already saved
+                List<Product> savedProducts = dailyLog.getProducts().stream()
+                        .map(product -> {
+                            if (product.getId() == null) {
+                                return productRepository.save(product);
+                            } else {
+                                return product;
+                            }
+                        })
+                        .collect(Collectors.toList());
+
+                dailyLog.setProducts(savedProducts);
+            }
 
             DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
             return convertToDto(savedDailyLog);
@@ -98,6 +117,8 @@ public class DailyLogManagmentService {
     private DailyLogDto convertToDto(DailyLog dailyLog) {
         DailyLogDto dailyLogDto = new DailyLogDto();
         dailyLogDto.setDate(dailyLog.getDate());
+        dailyLogDto.setId(dailyLog.getId());
+
         dailyLogDto.setProducts(dailyLog.getProducts().stream()
                 .map(product -> {
                     Product simplifiedProduct = new Product();
@@ -105,6 +126,7 @@ public class DailyLogManagmentService {
                     simplifiedProduct.setName(product.getName());
                     simplifiedProduct.setFdcId(product.getFdcId());
                     simplifiedProduct.setPortion(product.getPortion());
+                    simplifiedProduct.setQuantity(product.getQuantity());
                     simplifiedProduct.setGram(product.getGram());
 
                     return simplifiedProduct;
@@ -130,7 +152,7 @@ public class DailyLogManagmentService {
     }
 
     public List<DailyLogDto> getDailyLogsByDate(Long userId, LocalDate date) {
-        List<DailyLog> dailyLogs = dailyLogRepository.findByUserIdAndDate(userId, date);
+        Optional<DailyLog> dailyLogs = dailyLogRepository.findByUserIdAndDate(userId, date);
         return dailyLogs.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -146,5 +168,20 @@ public class DailyLogManagmentService {
 
     public DailyLog addDailyLog(DailyLog dailyLog) {
         return dailyLogRepository.save(dailyLog);
+    }
+
+     public boolean deleteProductFromDailyLog(Long userId, LocalDate date, Long productId) {
+        Optional<DailyLog> optionalDailyLog = dailyLogRepository.findByUserIdAndDate(userId, date);
+        if (optionalDailyLog.isPresent()) {
+            DailyLog dailyLog = optionalDailyLog.get();
+            List<Product> products = dailyLog.getProducts();
+
+            boolean productRemoved = products.removeIf(product -> product.getId().equals(productId));
+            if (productRemoved) {
+                dailyLogRepository.save(dailyLog);
+                return true;
+            }
+        }
+        return false;
     }
 }

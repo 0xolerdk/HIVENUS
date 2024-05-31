@@ -22,6 +22,8 @@ public class DailyLogDto {
     private int statusCode;
     private String error;
     private String message;
+    private Long id;
+
     @Setter
     @Getter
     private LocalDate date;

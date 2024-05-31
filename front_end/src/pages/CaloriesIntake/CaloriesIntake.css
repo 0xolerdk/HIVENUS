@@ -1,12 +1,37 @@
-.donuts{
-    padding-top: 100px;
-    top: 100px;
+/* CaloriesIntake.css */
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .left-container {
+    width: 40%;
+  }
+  
+  .right-container {
+    width: 58%;
+  }
+  
+  .search-box {
+    margin-bottom: 20px;
+  }
+  
+  .donuts {
+    height: 500px;
+    top: 50px;
+    position: relative;
+
     display: flex;
     justify-content: center;
-}
-
-
-.search-box{
+    margin-bottom: 20px;
+  }
+  
+  .menu {
     display: flex;
-    justify-content: center;
-}
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  

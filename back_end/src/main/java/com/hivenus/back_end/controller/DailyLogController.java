@@ -88,4 +88,29 @@ public class DailyLogController {
         dailyLogManagmentService.deleteDailyLog(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/date")
+    public ResponseEntity<Void> deleteProductFromDailyLog(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam Long productId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        try {
+           boolean deleted = dailyLogManagmentService.deleteProductFromDailyLog(userDto.getOurUsers().getId(), date, productId);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
