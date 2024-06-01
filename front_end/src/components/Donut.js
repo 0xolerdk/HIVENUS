@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 
 Chart.register(ArcElement, Tooltip, DoughnutController);
 
-function Donut({ data, options, width, height, text, font_size, link, tooltip = false, date }) {
+function Donut({ data, options, width, height, text, font_size, link, tooltip = false, anim=true }) {
   const textRef = useRef(text);
 
   useEffect(() => {
@@ -50,15 +50,21 @@ function Donut({ data, options, width, height, text, font_size, link, tooltip = 
 
   return (
     <div>
-      <Link to={{ pathname: link, state: { date: date } }}>
-        <div
-          className="donut"
-          style={{ width: width, height: height }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
-        </div>
+      <Link to={link}>
+        {anim ? (
+          <div
+            className="donut"
+            style={{ width: width, height: height }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
+          </div>
+        ) : (
+          <div className="donut" style={{ width: width, height: height }}>
+            <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
+          </div>
+        )}
       </Link>
     </div>
   );

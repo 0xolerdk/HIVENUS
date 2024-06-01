@@ -42,13 +42,25 @@ const options1 = {
   rotation: 0, // This rotates the chart by 90 degrees.
   // Add other options here
 };
-
+const options2 = {
+  borderWidth: 1,
+  fullSize: true,
+  radius: 150,
+  cutout: "50%",
+  rotation: 90,
+  height: 120,
+};
 function Calendar({ selectedDate }) {
 
   return (
     <div className="statistics">
       <div className="row">
-      <NutrientDonut selectedDate={selectedDate}/>
+      <NutrientDonut 
+      selectedDate={selectedDate}
+      text="Food Intake"
+      link="/main/calories_intake"
+      font_size={1.7}
+      options={options2}/>
         {/* <Donut
           data={data}
           options={options1}

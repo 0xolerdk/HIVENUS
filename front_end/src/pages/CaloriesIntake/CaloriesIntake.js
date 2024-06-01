@@ -15,10 +15,17 @@ import TextField from "@mui/material/TextField";
 import { Select, MenuItem } from "@mui/material";
 import Calendar from "../../components/Calendar/Calendar";
 
-function CaloriesIntake() {
+const options = {
+  borderWidth: 1,
+  fullSize: true,
+  radius: 200,
+  cutout: "50%",
+  rotation: 90,
+};
 
+function CaloriesIntake() {
   const [date, setDate] = useState(() => {
-    const savedDate = localStorage.getItem('selectedDate');
+    const savedDate = localStorage.getItem("selectedDate");
     return savedDate ? dayjs(savedDate) : dayjs();
   });
 
@@ -133,7 +140,6 @@ function CaloriesIntake() {
     const allNutrients = await Promise.all(nutrientPromises);
   };
 
-
   useEffect(() => {
     fetchHistory(date);
   }, [date]);
@@ -200,7 +206,15 @@ function CaloriesIntake() {
         <Calendar date={date} onDateChange={setDate} />
       </div>
 
-      <NutrientDonut selectedDate={date} />
+      <NutrientDonut
+        selectedDate={date}
+        options={options}
+        text={""}
+        height={"500px"}
+        width={"500px"}
+        tooltip={true}
+        anim={false}
+      />
       <div className="menu">
         <ProductSearch onProductSelect={setSelectedProduct} />
         <div className="search-box">
@@ -257,7 +271,7 @@ function CaloriesIntake() {
               <Button
                 variant="contained"
                 onClick={handleConfirm}
-                sx={{ flex:"center", marginTop: 3, marginLeft: 2, width: 225 }}
+                sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
               >
                 Confirm
               </Button>

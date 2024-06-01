@@ -3,13 +3,7 @@ import Donut from "./Donut";
 import FCD from "../service/FCDLogic";
 import dayjs from "dayjs";
 
-const options = {
-  borderWidth: 1,
-  fullSize: true,
-  radius: 200,
-  cutout: "50%",
-  rotation: 90,
-};
+
 
 function calculateRemaining(nutrient, dailyNorm) {
   return nutrient > dailyNorm ? 0 : dailyNorm - nutrient;
@@ -19,12 +13,16 @@ function calculateExcess(nutrient, dailyNorm) {
   return nutrient > dailyNorm ? nutrient - dailyNorm : 0;
 }
 
-function NutrientDonut({ selectedDate }) {
+
+
+function NutrientDonut({ selectedDate, width, height, text, font_size, link, options, tooltip, anim }) {
   const [nutrient, setTotalNutrients] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
+    selectedDate = dayjs(localStorage.getItem('selectedDate'))
+
       try {
         const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
         setTotalNutrients(nutrient);
@@ -102,10 +100,13 @@ function NutrientDonut({ selectedDate }) {
       <Donut
         data={data}
         options={options}
-        text={""}
-        height={"500px"}
-        width={"500px"}
-        tooltip={true}
+        text={text}
+        font_size={font_size}
+        link={link}
+        height={height}
+        width={width}
+        tooltip={tooltip}
+        anim={anim}
       />
     </div>
   );
