@@ -25,7 +25,6 @@ function CaloriesIntake() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedPortion, setSelectedPortion] = useState(null);
   const [nutrients, setNutrients] = useState({});
-  const [totalNutrients, setTotalNutrients] = useState({});
   const [portions, setPortions] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [grams, setGrams] = useState(0);
@@ -132,20 +131,8 @@ function CaloriesIntake() {
     });
 
     const allNutrients = await Promise.all(nutrientPromises);
-    calculateTotalNutrients(allNutrients.flat());
   };
 
-  const calculateTotalNutrients = (nutrients) => {
-    const totals = nutrients.reduce((acc, nutrient) => {
-      if (!acc[nutrient.label]) {
-        acc[nutrient.label] = 0;
-      }
-      acc[nutrient.label] += parseFloat(nutrient.intake) || 0;
-      return acc;
-    }, {});
-
-    setTotalNutrients(totals);
-  };
 
   useEffect(() => {
     fetchHistory(date);
@@ -302,8 +289,8 @@ function CaloriesIntake() {
         <div className="right-container">
           <NutrientTable
             nutrients={nutrients}
-            totalNutrients={totalNutrients}
             selectedProduct={selectedProduct}
+            selectedDate={date}
           />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import FCD from '../service/FCDLogic';
 
 const nutrientLabels = [
   "Protein",
@@ -37,7 +38,22 @@ const nutrientUnits = {
   "Cholesterol": "mg",
 };
 
-function NutrientTable({ nutrients, totalNutrients, selectedProduct }) {
+function NutrientTable({ nutrients, selectedProduct, selectedDate }) {
+
+  const [totalNutrients, setTotalNutrients] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
+        setTotalNutrients(nutrient);
+      } catch (error) {
+        console.error("Error fetching daily nutrients:", error);
+      }
+    };
+    fetchData();
+  }, [selectedDate]); // Add selectedDate as a dependency
   return (
     <TableContainer component={Paper}>
       <Table>
