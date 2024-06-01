@@ -49,7 +49,7 @@ function NutrientTable({ nutrients, totalNutrients, selectedProduct }) {
         </TableHead>
         <TableBody>
           {nutrientLabels.map((label) => {
-            console.log(nutrients);
+            console.log(nutrients)
             const nutrient = selectedProduct ? nutrients[label] : totalNutrients[label];
             const unit = nutrientUnits[label] || '';
             return nutrient !== undefined ? (

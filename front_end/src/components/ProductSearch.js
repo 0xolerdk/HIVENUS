@@ -9,7 +9,7 @@ function ProductSearch({ onProductSelect }) {
   const getData = async (searchTerm) => {
     const foods = await FCD.find(searchTerm);
     const updatedOptions = foods.map((food) => {
-      return { name: food.description, fdcId: food.fdcId };
+      return { name: food.description, fdcId: food.fdcId, servingSize:food.servingSize};
     });
     setOptions(updatedOptions);
   };
