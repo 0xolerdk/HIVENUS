@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Statistics.css";
 import Donut from "./Donut";
 import NutrientDonut from "./NutrientDonut";
+import FCD from "../service/FCDLogic";
+import dayjs from "dayjs";
 const data = {
   labels: ["Red", "Blue"],
   datasets: [
@@ -51,6 +53,24 @@ const options2 = {
   height: 120,
 };
 function Calendar({ selectedDate }) {
+  const [totalNutrients, setTotalNutrients] = useState({});
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      const savedDate = dayjs(localStorage.getItem("selectedDate"));
+      selectedDate = savedDate;
+
+      try {
+        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
+        setTotalNutrients(nutrient);
+      } catch (error) {
+        console.error("Error fetching daily nutrients:", error);
+      }
+    };
+    fetchData();
+  }, [selectedDate]); // Add selectedDate as a dependency
 
   return (
     <div className="statistics">
@@ -60,7 +80,8 @@ function Calendar({ selectedDate }) {
       text="Food Intake"
       link="/main/calories_intake"
       font_size={1.7}
-      options={options2}/>
+      options={options2}
+      totalNutrients={totalNutrients}/>
         {/* <Donut
           data={data}
           options={options1}

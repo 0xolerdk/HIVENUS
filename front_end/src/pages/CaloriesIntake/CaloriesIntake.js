@@ -31,6 +31,7 @@ function CaloriesIntake() {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedPortion, setSelectedPortion] = useState(null);
+  const [totalNutrients, setTotalNutrients] = useState({});
   const [nutrients, setNutrients] = useState({});
   const [portions, setPortions] = useState([]);
   const [quantity, setQuantity] = useState(1);
@@ -70,9 +71,12 @@ function CaloriesIntake() {
       setSeverity("error");
       setSnackbarOpen(true);
     }
+    fetchAllNutrients();
+
   };
 
   const handleDelete = async (productId) => {
+
     const token = localStorage.getItem("token");
     const response = await DailyLogService.deleteLog(
       productId,
@@ -92,6 +96,8 @@ function CaloriesIntake() {
       setSeverity("error");
       setSnackbarOpen(true);
     }
+    fetchAllNutrients();
+
   };
 
   const fetchHistory = async (date) => {
@@ -138,15 +144,39 @@ function CaloriesIntake() {
     });
 
     const allNutrients = await Promise.all(nutrientPromises);
+    // Assuming you want to sum all nutrients
+    const totalNutrients = allNutrients.flat().reduce((acc, curr) => {
+      if (acc[curr.label]) {
+        acc[curr.label] += curr.intake;
+      } else {
+        acc[curr.label] = curr.intake;
+      }
+      return acc;
+    }, {});
   };
 
   useEffect(() => {
     fetchHistory(date);
   }, [date]);
 
+  const fetchAllNutrients= async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const nutrient = await FCD.calculateDailyNutrients(date.format("YYYY-MM-DD"), token);
+        setTotalNutrients(nutrient);
+      } catch (error) {
+        console.error("Error fetching daily nutrients:", error);
+      }
+  }; 
+
   useEffect(() => {
+    fetchAllNutrients();
+
     if (selectedProduct) {
+     
       const fetchPortionsAndNutrients = async () => {
+
         const portionsObj = await FCD.get_measures(selectedProduct.fdcId);
         const portions = Object.keys(portionsObj);
         setPortions(portions);
@@ -214,6 +244,7 @@ function CaloriesIntake() {
         width={"500px"}
         tooltip={true}
         anim={false}
+        totalNutrients={totalNutrients}
       />
       <div className="menu">
         <ProductSearch onProductSelect={setSelectedProduct} />
@@ -305,6 +336,7 @@ function CaloriesIntake() {
             nutrients={nutrients}
             selectedProduct={selectedProduct}
             selectedDate={date}
+            totalNutrients={totalNutrients}
           />
         </div>
       </div>

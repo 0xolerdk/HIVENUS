@@ -38,22 +38,22 @@ const nutrientUnits = {
   "Cholesterol": "mg",
 };
 
-function NutrientTable({ nutrients, selectedProduct, selectedDate }) {
+function NutrientTable({ nutrients, selectedProduct, selectedDate, totalNutrients }) {
 
-  const [totalNutrients, setTotalNutrients] = useState({});
+  // const [totalNutrients, setTotalNutrients] = useState({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
-        setTotalNutrients(nutrient);
-      } catch (error) {
-        console.error("Error fetching daily nutrients:", error);
-      }
-    };
-    fetchData();
-  }, [selectedDate]); // Add selectedDate as a dependency
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const token = localStorage.getItem("token");
+  //     try {
+  //       const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
+  //       setTotalNutrients(nutrient);
+  //     } catch (error) {
+  //       console.error("Error fetching daily nutrients:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [selectedDate]); // Add selectedDate as a dependency
   return (
     <TableContainer component={Paper}>
       <Table>
