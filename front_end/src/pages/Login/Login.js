@@ -8,14 +8,19 @@ import { Link, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import UserService from '../../service/logRegLogic';
+import UserService from "../../service/logRegLogic";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,21 +28,26 @@ export default function Login() {
   };
 
   const handleSubmit = async (event) => {
-    console.log('submit');
     event.preventDefault();
     try {
       const data = await UserService.login(formData.email, formData.password);
       if (data.statusCode === 200) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user_id', data.user_id);
-        alert('User logged in successfully');
-        navigate('/main');
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.user_id);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("User logged in successfully");
+        setSnackbarOpen(true);
+        navigate("/main");
       } else {
-        alert('An error occurred while logging in');
+        setSnackbarSeverity("error");
+        setSnackbarMessage("An error occurred while logging in");
+        setSnackbarOpen(true);
       }
     } catch (error) {
-      console.error('Error logging in user:', error);
-      alert('An error occurred while logging in');
+      console.error("Error logging in user:", error);
+      setSnackbarSeverity("error");
+      setSnackbarMessage("An error occurred while logging in");
+      setSnackbarOpen(true);
     }
   };
 
@@ -79,25 +89,41 @@ export default function Login() {
             autoComplete="current-password"
             onChange={handleInputChange}
           />
-
-
-          <Grid container>
+          <Grid container  sx={{ mt: 1, mb:4 }}>
             <Grid item xs>
               <Link to="/forgot_pass">Forgot password?</Link>
             </Grid>
             <Grid item>
               <Link to="/auth/reg">{"Don't have an account? Sign Up"}</Link>
             </Grid>
-            <Grid item>              <button className="login-button" type="submit"><span></span>LOGIN</button>
-</Grid>
           </Grid>
-        </Box>
+          <Grid container justifyContent="center"><Grid >
+              <button className="login-button" type="submit">
+                LOGIN
+              </button>
+            </Grid></Grid>
+          
 
+          
+        </Box>
 
         <img className="login_circle" src={login_circle} alt="" />
         <img className="circle" src={circle} alt="" />
       </div>
       <Bottom />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <MuiAlert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }

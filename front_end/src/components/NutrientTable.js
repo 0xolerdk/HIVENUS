@@ -22,6 +22,21 @@ const nutrientLabels = [
   "Cholesterol",
 ];
 
+const nutrientUnits = {
+  "Protein": "g",
+  "Total lipid (fat)": "g",
+  "Carbohydrate, by difference": "g",
+  "Energy": "kcal",
+  "Sugars, total including NLEA": "g",
+  "Fiber, total dietary": "g",
+  "Calcium, Ca": "mg",
+  "Iron, Fe": "mg",
+  "Sodium, Na": "mg",
+  "Vitamin A, IU": "IU",
+  "Vitamin C, total ascorbic acid": "mg",
+  "Cholesterol": "mg",
+};
+
 function NutrientTable({ nutrients, totalNutrients, selectedProduct }) {
   return (
     <TableContainer component={Paper}>
@@ -34,13 +49,15 @@ function NutrientTable({ nutrients, totalNutrients, selectedProduct }) {
         </TableHead>
         <TableBody>
           {nutrientLabels.map((label) => {
+            console.log(nutrients);
             const nutrient = selectedProduct ? nutrients[label] : totalNutrients[label];
+            const unit = nutrientUnits[label] || '';
             return nutrient !== undefined ? (
               <TableRow key={label}>
                 <TableCell component="th" scope="row">
                   {label}
                 </TableCell>
-                <TableCell align="right">{parseFloat(nutrient).toFixed(2)}</TableCell>
+                <TableCell align="right">{`${parseFloat(nutrient).toFixed(2)} ${unit}`}</TableCell>
               </TableRow>
             ) : null;
           })}

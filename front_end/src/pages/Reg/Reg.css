@@ -1,45 +1,47 @@
-.reg-button {
-    position: absolute;
-    margin-top: 600px;
-    height: 30px;
-    width: 150px;
-    z-index: 4;
-    border-radius: 10vw;
-    background-color: #9AD8DA; /* Changed to light coral color */
-    color: white; /* Changed to white color */
-    font-family: 'Koulen';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 50px;
-    line-height: 10wv;
-    text-decoration: none;
-    padding: 14px 49px;
-    border: 0px solid #000;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 0px 10px 0px #669192;
-  }
-  
-  .reg-button span {
-    position: absolute;
-    height: 5vw;
-    width: 20vw;
-    z-index: 5;
-    transform: rotate(0deg);
-  }
-  
-  .reg-button:hover {
-    background-color: #6ca8aa; /* Changed to a darker shade of coral for hover effect */
-  }
-  
-  .reg-button:active {
-    transform: scale(0.95);
-  }
+/* Ensure that the background color is set for autofill */
+input:-webkit-autofill {
+  box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
+  -webkit-box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
+}
 
-  .reg_circle{
-    position: relative;
-    top: 70px;
-    z-index: 2;
-    scale: 0.98;
-  }
+/* Style for autofilled text color */
+input:-webkit-autofill {
+  -webkit-text-fill-color: black !important;
+}
+
+.reg_circle{
+  position: relative;
+  top: 70px;
+  z-index: 2;
+  scale: 0.98;
+}
+
+.reg-button {
+  margin-bottom: 10px;
+  height: 60px;
+  width: 250px;
+  z-index: 4;
+  border-radius: 20px;
+  background-color: #9AD8DA;
+  color: white;
+  font-family: 'Koulen';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.5;
+  text-decoration: none;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px #669192;
+  cursor: pointer;
+}
+
+.reg-button:hover {
+  background-color: #6ca8aa;
+}
+
+.reg-button:active {
+  transform: scale(0.95);
+}
