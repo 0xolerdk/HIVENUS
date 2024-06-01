@@ -1,14 +1,12 @@
-import { Chart, ArcElement, DoughnutController } from "chart.js";
+import { Chart, ArcElement, Tooltip, DoughnutController } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import "./Donut.css";
-import { BrowserRouter as Route, Routes, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useEffect, useRef } from 'react';
 
+Chart.register(ArcElement, Tooltip, DoughnutController);
 
-
-Chart.register(ArcElement, DoughnutController);
-
-function Donut({ data, options, width, height, text, font_size, link }, onClick) {
+function Donut({ data, options, width, height, text, font_size, link, tooltip = false, date }) {
   const textRef = useRef(text);
 
   useEffect(() => {
@@ -41,16 +39,25 @@ function Donut({ data, options, width, height, text, font_size, link }, onClick)
     },
   ];
 
+  const updatedOptions = {
+    ...options,
+    plugins: {
+      tooltip: {
+        enabled: tooltip, // Enable tooltips
+      },
+    },
+  };
+
   return (
     <div>
-      <Link to={link}>
+      <Link to={{ pathname: link, state: { date: date } }}>
         <div
           className="donut"
           style={{ width: width, height: height }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <Doughnut data={data} options={options} plugins={plugins} key={text}/>
+          <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
         </div>
       </Link>
     </div>

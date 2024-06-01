@@ -111,6 +111,7 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="60px"
           height="60px"
           text={date.subtract(3, "day").format("DD")}
+          tooltip={false}
         />
       </div>
       <div onClick={() => subtractDay(2)}>
@@ -120,6 +121,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="100px"
           height="100px"
           text={date.subtract(2, "day").format("DD")}
+          tooltip={false}
+
         />
       </div>
       <div onClick={() => subtractDay(1)}>
@@ -130,6 +133,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="110px"
           height="110px"
           text={date.subtract(1, "day").format("DD")}
+          tooltip={false}
+
         />
       </div>
       <div>
@@ -141,6 +146,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           height="120px"
           text={date.format("DD")}
           font_size={2}
+          tooltip={false}
+
         />
       </div>
       <div onClick={() => addDay(1)}>
@@ -151,6 +158,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="110px"
           height="110px"
           text={date.add(1, "day").format("DD")}
+          tooltip={false}
+
         />
       </div>
       <div onClick={() => addDay(2)}>
@@ -161,6 +170,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="100px"
           height="100px"
           text={date.add(2, "day").format("DD")}
+          tooltip={false}
+
         />
       </div>
       <div onClick={() => addDay(3)}>
@@ -170,6 +181,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
           width="60px"
           height="60px"
           text={date.add(3, "day").format("DD")}
+          tooltip={false}
+
         />
       </div>
     </div>

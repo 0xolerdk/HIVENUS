@@ -9,7 +9,8 @@ function ProductSearch({ onProductSelect }) {
   const getData = async (searchTerm) => {
     const foods = await FCD.find(searchTerm);
     const updatedOptions = foods.map((food) => {
-      return { name: food.description, fdcId: food.fdcId, servingSize:food.servingSize};
+      console.log(food.description)
+      return { description: food.description, fdcId: food.fdcId, servingSize:food.servingSize};
     });
     setOptions(updatedOptions);
   };
@@ -28,7 +29,7 @@ function ProductSearch({ onProductSelect }) {
       options={options}
       onInputChange={onInputChange}
       onChange={(event, value) => onProductSelect(value)}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => option.description}
       style={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Search Product" variant="outlined" />}
     />

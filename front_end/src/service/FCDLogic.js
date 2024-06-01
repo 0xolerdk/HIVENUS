@@ -1,4 +1,5 @@
 import axios from 'axios';
+import DailyLogService from "./DailyLogService"
 
 class FCD {
     static API_KEY = "FPSzFJBUD8wUKeGA5qaFggDIlu7k4pcN9mP6qdx7";
@@ -83,6 +84,44 @@ class FCD {
         });
 
         return nutrients_for_given_grams;
+    }
+
+    static async calculateDailyNutrients(date, token) {
+        const response = await DailyLogService.getLogByDate(date, token);
+        if (response.status !== 200) {
+            throw new Error(`Error fetching log: ${response.statusText}`);
+        }
+
+        const logs = response.data;
+        const nutrientPromises = logs.map(async (log) => {
+            const productPromises = log.products.map(async (product) => {
+                if (product.gram > 0) {
+                    return await this.calculate_nutrients_gram(product.fdcId, product.gram);
+                } else if (product.portion) {
+                    return await this.calculate_nutrients(product.fdcId, product.portion, product.quantity);
+                } else {
+                    const servingSize = product.gram || product.servingSize;
+                    return await this.calculate_nutrients_gram(product.fdcId, servingSize * product.quantity);
+                }
+            });
+
+            const productNutrients = await Promise.all(productPromises);
+            return productNutrients.flat();
+        });
+
+        const allNutrients = await Promise.all(nutrientPromises);
+
+        const totalNutrients = allNutrients.flat().reduce((acc, nutrient) => {
+            if (!acc[nutrient.label]) {
+                acc[nutrient.label] = 0;
+            }
+            acc[nutrient.label] += parseFloat(nutrient.intake) || 0;
+            return acc;
+        }, {});
+
+        console.log(totalNutrients)
+
+        return totalNutrients;
     }
 }
 

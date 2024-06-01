@@ -1,35 +1,113 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Donut from "./Donut";
+import FCD from "../service/FCDLogic";
+import dayjs from "dayjs";
 
-const data3 = {
-    labels: ["Green", "Blue", "Pink", "Yellow", "Grey"],
+const options = {
+  borderWidth: 1,
+  fullSize: true,
+  radius: 200,
+  cutout: "50%",
+  rotation: 90,
+};
+
+function calculateRemaining(nutrient, dailyNorm) {
+  return nutrient > dailyNorm ? 0 : dailyNorm - nutrient;
+}
+
+function calculateExcess(nutrient, dailyNorm) {
+  return nutrient > dailyNorm ? nutrient - dailyNorm : 0;
+}
+
+function NutrientDonut({ selectedDate }) {
+  const [nutrient, setTotalNutrients] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
+        setTotalNutrients(nutrient);
+      } catch (error) {
+        console.error("Error fetching daily nutrients:", error);
+      }
+    };
+    fetchData();
+  }, [selectedDate]); // Add selectedDate as a dependency
+
+  const dailyNorms = {
+    Energy: 1500, // daily norm for energy in kcal
+    Protein: 70, // daily norm for protein in grams
+    Carbohydrate: 20, // daily norm for carbohydrates in grams
+    Fat: 30, // daily norm for fat in grams
+  };
+
+  const data = {
+    labels: ['Consumed', 'Left', 'Excess'],
     datasets: [
       {
-        data: [15, 20, 20, 50, 30],
-        backgroundColor: ["#4CAF50", "#00BCD4", "#E91E63", "#FFC107", "#9E9E9E"],
+        label: 'Energy, kcal',
+        data: [
+          nutrient.Energy || 0,
+          calculateRemaining(nutrient.Energy || 0, dailyNorms.Energy),
+          calculateExcess(nutrient.Energy || 0, dailyNorms.Energy)
+        ],
+        backgroundColor: ['#4caf50', '#333333', '#ff0000'],
+        borderWidth: 5,
+        borderColor: "#333333",
+        borderRadius: 10
       },
-    ],
+      {
+        label: 'Protein, g',
+        data: [
+          nutrient.Protein || 0,
+          calculateRemaining(nutrient.Protein || 0, dailyNorms.Protein),
+          calculateExcess(nutrient.Protein || 0, dailyNorms.Protein)
+        ],
+        backgroundColor: ['#00bcd4', '#333333', '#ff0000'],
+        borderWidth: 4,
+        borderColor: "#333333",
+        borderRadius: 10
+      },
+      {
+        label: 'Carbohydrate, g',
+        data: [
+          nutrient["Carbohydrate, by difference"] || 0,
+          calculateRemaining(nutrient["Carbohydrate, by difference"] || 0, dailyNorms.Carbohydrate),
+          calculateExcess(nutrient["Carbohydrate, by difference"] || 0, dailyNorms.Carbohydrate)
+        ],
+        backgroundColor: ['#faba22', '#333333', '#ff0000'],
+        borderWidth: 4,
+        borderColor: "#333333",
+        borderRadius: 10
+      },
+      {
+        label: 'Fat, g',
+        data: [
+          nutrient["Total lipid (fat)"] || 0,
+          calculateRemaining(nutrient["Total lipid (fat)"] || 0, dailyNorms.Fat),
+          calculateExcess(nutrient["Total lipid (fat)"] || 0, dailyNorms.Fat)
+        ],
+        backgroundColor: ['#e91e63', '#333333', '#ff0000'],
+        borderWidth: 3,
+        borderColor: "#333333",
+        borderRadius: 10,
+        hoverOffset: 4
+      }
+    ]
   };
 
-  const options1 = {
-    borderWidth: 1,
-    fullSize: true,
-    radius: 180,
-    cutout: "85%",
-    rotation: 90,
-  };
-
-function NutrientDonut() {
   return (
     <div className="donuts">
-    <Donut
-      data={data3}
-      options={options1}
-      text={""}
-      height={"500px"}
-      width={"500px"}
-    />
-  </div>
+      <Donut
+        data={data}
+        options={options}
+        text={""}
+        height={"500px"}
+        width={"500px"}
+        tooltip={true}
+      />
+    </div>
   );
 }
 
