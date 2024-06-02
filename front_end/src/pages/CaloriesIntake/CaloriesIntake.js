@@ -157,6 +157,7 @@ function CaloriesIntake() {
 
   useEffect(() => {
     fetchHistory(date);
+    fetchAllNutrients();
   }, [date]);
 
   const fetchAllNutrients= async () => {
@@ -299,13 +300,14 @@ function CaloriesIntake() {
                   />
                 </div>
               )}
-              <Button
+              <div className="center" style={{height:30}}>              <Button
                 variant="contained"
                 onClick={handleConfirm}
                 sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
               >
                 Confirm
-              </Button>
+              </Button></div>
+
             </div>
           )}
           <Snackbar

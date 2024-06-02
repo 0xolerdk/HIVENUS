@@ -4,17 +4,35 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { LocalDining, FitnessCenter, Settings, DataUsage, LocalDrink, Hotel, MonitorWeight } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import UserService from "../../service/logRegLogic"; // Assuming UserService is in this path
 
-function Top_Bar({ pageValue = 0 }) {
-  const [value, setValue] = React.useState(pageValue);
+function Top_Bar() {
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  // Function to determine the current tab based on the path
+  const getTabValue = () => {
+    switch (location.pathname) {
+      case "/main":
+        return 0;
+      case "/main/calories_intake":
+        return 1;
+      case "/main/activity":
+        return 2;
+      case "/main/weight":
+        return 3;
+      case "/main/water_intake":
+        return 4;
+      case "/main/sleep_track":
+        return 5;
+      case "/main/settings":
+        return 6;
+      default:
+        return 0;
+    }
   };
 
   const handleMenuOpen = (event) => {
@@ -36,8 +54,7 @@ function Top_Bar({ pageValue = 0 }) {
       <div className="tabs">
         <img className="logo" src={logo} alt="" />
         <Tabs
-          value={value}
-          onChange={handleChange}
+          value={getTabValue()}
           aria-label="icon tabs example"
           style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
         >
@@ -88,6 +105,7 @@ function Top_Bar({ pageValue = 0 }) {
             aria-label="settings"
             style={{ marginLeft: 'auto' }}
             onClick={handleMenuOpen}
+            to="/main/settings"
           />
         </Tabs>
         <Menu

@@ -14,6 +14,7 @@ import Reg from './pages/Reg/Reg';
 import Login from './pages/Login/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ProtectedComponent  from './service/ProtectedRoute'; // Import ProtectedRoute
+import Settings from './pages/Settings/Settings';
 
 function App() {
     const darkTheme = createTheme({
@@ -56,6 +57,9 @@ function App() {
                 <Route path="/main/water_intake" element={<ProtectedComponent>
                     <WaterIntake />
             </ProtectedComponent>}/>
+            <Route path="/main/settings" element={<ProtectedComponent>
+            <Settings />
+            </ProtectedComponent>} /> // Use ProtectedRoute
         </Routes>
       </Router>
     </ThemeProvider>

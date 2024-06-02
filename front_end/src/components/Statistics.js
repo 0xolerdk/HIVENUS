@@ -49,7 +49,7 @@ const options2 = {
   fullSize: true,
   radius: 150,
   cutout: "50%",
-  rotation: 90,
+  rotation: 0,
   height: 120,
 };
 function Calendar({ selectedDate }) {
@@ -79,7 +79,7 @@ function Calendar({ selectedDate }) {
       selectedDate={selectedDate}
       text="Food Intake"
       link="/main/calories_intake"
-      font_size={1.7}
+      font_size={1.5}
       options={options2}
       totalNutrients={totalNutrients}/>
         {/* <Donut
