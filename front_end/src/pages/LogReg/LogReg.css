@@ -8,7 +8,7 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  transition: transform 0.3s ease-in-out; /* Додаємо плавний перехід */
+  transition: transform 0.3s ease-in-out; /* Adds smooth transition */
 }
 
 @keyframes hoverGrow {
@@ -39,8 +39,8 @@
 
 .circle {
   position: absolute;
-  height: 800px;
-  top: 20px;
+  height: 90vh; /* Reduced size */
+  top: 10px;
 }
 
 .container {
@@ -49,21 +49,27 @@
   position: relative;
 }
 
+.login-img, .reg-img{
+  height: 80vh;
+
+}
+
 .login, .reg {
-  margin-top: 78px;
+
+  margin-top: 50px; /* Adjusted to fit new circle size */
   z-index: 1;
 }
 
 .login {
-  margin-right: -148px; /* Відстань між .login та .reg */
+  margin-right: -130px; /* Adjusted distance */
 }
 
 .icon {
-  transition: filter 0.3s ease-in-out; /* Додаємо плавний перехід */
+  transition: filter 0.3s ease-in-out; /* Adds smooth transition */
 }
 
 .icon:hover {
-  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.2)); /* Ефект тіні при наведенні мишкою */
+  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.2)); /* Shadow effect on hover */
 }
 
 .login-text, .reg-text {
@@ -72,19 +78,19 @@
   font-family: 'Koulen';
   font-style: normal;
   font-weight: 400;
-  font-size: 115px;
-  line-height: 208px;
+  font-size: 80px; /* Reduced font size */
+  line-height: 144px;
   color: #FFFFFF;
   transform: rotate(59deg);
-  pointer-events: none; /* Текст не впливає на події миші */
+  pointer-events: none; /* Text does not interfere with mouse events */
 }
 
 .login-text {
   top: 50%;
-  margin-left: -400px;
+  margin-left: -280px; /* Adjusted to fit new circle size */
 }
 
 .reg-text {
   top: 32%;
-  margin-left: 400px;
+  margin-left: 280px; /* Adjusted to fit new circle size */
 }
