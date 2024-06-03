@@ -50,18 +50,19 @@
 }
 
 .login-img, .reg-img{
-  height: 80vh;
+  height: 78vh;
 
 }
 
 .login, .reg {
 
-  margin-top: 50px; /* Adjusted to fit new circle size */
+  margin-top: 7vh;
+  /* Adjusted to fit new circle size */
   z-index: 1;
 }
 
 .login {
-  margin-right: -130px; /* Adjusted distance */
+  margin-right: -17vh; /* Adjusted distance */
 }
 
 .icon {

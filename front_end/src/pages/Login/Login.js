@@ -62,7 +62,7 @@ export default function Login() {
           component="form"
           onSubmit={handleSubmit}
           noValidate
-          sx={{ mt: 25 }}
+          sx={{ mt: "25vh" }}
           position={"absolute"}
           zIndex={4}
         >
@@ -89,10 +89,11 @@ export default function Login() {
             autoComplete="current-password"
             onChange={handleInputChange}
           />
-          <Grid container  sx={{ mt: 1, mb:4 }}>
-            <Grid item xs>
+          <Grid container  sx={{ mt: 1, mb:4 }}             spacing={"7vh"}
+>
+            {/* <Grid item xs>
               <Link to="/forgot_pass">Forgot password?</Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Link to="/auth/reg">{"Don't have an account? Sign Up"}</Link>
             </Grid>

@@ -94,7 +94,7 @@ export default function Reg() {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 25 }}
+          sx={{ mt: "25vh" }}
           position={"absolute"}
           zIndex={4}
         >
@@ -102,7 +102,7 @@ export default function Reg() {
             width={500}
             xs={13}
             container
-            spacing={5}
+            spacing={"7vh"}
             justifyContent="center"
             alignItems="center"
           >

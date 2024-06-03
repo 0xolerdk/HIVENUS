@@ -11,9 +11,9 @@ input:-webkit-autofill {
 
 .reg_circle{
   position: relative;
-  top: -12px;
+  top: 7vh;
   z-index: 2;
-  scale: 0.82;
+  height: 78vh;
 }
 
 .reg-button {
