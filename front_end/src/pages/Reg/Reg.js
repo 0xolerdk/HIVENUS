@@ -99,10 +99,10 @@ export default function Reg() {
           zIndex={4}
         >
           <Grid
-            width={500}
-            xs={13}
+            width={"50vh"}
+            xs={"1vh"}
             container
-            spacing={"7vh"}
+            spacing={"5vh"}
             justifyContent="center"
             alignItems="center"
           >
@@ -140,7 +140,7 @@ export default function Reg() {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid container justifyContent="flex-end" sx={{mt:2}}>
+            <Grid container justifyContent="flex-end" sx={{mt:"0.2vh"}}>
             <Grid item>
               <Link className="" to="/auth/login">
                 Already have an account? Sign in

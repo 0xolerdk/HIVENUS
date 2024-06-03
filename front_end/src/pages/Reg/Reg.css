@@ -17,18 +17,18 @@ input:-webkit-autofill {
 }
 
 .reg-button {
-  margin-bottom: 10px;
-  height: 60px;
-  width: 250px;
+  margin-top: 1vh;
+  height: 6vh;
+  width: 25vh;
   z-index: 4;
-  border-radius: 20px;
+  border-radius: 2vh;
+  font-weight: 400;
+  font-size: 5vh;
+  line-height: 1.5;
   background-color: #9AD8DA;
   color: white;
   font-family: 'Koulen';
   font-style: normal;
-  font-weight: 400;
-  font-size: 40px;
-  line-height: 1.5;
   text-decoration: none;
   border: none;
   display: inline-flex;

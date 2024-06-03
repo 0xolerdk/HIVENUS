@@ -1,0 +1,35 @@
+/* CSS з CodePen */
+
+.container {
+    perspective: 1000px;
+    
+  }
+  
+  .carousel {
+    width: 300px;
+    height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+  
+  .carousel-item {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    opacity: 0;
+    transition: opacity 1s, transform 1s;
+  }
+  
+  .carousel-item.active {
+    opacity: 1;
+    transform: translateZ(300px);
+  }
+  
+  .carousel-item.next {
+    transform: rotateY(45deg) translateZ(300px);
+  }
+  
+  .carousel-item.prev {
+    transform: rotateY(-45deg) translateZ(300px);
+  }
+  

@@ -9,6 +9,8 @@ input:-webkit-autofill {
   -webkit-text-fill-color: black !important;
 }
 
+
+
 .login_circle{
   position: relative;
   top: 7vh;
@@ -16,18 +18,23 @@ input:-webkit-autofill {
   height: 78vh;
 }
 
+.text{
+  font-weight: 400;
+  font-size: 2vh;
+}
+
 .login-button {
-  margin-top: 20px;
-  height: 60px;
-  width: 250px;
+  margin-top: 2vh;
+  height: 6vh;
+  width: 25vh;
   z-index: 4;
-  border-radius: 20px;
+  border-radius: 2vh;
   background-color: #F8A89A;
   color: white;
   font-family: 'Koulen';
   font-style: normal;
   font-weight: 400;
-  font-size: 50px;
+  font-size: 5vh;
   line-height: 1.5;
   text-decoration: none;
   border: none;

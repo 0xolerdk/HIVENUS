@@ -9,6 +9,7 @@
   top: 20px;
   right: 20px;
   transition: transform 0.3s ease-in-out; /* Adds smooth transition */
+  height: 10vh;
 }
 
 @keyframes hoverGrow {
@@ -79,7 +80,7 @@
   font-family: 'Koulen';
   font-style: normal;
   font-weight: 400;
-  font-size: 80px; /* Reduced font size */
+  font-size: 15vh; /* Reduced font size */
   line-height: 144px;
   color: #FFFFFF;
   transform: rotate(59deg);
@@ -88,10 +89,10 @@
 
 .login-text {
   top: 50%;
-  margin-left: -280px; /* Adjusted to fit new circle size */
+  margin-left: -30vh; /* Adjusted to fit new circle size */
 }
 
 .reg-text {
   top: 32%;
-  margin-left: 280px; /* Adjusted to fit new circle size */
+  margin-left: 30vh; /* Adjusted to fit new circle size */
 }

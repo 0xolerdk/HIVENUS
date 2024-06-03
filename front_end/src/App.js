@@ -17,11 +17,23 @@ import ProtectedComponent  from './service/ProtectedRoute'; // Import ProtectedR
 import Settings from './pages/Settings/Settings';
 
 function App() {
-    const darkTheme = createTheme({
-        palette: {
-          mode: 'dark',
-        },
-      });
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark'
+
+    },
+    typography: {
+      h4: {
+        color: '#ffffff',
+      },
+      body1: {
+        color: '#ffffff',
+      },
+      body2: {
+        color: '#aaaaaa',
+      },
+    },
+  });
     return(
 
 

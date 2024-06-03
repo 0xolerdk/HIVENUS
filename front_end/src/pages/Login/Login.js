@@ -59,6 +59,8 @@ export default function Login() {
 
       <div className="container">
         <Box
+                    width={"50vh"}
+
           component="form"
           onSubmit={handleSubmit}
           noValidate
@@ -78,7 +80,7 @@ export default function Login() {
             onChange={handleInputChange}
           />
           <TextField
-            sx={{ mt: 6 }}
+            sx={{ mt: "7vh" }}
             margin="normal"
             required
             fullWidth
@@ -89,13 +91,13 @@ export default function Login() {
             autoComplete="current-password"
             onChange={handleInputChange}
           />
-          <Grid container  sx={{ mt: 1, mb:4 }}             spacing={"7vh"}
+          <Grid container  sx={{mb:"4vh" }}             spacing={"5vh"}
 >
             {/* <Grid item xs>
               <Link to="/forgot_pass">Forgot password?</Link>
             </Grid> */}
             <Grid item>
-              <Link to="/auth/reg">{"Don't have an account? Sign Up"}</Link>
+              <Link className="text" to="/auth/reg">{"Don't have an account? Sign Up"}</Link>
             </Grid>
           </Grid>
           <Grid container justifyContent="center"><Grid >

@@ -4,8 +4,7 @@ import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import Calendar from "../../components/Calendar/Calendar";
 import Statistics from "../../components/Statistics";
 import dayjs from "dayjs";
-import { useEffect } from "react";
-import FCD from "../../service/FCDLogic";
+
 
 
 function Statistic() {
