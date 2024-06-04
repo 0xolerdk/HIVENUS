@@ -1,6 +1,7 @@
 /* CSS з CodePen */
 
 .container {
+    top: 50px;
     perspective: 1000px;
     
   }
