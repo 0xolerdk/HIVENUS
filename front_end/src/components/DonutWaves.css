@@ -1,0 +1,30 @@
+.donut-container {
+    margin-top: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .donut {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .wave-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;  /* Adjust as needed */
+    height: 80%; /* Adjust as needed */
+    pointer-events: none; /* Allows interactions with the donut chart */
+  }
+  
+  .waves-circle {
+    width: 100%;
+    height: 100%;
+  }
+  
