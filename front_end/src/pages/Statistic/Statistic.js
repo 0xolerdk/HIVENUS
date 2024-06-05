@@ -25,7 +25,7 @@ function Statistic() {
         <div className="center" style={{height:"40px", marginTop: "20px"}}>
           {/* <Add/> */}
         </div>
-      <div>
+      <div className="statistics">
         <Statistics selectedDate={selectedDate}/>
       </div>
     </div>

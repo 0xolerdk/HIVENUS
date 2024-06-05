@@ -3,19 +3,19 @@ import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import LocalDiningOutlinedIcon from '@mui/icons-material/LocalDiningOutlined';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-
+import { LocalDrink, Opacity, WaterDrop } from '@mui/icons-material';
 const actions = [
-  { icon: <LocalDiningOutlinedIcon />, name: 'Intake' },
-  { icon: <FitnessCenterIcon />, name: 'Activite' },
+  { icon: <LocalDrink />, name: '200ml' },
+  { icon: <Opacity />, name: '500ml' },
+  { icon: <WaterDrop />, name: '1000ml' },
+
 
 ];
 
 export default function BasicSpeedDial() {
   return (
     <div>
-    <Box sx={{ height: "20px", transform: 'translateZ(0px)', flexGrow: 1 }}>
+    <Box sx={{ height: "20px", transform: 'translateZ(0px)', flexGrow: 1, mt: 2 }}>
       <SpeedDial
         ariaLabel="SpeedDial basic example"
                 icon={<SpeedDialIcon />}

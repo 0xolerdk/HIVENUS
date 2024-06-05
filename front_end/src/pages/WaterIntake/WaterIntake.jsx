@@ -5,6 +5,7 @@ import Top_Bar from "../../components/Top_Bar/Top_Bar.js";
 import "./WaterIntake.css";
 import WavesCircle from "../../components/WavesCircle.jsx";
 import DonutWaves from "../../components/DonutWaves.jsx";
+import Add from "../../components/Add.js"
 
 const data = {
   labels: ["Red", "Blue"],
@@ -44,6 +45,7 @@ export default function WaterIntake() {
         <Calendar selectedDate={selectedDate} onDateChange={handleDateChange} />
       </div>
       <DonutWaves data={data} options={options1} text={""} />
+      <Add className="add_button"/>
       
     </div>
   );

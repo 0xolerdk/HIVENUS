@@ -12,7 +12,7 @@ export default function SleepTrack() {
   }
   return (
     <div>
-    <Top_Bar pageValue={5}/>
+    <Top_Bar pageValue={2}/>
     <div className="calendar" >
         <Calendar selectedDate={selectedDate} onDateChange={handleDateChange}/>
       </div>

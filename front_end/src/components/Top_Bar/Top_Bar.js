@@ -20,16 +20,12 @@ function Top_Bar() {
         return 0;
       case "/main/calories_intake":
         return 1;
-      case "/main/activity":
-        return 2;
-      case "/main/weight":
-        return 3;
       case "/main/water_intake":
-        return 4;
+        return 2;
       case "/main/sleep_track":
-        return 5;
+        return 3;
       case "/main/settings":
-        return 6;
+        return 4;
       default:
         return 0;
     }
@@ -72,20 +68,7 @@ function Top_Bar() {
             component={Link}
             to="/main/calories_intake"
           />
-          <Tab
-            icon={<FitnessCenter />}
-            aria-label="Use"
-            style={{ left: 0 }}
-            component={Link}
-            to="/main/activity"
-          />
-          <Tab
-            icon={<MonitorWeight />}
-            aria-label="Weight"
-            style={{ left: 90 }}
-            component={Link}
-            to="/main/weight"
-          />
+          
           <Tab
             icon={<LocalDrink />}
             aria-label="Water"

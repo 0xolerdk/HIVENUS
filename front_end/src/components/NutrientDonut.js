@@ -82,7 +82,6 @@ function NutrientDonut({ totalNutrients, width, height, text, font_size, link, o
   };
 
   return (
-    <div className="donuts">
       <Donut
         data={data}
         options={options}
@@ -94,7 +93,6 @@ function NutrientDonut({ totalNutrients, width, height, text, font_size, link, o
         tooltip={tooltip}
         anim={anim}
       />
-    </div>
   );
 }
 

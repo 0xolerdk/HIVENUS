@@ -236,8 +236,7 @@ function CaloriesIntake() {
       <div className="calendar">
         <Calendar date={date} onDateChange={setDate} />
       </div>
-
-      <NutrientDonut
+      <div className="donut"><NutrientDonut
         selectedDate={date}
         options={options}
         text={""}
@@ -246,7 +245,8 @@ function CaloriesIntake() {
         tooltip={true}
         anim={false}
         totalNutrients={totalNutrients}
-      />
+      /> </div>
+      
       <div className="menu">
         <ProductSearch onProductSelect={setSelectedProduct} />
         <div className="search-box">
