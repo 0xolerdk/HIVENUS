@@ -73,7 +73,7 @@ const options1 = {
 const options2 = {
   borderWidth: 1,
   fullSize: false,
-  radius: 150,
+  radius: 140,
   cutout: "50%",
   rotation: 0,
   height: 120,

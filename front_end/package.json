@@ -33,6 +33,7 @@
     "react-spring": "^9.7.3",
     "react-transition-group": "^4.4.5",
     "react-wavify": "^1.10.0",
+    "styled-components": "^6.1.11",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

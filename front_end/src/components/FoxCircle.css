@@ -1,0 +1,363 @@
+/* Keyframes for day to night transition */
+@keyframes dayToNight {
+    0% {
+        background: #DDDDDD;
+    }
+    50% {
+        background: #999999;
+    }
+    100% {
+        background: #222222;
+    }
+}
+
+@keyframes nightToDay {
+    0% {
+        background: #222222;
+    }
+    50% {
+        background: #999999;
+    }
+    100% {
+        background: #DDDDDD;
+    }
+}
+
+@keyframes sunDisappear {
+    0% {
+        top: 18px;
+        opacity: 1;
+    }
+    100% {
+        top: -40px;
+        opacity: 0;
+    }
+}
+
+@keyframes sunAppear {
+    0% {
+        top: -40px;
+        opacity: 0;
+    }
+    100% {
+        top: 18px;
+        opacity: 1;
+    }
+}
+
+@keyframes moonAppear {
+    0% {
+        top: 100px;
+        opacity: 0;
+    }
+    100% {
+        top: 40px;
+        opacity: 1;
+    }
+}
+
+@keyframes moonDisappear {
+    0% {
+        top: 40px;
+        opacity: 1;
+    }
+    100% {
+        top: 100px;
+        opacity: 0;
+    }
+}
+
+@keyframes foxDayToNight {
+    0% {
+        background: #E86A47;
+    }
+    100% {
+        background: #C74628;
+    }
+}
+
+@keyframes foxNightToDay {
+    0% {
+        background: #C74628;
+    }
+    100% {
+        background: #E86A47;
+    }
+}
+
+/* Apply animations */
+.c-window {
+    transition: background 2s linear;
+    -webkit-transition: background 2s linear;
+}
+
+.c-window.day {
+    animation: nightToDay 2s forwards;
+}
+
+.c-window.night {
+    animation: dayToNight 2s forwards;
+}
+
+.c-window .the-sun {
+    transition: top 2s, opacity 2s;
+}
+
+.c-window.day .the-sun {
+    animation: sunAppear 2s forwards;
+}
+
+.c-window.night .the-sun {
+    animation: sunDisappear 2s forwards;
+}
+
+.c-window .the-moon {
+    transition: top 2s, opacity 2s;
+}
+
+.c-window.day .the-moon {
+    animation: moonDisappear 2s forwards;
+}
+
+.c-window.night .the-moon {
+    animation: moonAppear 2s forwards;
+}
+
+.c-window .the-fox {
+    transition: background 2s;
+}
+
+.c-window.day .the-fox {
+    animation: foxNightToDay 2s forwards;
+}
+
+.c-window.night .the-fox {
+    animation: foxDayToNight 2s forwards;
+}
+
+/* Your existing styles */
+.switch-container {
+    position: relative;
+    top: 400px;
+    left: -120px;
+    height: 10px;
+}
+
+.the-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 42px;
+    left: -8px;
+}
+
+.c-window {
+    display: flex;
+    left: 50px;
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 100%;
+    border: 8px solid #34A87C;
+    background: #DDDDDD;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.25) inset;
+    overflow: hidden;
+}
+
+.c-window .the-sun {
+    display: block;
+    position: relative;
+    top: 18px;
+    height: 40px;
+    width: 40px;
+    background: #FFE067;
+    border-radius: 100%;
+    margin: 0 auto;
+    left: 30px;
+}
+
+.c-window.night .the-sun {
+    display: none;
+}
+
+.c-window .the-moon {
+    position: relative;
+    height: 24px;
+    width: 24px;
+    background: #EEE;
+    border-radius: 100%;
+    display: none;
+}
+
+.c-window.night .the-moon {
+    display: block;
+    margin: 0 auto;
+    top: 40px;
+    left: 60px;
+}
+
+.c-window .the-fox {
+    display: block;
+    position: absolute;
+    bottom: -20px;
+    height: 140px;
+    width: 135px;
+    margin: 0 50px;
+    background: #E86A47;
+    transition: bottom 1s;
+    -webkit-transition: bottom .15s ease-in-out;
+}
+
+.c-window.night .the-fox {
+    background: #C74628;
+}
+
+.c-window .the-fox:before, .c-window .the-fox:after {
+    content: "";
+}
+
+.c-window .the-fox:before {
+    width: 0;
+    height: 0;
+    border-left: 0px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 30px solid #E86A47;
+    top: -25px;
+    left: 0;
+    position: absolute;
+}
+
+.c-window.night .the-fox:before {
+    border-bottom: 30px solid #C74628;
+    top: -29px;
+}
+
+.c-window .the-fox:after {
+    width: 0;
+    height: 0;
+    border-right: 0px solid transparent;
+    border-left: 60px solid transparent;
+    border-bottom: 30px solid #E86A47;
+    top: -29px;
+    right: 0;
+    position: absolute;
+}
+
+.c-window.night .the-fox:after {
+    border-bottom: 30px solid #C74628;
+}
+
+.c-window .the-fox:hover {
+    bottom: -30px;
+}
+
+.c-window .the-fox .eyes {
+    display: block;
+    position: absolute;
+    background: #FFFFFF;
+    height: 15px;
+    width: 15px;
+    border-radius: 100%;
+    bottom: 90px;
+    -webkit-transition: all .15s linear;
+}
+
+.c-window.night .the-fox .eyes {
+    height: 2px;
+    bottom: 90px;
+}
+
+.c-window .the-fox:hover .eyes {
+    height: 2px;
+    bottom: 97px;
+}
+
+.c-window.night .the-fox:hover .eyes {
+    height: 15px;
+    bottom: 85px;
+}
+
+.c-window .the-fox .eyes.left {
+    left: 30px;
+}
+
+.c-window .the-fox .eyes.right {
+    right: 30px;
+}
+
+.c-window .the-fox .nose {
+    display: block;
+    position: relative;
+    background: #333;
+    height: 12px;
+    width: 12px;
+    border-radius: 100%;
+    margin: 0 auto;
+    top: 50px;
+}
+
+.c-window .the-fox .white-part {
+    display: block;
+    position: relative;
+    width: 0px;
+    height: 0px;
+    top: 55px;
+    border-style: solid;
+    border-width: 60px 70px 0 65px;
+    border-color: #ffffff transparent transparent transparent;
+}
+
+/* Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #34A87C;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
