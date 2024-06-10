@@ -1,7 +1,6 @@
 package com.hivenus.back_end.service;
 
 import com.hivenus.back_end.dto.DailyLogDto;
-import com.hivenus.back_end.entity.Activity;
 import com.hivenus.back_end.entity.DailyLog;
 import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.entity.Product;
@@ -102,7 +101,6 @@ public class DailyLogManagmentService {
                     .collect(Collectors.toList());
 
             dailyLog.setProducts(savedProducts);
-            dailyLog.setActivities(dailyLogDto.getActivities());
             DailyLog updatedDailyLog = dailyLogRepository.save(dailyLog);
             return convertToDto(updatedDailyLog);
         } else {
@@ -131,14 +129,7 @@ public class DailyLogManagmentService {
 
                     return simplifiedProduct;
                 })
-                .collect(Collectors.toList()));
-        dailyLogDto.setActivities(dailyLog.getActivities().stream()
-                .map(activity -> {
-                    Activity simplifiedActivity = new Activity();
-                    simplifiedActivity.setId(activity.getId());
-                    simplifiedActivity.setName(activity.getName());
-                    return simplifiedActivity;
-                })
+
                 .collect(Collectors.toList()));
         return dailyLogDto;
     }
@@ -147,7 +138,6 @@ public class DailyLogManagmentService {
         DailyLog dailyLog = new DailyLog();
         dailyLog.setDate(dailyLogDto.getDate());
         dailyLog.setProducts(dailyLogDto.getProducts());
-        dailyLog.setActivities(dailyLogDto.getActivities());
         return dailyLog;
     }
 

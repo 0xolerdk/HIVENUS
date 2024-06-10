@@ -34,14 +34,21 @@ public class DailyLog {
     )
     private List<Product> products;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+        @OneToOne(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "daily_log_activities",
+        name = "daily_log_sleep_track",
         joinColumns = @JoinColumn(name = "daily_log_id"),
-        inverseJoinColumns = @JoinColumn(name = "activity_id")
+        inverseJoinColumns = @JoinColumn(name = "sleep_track_id")
     )
-    private List<Activity> activities;
+    private SleepTrack sleepTrack;
 
-    private int duration; // duration in minutes
-    private int caloriesBurned;
+                @OneToOne(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "daily_log_water_intake",
+        joinColumns = @JoinColumn(name = "daily_log_id"),
+        inverseJoinColumns = @JoinColumn(name = "water_intake_id")
+    )
+    private WaterIntake waterIntake;
+
+
 }

@@ -1,11 +1,13 @@
 package com.hivenus.back_end.controller;
 
-import com.hivenus.back_end.service.ProductManagmentService;
 import com.hivenus.back_end.entity.Product;
+import com.hivenus.back_end.service.ProductManagmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,6 +29,13 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    @GetMapping("/date")
+    public ResponseEntity<List<Product>> getProductsByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<Product> products = productService.getProductsByDate(date);
+        return ResponseEntity.ok(products);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
@@ -38,7 +47,6 @@ public class ProductController {
         List<Product> createdProducts = productService.createProducts(products);
         return ResponseEntity.ok(createdProducts);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
