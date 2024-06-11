@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hivenus.back_end.entity.OurUser;
 import com.hivenus.back_end.entity.Product;
+import com.hivenus.back_end.entity.SleepTrack;
+import com.hivenus.back_end.entity.WaterIntake;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,8 @@ public class DailyLogDto {
     private Long id;
     private LocalDate date;
     private List<Product> products;
+    private SleepTrack sleepTrack;
+    private WaterIntake waterIntake;
     private OurUser user;
 
 }

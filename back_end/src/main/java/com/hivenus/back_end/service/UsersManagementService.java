@@ -30,8 +30,7 @@ public class UsersManagementService {
     @Autowired
     private DailyLogRepository dailyLogRepository;
 
-
-    public UserDto register(UserDto registrationRequest){
+    public UserDto register(UserDto registrationRequest) {
         UserDto resp = new UserDto();
 
         try {
@@ -40,8 +39,7 @@ public class UsersManagementService {
             if (existingUser.isPresent()) {
                 resp.setStatusCode(400);
                 resp.setMessage("A user with this email already exists");
-            }
-            else{
+            } else {
                 OurUser ourUser = new OurUser();
 
                 DailyLog dailyLog = new DailyLog();
@@ -49,7 +47,6 @@ public class UsersManagementService {
                 ourUser.setRole(registrationRequest.getRole());
                 ourUser.setName(registrationRequest.getName());
                 ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-
 
                 resp.setOurUsers(ourUser);
                 resp.setMessage("User Saved Successfully");
@@ -63,16 +60,14 @@ public class UsersManagementService {
                 dailyLog.setUser(savedUser);
                 dailyLogRepository.save(dailyLog);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
         }
         return resp;
     }
 
-
-
-    public UserDto login(UserDto loginRequest){
+    public UserDto login(UserDto loginRequest) {
         UserDto response = new UserDto();
         try {
             authenticationManager
@@ -88,20 +83,16 @@ public class UsersManagementService {
             response.setExpirationTime("24Hrs");
             response.setMessage("Successfully Logged In");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage(e.getMessage());
         }
         return response;
     }
 
-
-
-
-
-    public UserDto refreshToken(UserDto refreshTokenReqiest){
+    public UserDto refreshToken(UserDto refreshTokenReqiest) {
         UserDto response = new UserDto();
-        try{
+        try {
             String ourEmail = jwtUtils.extractUsername(refreshTokenReqiest.getToken());
             OurUser users = usersRepo.findByEmail(ourEmail).orElseThrow();
             if (jwtUtils.isTokenValid(refreshTokenReqiest.getToken(), users)) {
@@ -115,13 +106,12 @@ public class UsersManagementService {
             response.setStatusCode(200);
             return response;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage(e.getMessage());
             return response;
         }
     }
-
 
     public UserDto getAllUsers() {
         UserDto userDto = new UserDto();
@@ -144,7 +134,6 @@ public class UsersManagementService {
         }
     }
 
-
     public UserDto getUsersById(Long id) {
         UserDto userDto = new UserDto();
         try {
@@ -158,7 +147,6 @@ public class UsersManagementService {
         }
         return userDto;
     }
-
 
     public UserDto deleteUser(Long userId) {
         UserDto userDto = new UserDto();
@@ -210,8 +198,7 @@ public class UsersManagementService {
         return userDto;
     }
 
-
-    public UserDto getMyInfo(String email){
+    public UserDto getMyInfo(String email) {
         UserDto userDto = new UserDto();
         try {
             Optional<OurUser> userOptional = usersRepo.findByEmail(email);
@@ -224,11 +211,10 @@ public class UsersManagementService {
                 userDto.setMessage("User not found for update");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             userDto.setStatusCode(500);
             userDto.setMessage("Error occurred while getting user info: " + e.getMessage());
         }
         return userDto;
-
     }
 }
