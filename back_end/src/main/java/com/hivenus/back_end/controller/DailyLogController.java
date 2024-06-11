@@ -24,8 +24,7 @@ public class DailyLogController {
     private DailyLogManagmentService dailyLogManagmentService;
     @Autowired
     private UsersManagementService usersManagementService;
-    @Autowired
-    private OurUserDetailsService ourUserDetailsService;
+
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<DailyLogDto>> getAllDailyLogs() {
