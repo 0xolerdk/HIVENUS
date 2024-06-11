@@ -91,6 +91,10 @@ class UserService{
         localStorage.removeItem('role')
     }
 
+    static getToken(){
+        return localStorage.getItem('token'); // Or wherever you store the token
+      }
+
     static isAuthenticated(){
         const token = localStorage.getItem('token')
         return !!token

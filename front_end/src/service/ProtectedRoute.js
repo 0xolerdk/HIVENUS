@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import UserService from './logRegLogic.js';
 
 const ProtectedComponent = ({ children }) => {
-  const navigate = useNavigate();
-  const isAuthenticated = UserService.isAuthenticated();
-
+  const [isAuthenticated, setIsAuthenticated] = useState(UserService.isAuthenticated());
 
   useEffect(() => {
-
     if (!isAuthenticated) {
-      console.log("you are not logined")
-      navigate('/auth');
+      console.log("You are not logged in");
     }
-  }, [navigate]);
+  }, [isAuthenticated]);
 
-  return isAuthenticated ? children : null;
+  return isAuthenticated ? children : <Navigate to="/auth" />;
 };
 
 export default ProtectedComponent;

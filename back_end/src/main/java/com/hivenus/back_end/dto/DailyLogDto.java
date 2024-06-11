@@ -20,17 +20,8 @@ public class DailyLogDto {
     private String error;
     private String message;
     private Long id;
-
-    @Setter
-    @Getter
     private LocalDate date;
-
-    @Setter
-    @Getter
     private List<Product> products;
-    @Setter
-    @Getter
-//    private DailyLog dailyLog;
     private OurUser user;
 
 }

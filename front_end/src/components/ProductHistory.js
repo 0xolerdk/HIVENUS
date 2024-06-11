@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function ProductHistory({ history, onDelete, onProductSelect, onPortionSelect, onQuantitySelect, onGramsSelect, selectedProduct }) {
+function ProductHistory({ history, onDelete, onProductSelect, onPortionSelect, onQuantitySelect, onGramsSelect }) {
   const [selectedProductId, setSelectedProductId] = useState(null);
 
   const handleProductSelect = (product, index) => {
