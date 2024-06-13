@@ -113,7 +113,7 @@ function CaloriesIntake() {
           nutrientsArr = await FCD.calculate_nutrients(product.fdcId, product.portion, product.quantity);
         } else {
           const servingSize = product.gram || selectedProduct.servingSize;
-          nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, servingSize * product.quantity);
+          nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
         }
         return nutrientsArr;
       });
@@ -149,6 +149,33 @@ function CaloriesIntake() {
     }
   };
 
+  const calculateNutrients = async (product, portion, grams, quantity) => {
+    try {
+      let nutrientsArr;
+      if (grams > 0) {
+        nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
+      } else if (portion) {
+        nutrientsArr = await FCD.calculate_nutrients(product.fdcId, portion, quantity);
+      } else {
+        const totalGrams = product.servingSize * quantity;
+        nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
+      }
+
+      if (!Array.isArray(nutrientsArr)) {
+        throw new Error("Invalid response from FCD service");
+      }
+
+      const nutrients = nutrientsArr.reduce((acc, nutrient) => {
+        acc[nutrient.label] = nutrient.intake;
+        return acc;
+      }, {});
+      setNutrients(nutrients);
+    } catch (error) {
+      console.error("Error calculating nutrients:", error);
+      setNutrients({});
+    }
+  };
+
   useEffect(() => {
     if (selectedProduct) {
       const fetchPortionsAndNutrients = async () => {
@@ -156,56 +183,37 @@ function CaloriesIntake() {
         const portions = Object.keys(portionsObj);
         setPortions(portions);
         if (portions.length === 0) {
-          const nutrientsArr = await FCD.calculate_nutrients_gram(selectedProduct.fdcId, selectedProduct.servingSize);
-          const nutrients = Array.isArray(nutrientsArr) ? nutrientsArr.reduce((acc, nutrient) => {
-            acc[nutrient.label] = nutrient.intake;
-            return acc;
-          }, {}) : {};
-          setNutrients(nutrients);
+          const totalGrams = selectedProduct.servingSize;
+          calculateNutrients(selectedProduct, "", grams, quantity);
         } else {
-          setNutrients({});
+          calculateNutrients(selectedProduct, selectedPortion, grams, quantity);
         }
-        setGrams(selectedProduct.servingSize);
       };
       fetchPortionsAndNutrients();
+    }
+  }, [selectedProduct, selectedPortion, grams, quantity]);
+
+  const handleProductSelect = (productId) => {
+    if (selectedProduct) {
+      setSelectedProduct(null);
+      setIsFromHistory(false);
+      setSelectedPortion("");
       setQuantity(1);
-    }
-  }, [selectedProduct]);
-
-  useEffect(() => {
-    if (selectedProduct && (selectedPortion || portions.length === 0)) {
-      const fetchNutrients = async () => {
-        let nutrientsArr;
-        try {
-          if (grams > 0) {
-            nutrientsArr = await FCD.calculate_nutrients_gram(selectedProduct.fdcId, grams);
-          } else if (selectedPortion) {
-            nutrientsArr = await FCD.calculate_nutrients(selectedProduct.fdcId, selectedPortion, quantity);
-          } else if (selectedProduct.servingSize) {
-            nutrientsArr = await FCD.calculate_nutrients_gram(selectedProduct.fdcId, selectedProduct.servingSize * quantity);
-          }
-
-          if (!Array.isArray(nutrientsArr)) {
-            throw new Error("Invalid response from FCD service");
-          }
-
-          const nutrients = nutrientsArr.reduce((acc, nutrient) => {
-            acc[nutrient.label] = nutrient.intake;
-            return acc;
-          }, {});
-          setNutrients(nutrients);
-        } catch (error) {
-          console.error("Error calculating nutrients:", error);
-          setNutrients({});
+      setGrams(0);
+    } else {
+      const product = history[0].products.find((item) => item.id === productId);
+      if (product) {
+        setSelectedProduct(product);
+        setIsFromHistory(true); // Mark as selected from history
+        if (product.portion) {
+          console.log("Portion selected:", product.portion);
+          setSelectedPortion(product.portion);
         }
-      };
-      fetchNutrients();
+        setQuantity(product.quantity);
+        setGrams(product.gram); // Adjust grams calculation here
+      }
     }
-  }, [selectedProduct, selectedPortion, quantity, grams, portions]);
-
-  useEffect(() => {
-    console.log("CaloriesIntake updated", { selectedProduct, selectedPortion, quantity, grams, nutrients });
-  }, [selectedProduct, selectedPortion, quantity, grams, nutrients]);
+  };
 
   return (
     <div>
@@ -214,7 +222,16 @@ function CaloriesIntake() {
         <Calendar date={date} onDateChange={setDate} />
       </div>
       <div className="donut">
-        <NutrientDonut selectedDate={date} options={options} text={""} height={"500px"} width={"500px"} tooltip={true} anim={false} totalNutrients={totalNutrients} />
+        <NutrientDonut
+          selectedDate={date}
+          options={options}
+          text={""}
+          height={"500px"}
+          width={"500px"}
+          tooltip={true}
+          anim={false}
+          totalNutrients={totalNutrients}
+        />
       </div>
       <div className="menu">
         <ProductSearch
@@ -229,7 +246,7 @@ function CaloriesIntake() {
         <div className="search-box">
           {selectedProduct && (
             <div>
-              {portions.length > 0 ? (
+              {!isFromHistory && portions.length > 0 ? (
                 <>
                   <Select
                     className="center"
@@ -249,39 +266,47 @@ function CaloriesIntake() {
                     label="Quantity"
                     value={quantity}
                     sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
-                    onChange={(event) => setQuantity(event.target.value)}
+                    onChange={(event) => setQuantity(Number(event.target.value))}
                   />
                   <TextField
                     type="number"
                     label="Grams"
                     value={grams}
-                    onChange={(event) => setGrams(event.target.value)}
+                    onChange={(event) => setGrams(Number(event.target.value))}
                     sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
                   />
+                                      <div className="center" style={{ height: 30 }}>
+                      <Button
+                        variant="contained"
+                        onClick={handleConfirm}
+                        sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
+                      >
+                        Confirm
+                      </Button>
+                    </div>
                 </>
               ) : (
-                <div>
-                  <TextField
-                    type="number"
-                    label="Quantity"
-                    value={quantity}
-                    onChange={(event) => setQuantity(event.target.value)}
-                    sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
-                  />
-                  <TextField
-                    type="number"
-                    label="Grams"
-                    value={grams}
-                    onChange={(event) => setGrams(event.target.value)}
-                    sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
-                  />
-                </div>
+                !isFromHistory && (
+                  <div>
+                    <TextField
+                      type="number"
+                      label="Grams"
+                      value={grams}
+                      onChange={(event) => setGrams(Number(event.target.value))}
+                      sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
+                    />
+                    <div className="center" style={{ height: 30 }}>
+                      <Button
+                        variant="contained"
+                        onClick={handleConfirm}
+                        sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
+                      >
+                        Confirm
+                      </Button>
+                    </div>
+                  </div>
+                )
               )}
-              <div className="center" style={{ height: 30 }}>
-                <Button variant="contained" onClick={handleConfirm} disabled={isFromHistory} sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}>
-                  Confirm
-                </Button>
-              </div>
             </div>
           )}
           <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
@@ -293,22 +318,7 @@ function CaloriesIntake() {
       </div>
       <div className="main-container">
         <div className="left-container">
-          <ProductHistory
-            history={history}
-            onDelete={handleDelete}
-            onProductSelect={(product) => {
-              setSelectedProduct(product);
-              setIsFromHistory(true); // Mark as selected from history
-              if (product) {
-                setSelectedPortion(product.portion);
-                setQuantity(product.quantity);
-                setGrams(product.gram);
-              }
-            }}
-            onPortionSelect={setSelectedPortion}
-            onQuantitySelect={setQuantity}
-            onGramsSelect={setGrams}
-          />
+          <ProductHistory history={history} onDelete={handleDelete} onProductSelect={handleProductSelect} />
         </div>
         <div className="right-container">
           <NutrientTable nutrients={selectedProduct ? nutrients : totalNutrients} />

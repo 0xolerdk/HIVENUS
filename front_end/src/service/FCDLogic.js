@@ -1,9 +1,9 @@
 import axios from 'axios';
-import DailyLogService from "./DailyLogService"
+import DailyLogService from "./DailyLogService";
 
 class FCD {
-    static API_KEY = "FPSzFJBUD8wUKeGA5qaFggDIlu7k4pcN9mP6qdx7";
-    static API_URL = "https://api.nal.usda.gov/fdc/v1/";
+    static API_KEY = process.env.REACT_APP_FCD_API_KEY;
+    static API_URL = process.env.REACT_APP_FCD_AUTH_DOMAIN;
 
     static get_url(command) {
         return `${this.API_URL}${command}?api_key=${this.API_KEY}`;
@@ -119,7 +119,7 @@ class FCD {
             return acc;
         }, {});
 
-        console.log(totalNutrients)
+        console.log(totalNutrients);
 
         return totalNutrients;
     }

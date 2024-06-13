@@ -9,23 +9,16 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function ProductHistory({ history, onDelete, onProductSelect, onPortionSelect, onQuantitySelect, onGramsSelect }) {
+function ProductHistory({ history, onDelete, onProductSelect }) {
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  const handleProductSelect = (product, index) => {
-    const productId = `${product.fdcId}-${index}`;
+  const handleProductSelect = (productId) => {
     if (selectedProductId === productId) {
       setSelectedProductId(null);
       onProductSelect(null);
-      onPortionSelect("");
-      onQuantitySelect(1);
-      onGramsSelect(0);
     } else {
       setSelectedProductId(productId);
-      onProductSelect(product);
-      onPortionSelect(product.portion);
-      onQuantitySelect(product.quantity);
-      onGramsSelect(product.gram);
+      onProductSelect(productId);
     }
   };
 
@@ -44,11 +37,11 @@ function ProductHistory({ history, onDelete, onProductSelect, onPortionSelect, o
         <TableBody>
           {history.length > 0 && history[0].products.map((item, index) => (
             <TableRow
-              key={`${item.fdcId}-${index}`}
-              onClick={() => handleProductSelect(item, index)}
-              selected={selectedProductId === `${item.fdcId}-${index}`}
+              key={item.id}
+              onClick={() => handleProductSelect(item.id)}
+              selected={selectedProductId === item.id}
               style={{
-                backgroundColor: selectedProductId === `${item.fdcId}-${index}` ? '#686868' : 'inherit',
+                backgroundColor: selectedProductId === item.id ? '#686868' : 'inherit',
                 cursor: 'pointer'
               }}
             >

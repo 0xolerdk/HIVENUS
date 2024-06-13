@@ -50,7 +50,7 @@ function DonutWaves({ data, options, width = '400px', height = '400px', text, fo
   };
 
   return (
-    <div className="donut-container">
+    <div className="donut-water-container">
       <Link to={link}>
         <div className="donut" style={{ width: width, height: height, position: 'relative' }}>
           <div className="wave-wrapper">

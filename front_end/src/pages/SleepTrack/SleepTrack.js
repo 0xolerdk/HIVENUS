@@ -22,8 +22,8 @@ const options1 = {
   height: 120,
   borderWidth: 1,
   fullSize: true,
-  radius: 200,
-  cutout: "78.5%", // This changes the radius of the Doughnut hole.
+  radius: 185,
+  cutout: "80%", // This changes the radius of the Doughnut hole.
   rotation: 0, // This rotates the chart by 90 degrees.
   // Add other options here
 };

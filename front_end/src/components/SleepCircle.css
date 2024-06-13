@@ -1,0 +1,9 @@
+.donut-container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(2%,0) !important;
+    margin-top: 50px;
+
+}
