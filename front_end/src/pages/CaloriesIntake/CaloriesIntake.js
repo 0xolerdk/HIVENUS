@@ -20,7 +20,7 @@ const options = {
   fullSize: true,
   radius: 200,
   cutout: "50%",
-  rotation: 90,
+  rotation: 0,
 };
 
 function CaloriesIntake() {
@@ -67,7 +67,9 @@ function CaloriesIntake() {
       setSnackbarOpen(true);
       fetchHistory(date);
     } else {
-      setMessage(`Error posting data: ${response.status} ${response.statusText}`);
+      setMessage(
+        `Error posting data: ${response.status} ${response.statusText}`
+      );
       setSeverity("error");
       setSnackbarOpen(true);
     }
@@ -76,7 +78,11 @@ function CaloriesIntake() {
 
   const handleDelete = async (productId) => {
     const token = localStorage.getItem("token");
-    const response = await DailyLogService.deleteLog(productId, date.format("YYYY-MM-DD"), token);
+    const response = await DailyLogService.deleteLog(
+      productId,
+      date.format("YYYY-MM-DD"),
+      token
+    );
 
     if (response.status === 200) {
       setMessage("Product successfully deleted from history");
@@ -84,7 +90,9 @@ function CaloriesIntake() {
       setSnackbarOpen(true);
       fetchHistory(date);
     } else {
-      setMessage(`Error deleting data: ${response.status} ${response.statusText}`);
+      setMessage(
+        `Error deleting data: ${response.status} ${response.statusText}`
+      );
       setSeverity("error");
       setSnackbarOpen(true);
     }
@@ -93,7 +101,10 @@ function CaloriesIntake() {
 
   const fetchHistory = async (date) => {
     const token = localStorage.getItem("token");
-    const response = await DailyLogService.getLogByDate(date.format("YYYY-MM-DD"), token);
+    const response = await DailyLogService.getLogByDate(
+      date.format("YYYY-MM-DD"),
+      token
+    );
     if (response.status === 200) {
       const data = await response.data;
       setHistory(data);
@@ -108,12 +119,22 @@ function CaloriesIntake() {
       const productPromises = log.products.map(async (product) => {
         let nutrientsArr;
         if (product.gram > 0) {
-          nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, product.gram * product.quantity);
+          nutrientsArr = await FCD.calculate_nutrients_gram(
+            product.fdcId,
+            product.gram * product.quantity
+          );
         } else if (product.portion) {
-          nutrientsArr = await FCD.calculate_nutrients(product.fdcId, product.portion, product.quantity);
+          nutrientsArr = await FCD.calculate_nutrients(
+            product.fdcId,
+            product.portion,
+            product.quantity
+          );
         } else {
           const servingSize = product.gram || selectedProduct.servingSize;
-          nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
+          nutrientsArr = await FCD.calculate_nutrients_gram(
+            product.fdcId,
+            grams
+          );
         }
         return nutrientsArr;
       });
@@ -142,7 +163,10 @@ function CaloriesIntake() {
     const token = localStorage.getItem("token");
 
     try {
-      const nutrient = await FCD.calculateDailyNutrients(date.format("YYYY-MM-DD"), token);
+      const nutrient = await FCD.calculateDailyNutrients(
+        date.format("YYYY-MM-DD"),
+        token
+      );
       setTotalNutrients(nutrient);
     } catch (error) {
       console.error("Error fetching daily nutrients:", error);
@@ -155,7 +179,11 @@ function CaloriesIntake() {
       if (grams > 0) {
         nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
       } else if (portion) {
-        nutrientsArr = await FCD.calculate_nutrients(product.fdcId, portion, quantity);
+        nutrientsArr = await FCD.calculate_nutrients(
+          product.fdcId,
+          portion,
+          quantity
+        );
       } else {
         const totalGrams = product.servingSize * quantity;
         nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
@@ -266,7 +294,9 @@ function CaloriesIntake() {
                     label="Quantity"
                     value={quantity}
                     sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
-                    onChange={(event) => setQuantity(Number(event.target.value))}
+                    onChange={(event) =>
+                      setQuantity(Number(event.target.value))
+                    }
                   />
                   <TextField
                     type="number"
@@ -275,15 +305,20 @@ function CaloriesIntake() {
                     onChange={(event) => setGrams(Number(event.target.value))}
                     sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
                   />
-                                      <div className="center" style={{ height: 30 }}>
-                      <Button
-                        variant="contained"
-                        onClick={handleConfirm}
-                        sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
-                      >
-                        Confirm
-                      </Button>
-                    </div>
+                  <div className="center" style={{ height: 30 }}>
+                    <Button
+                      variant="contained"
+                      onClick={handleConfirm}
+                      sx={{
+                        flex: "center",
+                        marginTop: 3,
+                        marginLeft: 2,
+                        width: 225,
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </div>
                 </>
               ) : (
                 !isFromHistory && (
@@ -299,7 +334,12 @@ function CaloriesIntake() {
                       <Button
                         variant="contained"
                         onClick={handleConfirm}
-                        sx={{ flex: "center", marginTop: 3, marginLeft: 2, width: 225 }}
+                        sx={{
+                          flex: "center",
+                          marginTop: 3,
+                          marginLeft: 2,
+                          width: 225,
+                        }}
                       >
                         Confirm
                       </Button>
@@ -309,7 +349,11 @@ function CaloriesIntake() {
               )}
             </div>
           )}
-          <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarOpen(false)}
+          >
             <Alert severity={severity} sx={{ width: "100%" }}>
               {message}
             </Alert>
@@ -318,10 +362,16 @@ function CaloriesIntake() {
       </div>
       <div className="main-container">
         <div className="left-container">
-          <ProductHistory history={history} onDelete={handleDelete} onProductSelect={handleProductSelect} />
+          <ProductHistory
+            history={history}
+            onDelete={handleDelete}
+            onProductSelect={handleProductSelect}
+          />
         </div>
         <div className="right-container">
-          <NutrientTable nutrients={selectedProduct ? nutrients : totalNutrients} />
+          <NutrientTable
+            nutrients={selectedProduct ? nutrients : totalNutrients}
+          />
         </div>
       </div>
     </div>

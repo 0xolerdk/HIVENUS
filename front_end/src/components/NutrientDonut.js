@@ -15,6 +15,7 @@ function NutrientDonut({ totalNutrients, width, height, text, font_size, link, o
     Protein: 70, // daily norm for protein in grams
     Carbohydrate: 20, // daily norm for carbohydrates in grams
     Fat: 30, // daily norm for fat in grams
+    rotate: 90, //
   };
 
   const data = {
