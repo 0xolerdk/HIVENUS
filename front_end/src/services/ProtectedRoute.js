@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
-import UserService from './logRegLogic.js';
+import AuthService from './AuthService.js';
 
 const ProtectedComponent = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(UserService.isAuthenticated());
+  const [isAuthenticated, setIsAuthenticated] = useState(AuthService.isAuthenticated());
 
   useEffect(() => {
     if (!isAuthenticated) {

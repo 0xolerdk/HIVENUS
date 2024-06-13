@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./CaloriesIntake.css";
 import NutrientDonut from "../../components/NutrientDonut";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
-import FCD from "../../service/FCDLogic";
+import FCD from "../../services/FCDLogic";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
-import DailyLogService from "../../service/DailyLogService";
+import ProductsService from "../../services/ProductsService";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import ProductSearch from "../../components/ProductSearch";
@@ -47,19 +47,18 @@ function CaloriesIntake() {
 
     const token = localStorage.getItem("token");
     const data = {
-      date: date.format("YYYY-MM-DD"),
-      products: [
-        {
-          name: selectedProduct.description,
-          fdcId: selectedProduct.fdcId,
-          portion: selectedPortion,
-          quantity: quantity,
-          gram: grams,
-        },
-      ],
+      name: selectedProduct.description,
+      fdcId: selectedProduct.fdcId,
+      portion: selectedPortion,
+      quantity: quantity,
+      gram: grams,
     };
 
-    const response = await DailyLogService.addLog(data, token);
+    const response = await ProductsService.addProductByDate(
+      date.format("YYYY-MM-DD"),
+      data,
+      token
+    );
 
     if (response.status === 200) {
       setMessage("Product successfully added to statistics");
@@ -78,7 +77,7 @@ function CaloriesIntake() {
 
   const handleDelete = async (productId) => {
     const token = localStorage.getItem("token");
-    const response = await DailyLogService.deleteLog(
+    const response = await ProductsService.deleteProductByDate(
       productId,
       date.format("YYYY-MM-DD"),
       token
@@ -101,57 +100,17 @@ function CaloriesIntake() {
 
   const fetchHistory = async (date) => {
     const token = localStorage.getItem("token");
-    const response = await DailyLogService.getLogByDate(
+    const response = await ProductsService.getProductsByDate(
       date.format("YYYY-MM-DD"),
       token
     );
     if (response.status === 200) {
       const data = await response.data;
       setHistory(data);
-      fetchNutrientsForProducts(data);
+      setTotalNutrients(FCD.fetchNutrientsForProducts(data, selectedProduct));
     } else {
       console.error(`Error fetching history: ${response.statusText}`);
     }
-  };
-
-  const fetchNutrientsForProducts = async (data) => {
-    const nutrientPromises = data.map(async (log) => {
-      const productPromises = log.products.map(async (product) => {
-        let nutrientsArr;
-        if (product.gram > 0) {
-          nutrientsArr = await FCD.calculate_nutrients_gram(
-            product.fdcId,
-            product.gram * product.quantity
-          );
-        } else if (product.portion) {
-          nutrientsArr = await FCD.calculate_nutrients(
-            product.fdcId,
-            product.portion,
-            product.quantity
-          );
-        } else {
-          const servingSize = product.gram || selectedProduct.servingSize;
-          nutrientsArr = await FCD.calculate_nutrients_gram(
-            product.fdcId,
-            grams
-          );
-        }
-        return nutrientsArr;
-      });
-      const productNutrients = await Promise.all(productPromises);
-      return productNutrients.flat();
-    });
-
-    const allNutrients = await Promise.all(nutrientPromises);
-    const totalNutrients = allNutrients.flat().reduce((acc, curr) => {
-      if (acc[curr.label]) {
-        acc[curr.label] += curr.intake;
-      } else {
-        acc[curr.label] = curr.intake;
-      }
-      return acc;
-    }, {});
-    setTotalNutrients(totalNutrients);
   };
 
   useEffect(() => {
@@ -185,7 +144,6 @@ function CaloriesIntake() {
           quantity
         );
       } else {
-        const totalGrams = product.servingSize * quantity;
         nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
       }
 
@@ -229,7 +187,7 @@ function CaloriesIntake() {
       setQuantity(1);
       setGrams(0);
     } else {
-      const product = history[0].products.find((item) => item.id === productId);
+      const product = history.find((item) => item.id === productId);
       if (product) {
         setSelectedProduct(product);
         setIsFromHistory(true); // Mark as selected from history

@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import UserService from "../../service/logRegLogic";
+import AuthService from "../../services/AuthService.js";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
@@ -30,7 +30,7 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const data = await UserService.login(formData.email, formData.password);
+      const data = await AuthService.login(formData.email, formData.password);
       if (data.statusCode === 200) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user_id", data.user_id);

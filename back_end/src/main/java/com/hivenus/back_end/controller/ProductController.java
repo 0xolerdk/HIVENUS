@@ -1,10 +1,17 @@
 package com.hivenus.back_end.controller;
 
+import com.hivenus.back_end.dto.UserDto;
 import com.hivenus.back_end.entity.Product;
+import com.hivenus.back_end.repository.DailyLogRepository;
+import com.hivenus.back_end.service.DailyLogManagmentService;
 import com.hivenus.back_end.service.ProductManagmentService;
+import com.hivenus.back_end.service.UsersManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,6 +23,10 @@ public class ProductController {
 
     @Autowired
     private ProductManagmentService productService;
+    @Autowired
+    private UsersManagementService usersManagementService;
+        @Autowired
+private DailyLogManagmentService dailyLogManagmentService;
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -34,6 +45,23 @@ public class ProductController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<Product> products = productService.getProductsByDate(date);
         return ResponseEntity.ok(products);
+    }
+
+    @PostMapping("/date")
+    public ResponseEntity<Product> addProductsByDate(@RequestBody Product product,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Product createdProduct = productService.addProductByDateAndUserId(product,date, userDto.getOurUsers().getId());
+        return ResponseEntity.ok(createdProduct);
     }
 
     @PostMapping("/create")
@@ -58,5 +86,29 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
+    }
+        @DeleteMapping("/date")
+    public ResponseEntity<Void> deleteProduct(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,@RequestParam Long productId) {
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        try {
+           boolean deleted = dailyLogManagmentService.deleteProductFromDailyLog(userDto.getOurUsers().getId(), date, productId);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

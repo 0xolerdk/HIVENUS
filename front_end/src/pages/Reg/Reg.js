@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import UserService from '../../service/logRegLogic';
+import AuthService from '../../services/AuthService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
@@ -56,7 +56,7 @@ export default function Reg() {
     }
     try {
       const token = localStorage.getItem('token');
-      var data = await UserService.register(formData, token);
+      var data = await AuthService.register(formData, token);
       setFormData({
         name: '',
         email: '',

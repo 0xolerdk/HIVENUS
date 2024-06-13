@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Statistics.css";
 import Donut from "./Donut";
 import NutrientDonut from "./NutrientDonut";
-import FCD from "../service/FCDLogic";
+import FCD from "../services/FCDLogic";
 import dayjs from "dayjs";
 import DonutWaves from "./DonutWaves";
 

@@ -1,6 +1,7 @@
 package com.hivenus.back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class SleepTrack {
     private int endTime;
     private LocalDate date;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private OurUser user;

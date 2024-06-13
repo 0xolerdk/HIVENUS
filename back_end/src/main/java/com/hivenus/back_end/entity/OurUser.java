@@ -31,6 +31,7 @@ public class OurUser implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+
     private List<DailyLog> dailyLogs;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

@@ -9,9 +9,9 @@ import WaterIntake from './pages/WaterIntake/WaterIntake';
 import Reg from './pages/Reg/Reg';
 import Login from './pages/Login/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import ProtectedComponent from './service/ProtectedRoute';
+import ProtectedComponent from './services/ProtectedRoute';
 import Settings from './pages/Settings/Settings';
-import setupAxiosInterceptors from './service/axiosConfig';
+import setupAxiosInterceptors from './services/axiosConfig';
 
 const AxiosInterceptorSetup = () => {
   const navigate = useNavigate();

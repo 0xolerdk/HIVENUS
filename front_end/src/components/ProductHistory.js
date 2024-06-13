@@ -35,7 +35,7 @@ function ProductHistory({ history, onDelete, onProductSelect }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {history.length > 0 && history[0].products.map((item, index) => (
+          {history.length > 0 && history.map((item, index) => (
             <TableRow
               key={item.id}
               onClick={() => handleProductSelect(item.id)}

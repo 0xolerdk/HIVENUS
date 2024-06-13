@@ -3,11 +3,11 @@ import logo from "../../assets/images/logo.svg";
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { LocalDining, FitnessCenter, Settings, DataUsage, LocalDrink, Hotel, MonitorWeight } from "@mui/icons-material";
+import { LocalDining, Settings, DataUsage, LocalDrink, Hotel, MonitorWeight } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import UserService from "../../service/logRegLogic"; // Assuming UserService is in this path
+import AuthService from "../../services/AuthService";
 
 function Top_Bar() {
   const location = useLocation();
@@ -40,7 +40,7 @@ function Top_Bar() {
   };
 
   const handleLogout = () => {
-    UserService.logout();
+    AuthService.logout();
     handleMenuClose();
     window.location.href = "/auth"; // Redirect to login page after logout
   };

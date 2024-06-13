@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import FCD from '../service/FCDLogic';
+import FCD from '../services/FCDLogic';
 
 function ProductSearch({ onProductSelect }) {
   const [options, setOptions] = useState([]);

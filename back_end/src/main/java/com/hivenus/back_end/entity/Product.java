@@ -1,6 +1,7 @@
 package com.hivenus.back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Product {
     private int gram;
     private int quantity;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "products")
     private List<DailyLog> dailyLogs;
 }
