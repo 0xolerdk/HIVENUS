@@ -25,7 +25,7 @@ public class DailyLogDto {
     private LocalDate date;
     private List<Product> products;
     private SleepTrack sleepTrack;
-    private WaterIntake waterIntake;
+    private List<WaterIntake> waterIntakes;
     private OurUser user;
 
 }

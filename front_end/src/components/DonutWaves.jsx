@@ -7,7 +7,7 @@ import "./DonutWaves.css";
 
 Chart.register(ArcElement, Tooltip, DoughnutController);
 
-function DonutWaves({ data, options, width = '400px', height = '400px', text, font_size, link, tooltip = false, anim=true }) {
+function DonutWaves({ data, options, width = '400px', height = '400px', text, font_size, link, tooltip = true, anim=true, percent }) {
   const textRef = useRef(text);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function DonutWaves({ data, options, width = '400px', height = '400px', text, fo
       <Link to={link}>
         <div className="donut" style={{ width: width, height: height, position: 'relative' }}>
           <div className="wave-wrapper">
-            <WavesCircle />
+            <WavesCircle targetWaveHeight={percent}/>
           </div>
           <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
         </div>

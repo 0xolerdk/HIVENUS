@@ -6,14 +6,13 @@ import FCD from "../../services/FCDLogic";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import ProductsService from "../../services/ProductsService";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import ProductSearch from "../../components/ProductSearch";
 import NutrientTable from "../../components/NutrientTable";
 import ProductHistory from "../../components/ProductHistory";
 import TextField from "@mui/material/TextField";
 import { Select, MenuItem } from "@mui/material";
 import Calendar from "../../components/Calendar/Calendar";
+import CustomSnackbar from "../../components/CustomSnackbar"; // Import Custom Snackbar
 
 const options = {
   borderWidth: 1,
@@ -307,15 +306,12 @@ function CaloriesIntake() {
               )}
             </div>
           )}
-          <Snackbar
+          <CustomSnackbar
             open={snackbarOpen}
-            autoHideDuration={6000}
             onClose={() => setSnackbarOpen(false)}
-          >
-            <Alert severity={severity} sx={{ width: "100%" }}>
-              {message}
-            </Alert>
-          </Snackbar>
+            message={message}
+            severity={severity}
+          />
         </div>
       </div>
       <div className="main-container">

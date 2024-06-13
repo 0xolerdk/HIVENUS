@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,4 +25,8 @@ public class WaterIntake {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private OurUser user;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "waterIntakes", cascade = CascadeType.ALL)
+    private List<DailyLog> dailyLogs;
 }

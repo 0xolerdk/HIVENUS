@@ -22,7 +22,7 @@ public class WaterIntakeService {
     @Autowired
     private DailyLogRepository dailyLogRepository;
     @Autowired
-    private UserRepository usersRepo;
+    private UserRepository userRepository;
 
     public List<WaterIntake> getAllWaterIntakes() {
         return waterIntakeRepository.findAll();
@@ -32,45 +32,31 @@ public class WaterIntakeService {
         return waterIntakeRepository.findById(id).orElse(null);
     }
 
-    public WaterIntake getWaterIntakesByDate(LocalDate date) {
-        // Assuming a method exists in the repository to find water intakes by date
-        return waterIntakeRepository.findByDate(date);
+    public List<WaterIntake> getWaterIntakesByDate(LocalDate date) {
+        return waterIntakeRepository.findAllByDate(date);
     }
 
-     public WaterIntake createWaterIntake(WaterIntake waterIntake, Long userId) {
-        OurUser user = usersRepo.findById(userId).orElse(null);
+    public WaterIntake createWaterIntake(WaterIntake waterIntake, Long userId) {
+        OurUser user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        if (user == null) {
-            // Handle the case where the user is not found
-            throw new IllegalArgumentException("User not found");
-        }
-
-        // Check if there's an existing record for the same user and date
+        // Check if there's an existing DailyLog for the user and date
         LocalDate date = waterIntake.getDate();
-        Optional<WaterIntake> existingWaterIntake = waterIntakeRepository.findByUserAndDate(user, date);
-                DailyLog dailyLog = dailyLogRepository.findByUserIdAndDate(userId, date).orElseGet(() -> {
+        DailyLog dailyLog = dailyLogRepository.findByUserIdAndDate(userId, date).orElseGet(() -> {
             DailyLog newDailyLog = new DailyLog();
             newDailyLog.setDate(date);
-            newDailyLog.setUser(usersRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")));
+            newDailyLog.setUser(user);
             newDailyLog.setProducts(new ArrayList<>());
+            newDailyLog.setWaterIntakes(new ArrayList<>());
             return newDailyLog;
         });
-        if (existingWaterIntake.isPresent()) {
-            // Replace the existing record
-            WaterIntake existing = existingWaterIntake.get();
-            existing.setAmount(waterIntake.getAmount());
-            WaterIntake newWaterIntake = waterIntakeRepository.save(existing);
-            dailyLog.setWaterIntake(newWaterIntake);
-            dailyLogRepository.save(dailyLog);
-            return newWaterIntake;
-        } else {
-            // Create a new record
-            waterIntake.setUser(user);
-            WaterIntake newWaterIntake = waterIntakeRepository.save(waterIntake);
-            dailyLog.setWaterIntake(newWaterIntake);
-            dailyLogRepository.save(dailyLog);
-            return newWaterIntake;
-        }
+
+        // Save the water intake and add it to the daily log
+        waterIntake.setUser(user);
+        WaterIntake newWaterIntake = waterIntakeRepository.save(waterIntake);
+        dailyLog.getWaterIntakes().add(newWaterIntake);
+        dailyLogRepository.save(dailyLog);
+
+        return newWaterIntake;
     }
 
     public WaterIntake updateWaterIntake(Long id, WaterIntake waterIntakeDetails) {

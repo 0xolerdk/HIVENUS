@@ -6,3 +6,37 @@
     height: 100vh; /* Adjust height as needed */
   }
   
+  .calendar {
+    margin-bottom: 20px;
+  }
+  
+  .delete_button {
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete_button:hover {
+    background-color: #ff1a1a;
+  }
+  
+  .history {
+    margin-top: 20px;
+  }
+  
+  .history ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .history li {
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+  

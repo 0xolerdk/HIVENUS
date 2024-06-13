@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import Wave from 'react-wavify';
 
-export default function WavesCircle({ waveHeight = 50 }) {
+export default function WavesCircle({ targetWaveHeight}) {
   // Calculate the appropriate height and position based on waveHeight
+  const [waveHeight, setWaveHeight] = useState(0); // Start at 0
   const heightPercentage = waveHeight / 100;
   const circleHeight = 200; // Assuming the SVG viewBox height is 200
   const waveYPosition = circleHeight * (1 - heightPercentage); // The y-coordinate where the wave starts
@@ -11,6 +12,19 @@ export default function WavesCircle({ waveHeight = 50 }) {
   const waveAnimation = {
     animation: `fillWave 1s ease-in-out forwards`,
   };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setWaveHeight((prevHeight) => {
+        if (prevHeight >= targetWaveHeight) {
+          clearInterval(intervalId); // Stop the interval when the target is reached
+          return targetWaveHeight;
+        }
+        return prevHeight + 0.5; // Increase by 1 each time
+      });
+    }, 10); // Adjust speed as needed
+
+    return () => clearInterval(intervalId); // Clean up on unmount
+  }, [targetWaveHeight]);
 
   return (
     <div className="waves-circle">

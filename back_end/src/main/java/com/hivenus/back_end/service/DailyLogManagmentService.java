@@ -96,14 +96,7 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 dailyLog.setSleepTrack(newSleepTrack);
             }
 
-            // Save WaterIntake if provided
-            if (dailyLogDto.getWaterIntake() != null) {
-                WaterIntake newWaterIntake = dailyLogDto.getWaterIntake();
-                if (newWaterIntake.getId() == null) {
-                    newWaterIntake = waterIntakeRepository.save(newWaterIntake);
-                }
-                dailyLog.setWaterIntake(newWaterIntake);
-            }
+
         }
 
         try {
@@ -152,17 +145,7 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 dailyLog.setSleepTrack(newSleepTrack);
             }
 
-            // Replace existing WaterIntake if provided
-            if (dailyLogDto.getWaterIntake() != null) {
-                WaterIntake newWaterIntake = dailyLogDto.getWaterIntake();
-                if (dailyLog.getWaterIntake() != null) {
-                    waterIntakeRepository.delete(dailyLog.getWaterIntake());
-                }
-                if (newWaterIntake.getId() == null) {
-                    newWaterIntake = waterIntakeRepository.save(newWaterIntake);
-                }
-                dailyLog.setWaterIntake(newWaterIntake);
-            }
+
 
             try {
                 DailyLog updatedDailyLog = dailyLogRepository.save(dailyLog);
@@ -186,7 +169,7 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
         dailyLogDto.setDate(dailyLog.getDate());
         dailyLogDto.setId(dailyLog.getId());
         dailyLogDto.setSleepTrack(dailyLog.getSleepTrack());
-        dailyLogDto.setWaterIntake(dailyLog.getWaterIntake());
+        dailyLogDto.setWaterIntakes(dailyLog.getWaterIntakes());
 
         dailyLogDto.setProducts(dailyLog.getProducts().stream()
                 .map(product -> {
@@ -215,7 +198,6 @@ private DailyLog convertToEntity(DailyLogDto dailyLogDto) {
     }
 
     dailyLog.setSleepTrack(dailyLogDto.getSleepTrack());
-    dailyLog.setWaterIntake(dailyLogDto.getWaterIntake());
     return dailyLog;
 }
 

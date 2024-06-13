@@ -32,10 +32,15 @@ public class DailyLog {
     private List<Product> products;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "water_intake_id")
-    private WaterIntake waterIntake;
-
-    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sleep_track_id")
     private SleepTrack sleepTrack;
+
+
+    @ManyToMany()
+    @JoinTable(
+        name = "daily_log_water_intakes",
+        joinColumns = @JoinColumn(name = "daily_log_id"),
+        inverseJoinColumns = @JoinColumn(name = "water_intake_id")
+    )
+    private List<WaterIntake> waterIntakes;
 }

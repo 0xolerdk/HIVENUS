@@ -37,15 +37,15 @@ public class WaterIntakeController {
     }
 
     @GetMapping("/date")
-    public ResponseEntity<WaterIntake> getWaterIntakesByDate(
+    public ResponseEntity<List<WaterIntake>> getWaterIntakesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        WaterIntake waterIntakes = waterIntakeService.getWaterIntakesByDate(date);
+        List<WaterIntake> waterIntakes = waterIntakeService.getWaterIntakesByDate(date);
         return ResponseEntity.ok(waterIntakes);
     }
 
     @PostMapping("/create")
     public ResponseEntity<WaterIntake> createWaterIntake(@RequestBody WaterIntake waterIntake) {
-         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
