@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -15,9 +16,12 @@ public class SleepTrack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    int startTime;
-    int endTime;
 
-    @OneToOne(mappedBy = "sleepTrack", fetch = FetchType.LAZY) // Fixed here
-    private DailyLog dailyLog;
+    private int startTime;
+    private int endTime;
+    private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private OurUser user;
 }

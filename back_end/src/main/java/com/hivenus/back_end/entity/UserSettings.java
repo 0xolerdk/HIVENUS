@@ -16,24 +16,14 @@ public class UserSettings {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private OurUser user;
 
-    private int maxEneregy;
+    private int maxEnergy;
     private int maxProtein;
     private int maxFat;
     private int maxCarbs;
-
     private int maxWater;
-
     private int minSleep;
-
     private int maxActivity;
-
-
-
-
-
-
-
 }

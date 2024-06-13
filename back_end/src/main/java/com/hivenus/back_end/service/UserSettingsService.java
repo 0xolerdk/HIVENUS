@@ -25,7 +25,7 @@ public class UserSettingsService {
         Optional<UserSettings> optionalUserSettings = Optional.ofNullable(userSettingsRepository.findByUserId(userId));
         if (optionalUserSettings.isPresent()) {
             UserSettings existingUserSettings = optionalUserSettings.get();
-            existingUserSettings.setMaxEneregy(userSettings.getMaxEneregy());
+            existingUserSettings.setMaxEnergy(userSettings.getMaxEnergy());
             existingUserSettings.setMaxProtein(userSettings.getMaxProtein());
             existingUserSettings.setMaxFat(userSettings.getMaxFat());
             existingUserSettings.setMaxCarbs(userSettings.getMaxCarbs());

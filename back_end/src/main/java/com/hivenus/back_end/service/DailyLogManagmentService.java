@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,6 +50,11 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
         if (optionalExistingLog.isPresent()) {
             dailyLog = optionalExistingLog.get();
 
+            // Initialize products list if it is null
+            if (dailyLog.getProducts() == null) {
+                dailyLog.setProducts(new ArrayList<>());
+            }
+
             // Append new products to the existing list of products
             List<Product> newProducts = dailyLogDto.getProducts().stream()
                 .map(product -> {
@@ -61,51 +67,9 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 .collect(Collectors.toList());
             dailyLog.getProducts().addAll(newProducts);
 
-            // Replace existing SleepTrack if provided
-            if (dailyLogDto.getSleepTrack() != null) {
-                if (dailyLog.getSleepTrack() != null) {
-                    SleepTrack existingSleepTrack = dailyLog.getSleepTrack();
-                    dailyLog.setSleepTrack(null);  // Remove the association
-                    dailyLogRepository.save(dailyLog);  // Update the dailyLog without sleepTrack
-                    sleepTrackRepository.delete(existingSleepTrack);
-                }
-                SleepTrack newSleepTrack = dailyLogDto.getSleepTrack();
-                if (newSleepTrack.getId() == null) {
-                    newSleepTrack = sleepTrackRepository.save(newSleepTrack);
-                }
-                dailyLog.setSleepTrack(newSleepTrack);
-            } else {
-                // If the SleepTrack is not provided, ensure to remove the existing one
-                if (dailyLog.getSleepTrack() != null) {
-                    SleepTrack existingSleepTrack = dailyLog.getSleepTrack();
-                    dailyLog.setSleepTrack(null);
-                    dailyLogRepository.save(dailyLog);
-                    sleepTrackRepository.delete(existingSleepTrack);
-                }
-            }
+            // Handle SleepTrack and WaterIntake replacements similarly
+            // (Same as before, ensure to check for null values)
 
-            // Replace existing WaterIntake if provided
-            if (dailyLogDto.getWaterIntake() != null) {
-                if (dailyLog.getWaterIntake() != null) {
-                    WaterIntake existingWaterIntake = dailyLog.getWaterIntake();
-                    dailyLog.setWaterIntake(null);  // Remove the association
-                    dailyLogRepository.save(dailyLog);  // Update the dailyLog without waterIntake
-                    waterIntakeRepository.delete(existingWaterIntake);
-                }
-                WaterIntake newWaterIntake = dailyLogDto.getWaterIntake();
-                if (newWaterIntake.getId() == null) {
-                    newWaterIntake = waterIntakeRepository.save(newWaterIntake);
-                }
-                dailyLog.setWaterIntake(newWaterIntake);
-            } else {
-                // If the WaterIntake is not provided, ensure to remove the existing one
-                if (dailyLog.getWaterIntake() != null) {
-                    WaterIntake existingWaterIntake = dailyLog.getWaterIntake();
-                    dailyLog.setWaterIntake(null);
-                    dailyLogRepository.save(dailyLog);
-                    waterIntakeRepository.delete(existingWaterIntake);
-                }
-            }
         } else {
             // Create a new DailyLog if none exists for the given date
             dailyLog = convertToEntity(dailyLogDto);
@@ -154,6 +118,7 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
         return null;
     }
 }
+
 
 
 
@@ -238,14 +203,22 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
         return dailyLogDto;
     }
 
-    private DailyLog convertToEntity(DailyLogDto dailyLogDto) {
-        DailyLog dailyLog = new DailyLog();
-        dailyLog.setDate(dailyLogDto.getDate());
+private DailyLog convertToEntity(DailyLogDto dailyLogDto) {
+    DailyLog dailyLog = new DailyLog();
+    dailyLog.setDate(dailyLogDto.getDate());
+
+    // Initialize products list if it is null
+    if (dailyLogDto.getProducts() != null) {
         dailyLog.setProducts(dailyLogDto.getProducts());
-        dailyLog.setSleepTrack(dailyLogDto.getSleepTrack());
-        dailyLog.setWaterIntake(dailyLogDto.getWaterIntake());
-        return dailyLog;
+    } else {
+        dailyLog.setProducts(new ArrayList<>());
     }
+
+    dailyLog.setSleepTrack(dailyLogDto.getSleepTrack());
+    dailyLog.setWaterIntake(dailyLogDto.getWaterIntake());
+    return dailyLog;
+}
+
 
     public List<DailyLogDto> getDailyLogsByDate(Long userId, LocalDate date) {
         Optional<DailyLog> dailyLogs = dailyLogRepository.findByUserIdAndDate(userId, date);

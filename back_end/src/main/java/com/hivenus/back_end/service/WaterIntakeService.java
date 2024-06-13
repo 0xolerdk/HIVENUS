@@ -24,7 +24,7 @@ public class WaterIntakeService {
 
     public WaterIntake getWaterIntakesByDate(LocalDate date) {
         // Assuming a method exists in the repository to find water intakes by date
-        return waterIntakeRepository.findByDailyLogDate(date);
+        return waterIntakeRepository.findByDate(date);
     }
 
     public WaterIntake createWaterIntake(WaterIntake waterIntake) {

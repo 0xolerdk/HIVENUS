@@ -24,7 +24,7 @@ public class ProductManagmentService {
 
     public List<Product> getProductsByDate(LocalDate date) {
         // Assuming a method exists in the repository to find products by date
-        return productRepository.findByDailyLogsDate(date);
+        return productRepository.findByDailyLogDate(date);
     }
 
     public Product createProduct(Product product) {

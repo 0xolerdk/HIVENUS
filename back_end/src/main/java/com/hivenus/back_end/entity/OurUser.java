@@ -7,9 +7,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -25,19 +22,26 @@ public class OurUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true, nullable=false)
+    @Column(unique = true, nullable = false)
     private String email;
-
 
     private String username;
     private String role;
-        private String name;
-
-
+    private String name;
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<DailyLog> dailyLogs;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserSettings userSettings;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<WaterIntake> waterIntakes;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SleepTrack> sleepTracks;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));

@@ -8,5 +8,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface SleepTrackRepository extends JpaRepository<SleepTrack, Long> {
-    SleepTrack findByDailyLogDate(LocalDate date);
+    SleepTrack findByDate(LocalDate date);
 }

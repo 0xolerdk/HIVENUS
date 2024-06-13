@@ -1,12 +1,9 @@
 package com.hivenus.back_end.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +19,11 @@ public class DailyLog {
 
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private OurUser user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
         name = "daily_log_products",
         joinColumns = @JoinColumn(name = "daily_log_id"),
@@ -34,21 +31,11 @@ public class DailyLog {
     )
     private List<Product> products;
 
-        @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "daily_log_sleep_track",
-        joinColumns = @JoinColumn(name = "daily_log_id"),
-        inverseJoinColumns = @JoinColumn(name = "sleep_track_id")
-    )
-    private SleepTrack sleepTrack;
-
-                @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "daily_log_water_intake",
-        joinColumns = @JoinColumn(name = "daily_log_id"),
-        inverseJoinColumns = @JoinColumn(name = "water_intake_id")
-    )
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "water_intake_id")
     private WaterIntake waterIntake;
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sleep_track_id")
+    private SleepTrack sleepTrack;
 }

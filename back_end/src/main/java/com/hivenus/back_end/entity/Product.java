@@ -1,12 +1,11 @@
 package com.hivenus.back_end.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,14 +19,11 @@ public class Product {
     private Long id;
 
     private String name;
-    private String FdcId;
-    private String Portion;
-    private int Gram;
-    private int Quantity;
+    private String fdcId; // Changed to camelCase
+    private String portion; // Changed to camelCase
+    private int gram;
+    private int quantity;
 
-
-    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "products")
     private List<DailyLog> dailyLogs;
-
-    // Getters and setters
 }

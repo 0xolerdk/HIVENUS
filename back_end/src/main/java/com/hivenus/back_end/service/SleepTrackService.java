@@ -24,7 +24,7 @@ public class SleepTrackService {
 
     public SleepTrack getSleepTracksByDate(LocalDate date) {
         // Assuming a method exists in the repository to find sleep tracks by date
-        return sleepTrackRepository.findByDailyLogDate(date);
+        return sleepTrackRepository.findByDate(date);
     }
 
     public SleepTrack createSleepTrack(SleepTrack sleepTrack) {
