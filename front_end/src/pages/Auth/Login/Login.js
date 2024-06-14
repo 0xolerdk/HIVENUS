@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Bottom from "../../components/Bottom";
+import Bottom from "../../../components/Home/Bottom";
 import "./Login.css";
-import circle from "../../assets/images/gradient_circle.svg";
-import login_circle from "../../assets/images/login_circle.svg";
-import back from "../../assets/images/back.svg";
+import circle from "../../../assets/images/gradient_circle.svg";
+import login_circle from "../../../assets/images/login_circle.svg";
+import back from "../../../assets/images/back.svg";
 import { Link, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import AuthService from "../../services/AuthService.js";
+import AuthService from "../../../services/AuthService.js";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 

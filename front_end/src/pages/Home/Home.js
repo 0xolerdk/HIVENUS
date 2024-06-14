@@ -1,5 +1,5 @@
-import Top from '../../components/Top.js';
-import Top_Button from '../../components/Top_Button.js';
+import Top from '../../components/Home/Top.js';
+import Top_Button from '../../components/Home/Top_Button.js';
 
 
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./CaloriesIntake.css";
-import NutrientDonut from "../../components/NutrientDonut";
+import NutrientDonut from "../../components/CaloriesIntake/NutrientDonut";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import FCD from "../../services/FCDLogic";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import ProductsService from "../../services/ProductsService";
-import ProductSearch from "../../components/ProductSearch";
-import NutrientTable from "../../components/NutrientTable";
-import ProductHistory from "../../components/ProductHistory";
+import ProductSearch from "../../components/CaloriesIntake/ProductSearch";
+import NutrientTable from "../../components/CaloriesIntake/NutrientTable";
+import ProductHistory from "../../components/CaloriesIntake/ProductHistory";
 import TextField from "@mui/material/TextField";
 import { Select, MenuItem } from "@mui/material";
 import Calendar from "../../components/Calendar/Calendar";
@@ -168,7 +168,6 @@ function CaloriesIntake() {
         const portions = Object.keys(portionsObj);
         setPortions(portions);
         if (portions.length === 0) {
-          const totalGrams = selectedProduct.servingSize;
           calculateNutrients(selectedProduct, "", grams, quantity);
         } else {
           calculateNutrients(selectedProduct, selectedPortion, grams, quantity);

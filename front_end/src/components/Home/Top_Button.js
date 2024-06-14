@@ -1,7 +1,7 @@
-import '../components/Top_Button.css';
+import './Top_Button.css';
 
 import { Route, Routes, Link } from 'react-router-dom';
-import Statistic from '../pages/Statistic/Statistic';
+import Statistic from '../../pages/Statistic/Statistic';
 
 function Top_Button() {
     return (

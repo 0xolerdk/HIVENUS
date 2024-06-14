@@ -1,5 +1,5 @@
 import React from "react";
-import Donut from "./Donut";
+import Donut from "../Donut";
 
 function calculateRemaining(nutrient, dailyNorm) {
   return nutrient > dailyNorm ? 0 : dailyNorm - nutrient;

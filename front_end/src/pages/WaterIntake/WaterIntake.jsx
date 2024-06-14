@@ -3,10 +3,10 @@ import dayjs from "dayjs";
 import Calendar from "../../components/Calendar/Calendar.js";
 import Top_Bar from "../../components/Top_Bar/Top_Bar.js";
 import "./WaterIntake.css";
-import DonutWaves from "../../components/DonutWaves.jsx";
+import DonutWaves from "../../components/WaterIntake/DonutWaves.jsx";
 import WaterIntakeService from "../../services/WaterIntakeService";
-import WaterHistory from "../../components/WaterHistory";
-import BasicSpeedDial from "../../components/Add.js"; // Ensure the correct import path
+import WaterHistory from "../../components/WaterIntake/WaterHistory";
+import BasicSpeedDial from "../../components/WaterIntake/Add.js"; // Ensure the correct import path
 import Container from '@mui/material/Container';
 import CustomSnackbar from "../../components/CustomSnackbar"; // Import Custom Snackbar
 

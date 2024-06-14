@@ -66,9 +66,9 @@ function SleepCircle({ data, options, width, height, text, font_size, link, tool
           <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
         </div>
       </Link>
-      <div className="switch-container">
-        <ToggleSwitch isChecked={isChecked} handleToggle={handleToggle} />
-      </div>
+      {/*<div className="switch-container">*/}
+      {/*  <ToggleSwitch isChecked={isChecked} handleToggle={handleToggle} />*/}
+      {/*</div>*/}
     </div>
   );
 }

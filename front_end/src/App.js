@@ -1,13 +1,13 @@
 import React from 'react';
 import Home from './pages/Home/Home';
-import LogReg from './pages/LogReg/LogReg';
+import LogReg from './pages/Auth/LogReg/LogReg';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Statistic from './pages/Statistic/Statistic';
 import CaloriesIntake from './pages/CaloriesIntake/CaloriesIntake';
 import SleepTrack from './pages/SleepTrack/SleepTrack';
 import WaterIntake from './pages/WaterIntake/WaterIntake';
-import Reg from './pages/Reg/Reg';
-import Login from './pages/Login/Login';
+import Reg from './pages/Auth/Reg/Reg';
+import Login from './pages/Auth/Login/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ProtectedComponent from './services/ProtectedRoute';
 import Settings from './pages/Settings/Settings';

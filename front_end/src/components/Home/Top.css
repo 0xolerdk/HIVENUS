@@ -16,7 +16,7 @@
 
 .Big_cloud {
   position: relative;
-  background-image: url('../assets/images/clouds_big.svg');
+  background-image: url('../../assets/images/clouds_big.svg');
   top: 10vw;
   height: 45vw;
   background-repeat: no-repeat;

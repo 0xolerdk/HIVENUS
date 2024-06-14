@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface SleepTrackRepository extends JpaRepository<SleepTrack, Long> {
     SleepTrack findByDate(LocalDate date);
     Optional<SleepTrack> findByUserAndDate(OurUser user, LocalDate date);
+
+    SleepTrack findByDateAndUserId(LocalDate date, Long userId);
 }

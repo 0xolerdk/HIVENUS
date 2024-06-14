@@ -15,8 +15,8 @@ const SleepTrackService = {
     );
     return response;
   },
-  async addSleepDataByDate(date, data, token) {
-    const response = await axios.post(`${this.BASE_URL}/sleeptracks/date?date=${date}`, data, {
+  async addSleepDataByDate(data, token) {
+    const response = await axios.post(`${this.BASE_URL}/sleeptracks/create`, data, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

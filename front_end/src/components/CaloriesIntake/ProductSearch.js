@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import FCD from '../services/FCDLogic';
+import FCD from '../../services/FCDLogic';
 
 function ProductSearch({ onProductSelect }) {
   const [options, setOptions] = useState([]);
@@ -28,7 +28,12 @@ function ProductSearch({ onProductSelect }) {
       id="combo-box-demo"
       options={options}
       onInputChange={onInputChange}
-      onChange={(event, value) => onProductSelect(value)}
+      onChange={(event, value) => {
+        if (value) {
+          onProductSelect(value);
+        }
+      }}
+
       getOptionLabel={(option) => option.description}
       style={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Search Product" variant="outlined" />}

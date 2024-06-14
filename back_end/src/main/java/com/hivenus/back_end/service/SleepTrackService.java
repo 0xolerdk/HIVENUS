@@ -32,9 +32,9 @@ public class SleepTrackService {
         return sleepTrackRepository.findById(id).orElse(null);
     }
 
-    public SleepTrack getSleepTracksByDate(LocalDate date) {
+    public SleepTrack getSleepTracksByDate(LocalDate date, Long userId) {
         // Assuming a method exists in the repository to find sleep tracks by date
-        return sleepTrackRepository.findByDate(date);
+        return sleepTrackRepository.findByDateAndUserId(date, userId);
     }
 
     public SleepTrack createSleepTrack(SleepTrack sleepTrack, Long userId) {

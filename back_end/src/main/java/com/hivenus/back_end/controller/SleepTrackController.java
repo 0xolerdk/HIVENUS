@@ -39,7 +39,16 @@ public class SleepTrackController {
     @GetMapping("/date")
     public ResponseEntity<SleepTrack> getSleepTracksByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        SleepTrack sleepTracks = sleepTrackService.getSleepTracksByDate(date);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        SleepTrack sleepTracks = sleepTrackService.getSleepTracksByDate(date, userDto.getOurUsers().getId());
         return ResponseEntity.ok(sleepTracks);
     }
 

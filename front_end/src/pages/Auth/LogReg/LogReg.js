@@ -1,10 +1,10 @@
 import React from 'react'
-import Bottom from '../../components/Bottom'
+import Bottom from '../../../components/Home/Bottom'
 import './LogReg.css'
-import circle from '../../assets/images/gradient_circle.svg'
-import login from '../../assets/images/login.svg'
-import reg from '../../assets/images/reg.svg'  
-import back from '../../assets/images/back.svg'  
+import circle from '../../../assets/images/gradient_circle.svg'
+import login from '../../../assets/images/login.svg'
+import reg from '../../../assets/images/reg.svg'
+import back from '../../../assets/images/back.svg'
 import { Link } from 'react-router-dom'
 
 

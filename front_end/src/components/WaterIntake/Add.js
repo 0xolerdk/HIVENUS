@@ -4,7 +4,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import { LocalDrink, Opacity, WaterDrop } from '@mui/icons-material';
-import WaterIntakeService from '../services/WaterIntakeService'; // Ensure the correct import path
+import WaterIntakeService from '../../services/WaterIntakeService'; // Ensure the correct import path
 
 const actions = [
   { icon: <LocalDrink />, name: '200ml', amount: 200 },

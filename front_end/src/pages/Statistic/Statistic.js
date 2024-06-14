@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../Statistic/Statistic.css";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import Calendar from "../../components/Calendar/Calendar";
-import Statistics from "../../components/Statistics";
+import Statistics from "../../components/Statistic/Statistics";
 import dayjs from "dayjs";
 
 

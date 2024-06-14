@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Koulent-s';
-  src: local('Koulent-s'), url('../assets/fonts/Koulen-Regular.ttf') format('ttf');
+  src: local('Koulent-s'), url('../../assets/fonts/Koulen-Regular.ttf') format('ttf');
   font-weight: normal;
   font-style: normal;
 }

@@ -1,13 +1,12 @@
-import med_girl from '../assets/images/meditation_girl.svg';
-import gradient_circle from '../assets/images/gradient_circle.svg';
-import w_circle from '../assets/images/white_circle.svg';
-import cloud_small from '../assets/images/cloud_small.svg';
-import sun from '../assets/images/sun.svg';
-import sun_big from '../assets/images/sun_big.svg';
-import news_box from '../assets/images/news_box.svg';
-import airplane from '../assets/images/airplane.svg';
-import clock from '../assets/images/clock.svg';
-import '../components/Top.css';
+import med_girl from '../../assets/images/meditation_girl.svg';
+import gradient_circle from '../../assets/images/gradient_circle.svg';
+import w_circle from '../../assets/images/white_circle.svg';
+import cloud_small from '../../assets/images/cloud_small.svg';
+import sun from '../../assets/images/sun.svg';
+import sun_big from '../../assets/images/sun_big.svg';
+import news_box from '../../assets/images/news_box.svg';
+import clock from '../../assets/images/clock.svg';
+import './Top.css';
 import Bottom from './Bottom';
 
 
