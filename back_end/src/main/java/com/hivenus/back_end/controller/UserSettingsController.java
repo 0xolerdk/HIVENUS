@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/usersettings")
+@RequestMapping("/user-settings")
 public class UserSettingsController {
     @Autowired
     private UsersManagementService usersManagementService;
@@ -43,11 +43,24 @@ public class UserSettingsController {
 
     @PostMapping
     public ResponseEntity<UserSettings> createUserSettings(@RequestBody UserSettings userSettings) {
-        UserSettings createdUserSettings = userSettingsService.createUserSettings(userSettings);
-        return ResponseEntity.ok(createdUserSettings);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        UserSettings createdUserSettings = userSettingsService.createUserSettings(userSettings, userDto.getOurUsers().getId());
+                if (createdUserSettings != null) {
+            return ResponseEntity.ok(createdUserSettings);
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 
-    @PutMapping("/")
+    @PostMapping("/modify")
     public ResponseEntity<UserSettings> updateUserSettings(@RequestBody UserSettings userSettings) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,7 +81,7 @@ public class UserSettingsController {
         }
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/admin/{userId}")
     public ResponseEntity<Void> deleteUserSettings(@PathVariable Long userId) {
         boolean deleted = userSettingsService.deleteUserSettings(userId);
         if (deleted) {

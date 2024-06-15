@@ -31,9 +31,9 @@ public class ProductManagmentService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public List<Product> getProductsByDate(LocalDate date) {
+    public List<Product> getProductsByDate(LocalDate date, Long userId) {
         // Assuming a method exists in the repository to find products by date
-        return productRepository.findByDailyLogDate(date);
+        return productRepository.findByDailyLogDateAndUserId(date, userId);
     }
 
     public Product createProduct(Product product) {

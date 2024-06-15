@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import WaterIntakeService from "../../services/WaterIntakeService";
 import SleepTrackService from "../../services/SleepTrackService";
 import SleepDonut from "../SleepTrack/SleepDonutStat";
+import SettingsService from "../../services/SettingsService"; // Import SettingsService
 
 const optionsW = {
   height: 120,
@@ -39,15 +40,38 @@ function Statistics({ selectedDate }) {
   const [totalNutrients, setTotalNutrients] = useState({});
   const [waterData, setWaterData] = useState({ consumed: 0, remaining: 2000 });
   const [sleepDuration, setSleepDuration] = useState(0);
+  const [settings, setSettings] = useState({
+    maxEnergy: 2000,
+    maxProtein: 50,
+    maxFat: 70,
+    maxCarbs: 300,
+    maxWater: 2000,
+    minSleep: 8 * 60, // Default to 8 hours in minutes
+  });
 
   useEffect(() => {
+    const fetchUserSettings = async () => {
+      try {
+        const fetchedSettings = await SettingsService.getSettings();
+        setSettings({
+          maxEnergy: fetchedSettings.maxEnergy,
+          maxProtein: fetchedSettings.maxProtein,
+          maxFat: fetchedSettings.maxFat,
+          maxCarbs: fetchedSettings.maxCarbs,
+          maxWater: fetchedSettings.maxWater,
+          minSleep: fetchedSettings.minSleep * 60, // Convert hours to minutes
+        });
+      } catch (error) {
+        console.error("Error fetching user settings:", error);
+      }
+    };
+
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
       const savedDate = dayjs(localStorage.getItem("selectedDate"));
       selectedDate = savedDate;
 
       try {
-        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"), token);
+        const nutrient = await FCD.calculateDailyNutrients(selectedDate.format("YYYY-MM-DD"));
         setTotalNutrients(nutrient);
       } catch (error) {
         console.error("Error fetching daily nutrients:", error);
@@ -55,32 +79,20 @@ function Statistics({ selectedDate }) {
     };
 
     const fetchWaterData = async (date) => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found");
-        return;
-      }
-
       try {
-        const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'), token);
+        const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
         const waterIntakes = response.data;
         const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
-        const cappedIntake = Math.min(totalIntake, 2000);
-        setWaterData({ consumed: cappedIntake, remaining: 2000 - cappedIntake });
+        const cappedIntake = Math.min(totalIntake, settings.maxWater);
+        setWaterData({ consumed: cappedIntake, remaining: settings.maxWater - cappedIntake });
       } catch (error) {
         console.error("Error fetching water data:", error);
       }
     };
 
     const fetchSleepData = async (date) => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found");
-        return;
-      }
-
       try {
-        const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'), token);
+        const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
         const sleepData = response.data;
 
         if (sleepData) {
@@ -101,10 +113,12 @@ function Statistics({ selectedDate }) {
       return endMinutes - startMinutes;
     };
 
-    fetchData();
-    fetchWaterData(selectedDate);
-    fetchSleepData(selectedDate);
-  }, [selectedDate]);
+    fetchUserSettings().then(() => {
+      fetchData();
+      fetchWaterData(selectedDate);
+      fetchSleepData(selectedDate);
+    });
+  }, [selectedDate, settings.maxWater]);
 
   return (
       <div className="statistics">
@@ -116,9 +130,9 @@ function Statistics({ selectedDate }) {
                   {
                     label: "Water Intake",
                     data: [waterData.consumed, waterData.remaining],
-                    backgroundColor: ["#00bcd4", "#333333"],
+                    backgroundColor: ["#00bcd4", "rgba(0, 0, 0, 0.1)"],
                     borderWidth: 5,
-                    borderColor: "#333333",
+                    borderColor: "rgba(0, 0, 0, 0.1)",
                     borderRadius: 50,
                   }
                 ],
@@ -134,6 +148,7 @@ function Statistics({ selectedDate }) {
               width={300}
               height={300}
               font_size={10}
+              link={"/main/sleep_track"}
           />
           <NutrientDonut
               selectedDate={selectedDate}

@@ -34,7 +34,9 @@
     "react-transition-group": "^4.4.5",
     "react-wavify": "^1.10.0",
     "styled-components": "^6.1.11",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@react-buddy/ide-toolbox": "^2.4.0",
+    "@react-buddy/palette-mui": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

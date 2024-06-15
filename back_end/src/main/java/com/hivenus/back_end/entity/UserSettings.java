@@ -27,5 +27,4 @@ public class UserSettings {
     private int maxCarbs;
     private int maxWater;
     private int minSleep;
-    private int maxActivity;
 }

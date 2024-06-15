@@ -24,13 +24,13 @@ public class WaterIntakeController {
     @Autowired
     private UsersManagementService usersManagementService;
 
-    @GetMapping
+    @GetMapping(value = "/admin")
     public ResponseEntity<List<WaterIntake>> getAllWaterIntakes() {
         List<WaterIntake> waterIntakes = waterIntakeService.getAllWaterIntakes();
         return ResponseEntity.ok(waterIntakes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<WaterIntake> getWaterIntakeById(@PathVariable Long id) {
         WaterIntake waterIntake = waterIntakeService.getWaterIntakeById(id);
         return ResponseEntity.ok(waterIntake);
@@ -39,7 +39,16 @@ public class WaterIntakeController {
     @GetMapping("/date")
     public ResponseEntity<List<WaterIntake>> getWaterIntakesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<WaterIntake> waterIntakes = waterIntakeService.getWaterIntakesByDate(date);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        List<WaterIntake> waterIntakes = waterIntakeService.getWaterIntakesByDate(date, userDto.getOurUsers().getId());
         return ResponseEntity.ok(waterIntakes);
     }
 
@@ -58,13 +67,13 @@ public class WaterIntakeController {
         return ResponseEntity.ok(createdWaterIntake);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<WaterIntake> updateWaterIntake(@PathVariable Long id, @RequestBody WaterIntake waterIntakeDetails) {
         WaterIntake updatedWaterIntake = waterIntakeService.updateWaterIntake(id, waterIntakeDetails);
         return ResponseEntity.ok(updatedWaterIntake);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteWaterIntake(@PathVariable Long id) {
         waterIntakeService.deleteWaterIntake(id);
         return ResponseEntity.ok().build();

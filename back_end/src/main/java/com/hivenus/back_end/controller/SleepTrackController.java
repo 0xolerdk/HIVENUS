@@ -24,13 +24,13 @@ public class SleepTrackController {
     @Autowired
     private UsersManagementService usersManagementService;
 
-    @GetMapping
+    @GetMapping(value = "/admin")
     public ResponseEntity<List<SleepTrack>> getAllSleepTracks() {
         List<SleepTrack> sleepTracks = sleepTrackService.getAllSleepTracks();
         return ResponseEntity.ok(sleepTracks);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<SleepTrack> getSleepTrackById(@PathVariable Long id) {
         SleepTrack sleepTrack = sleepTrackService.getSleepTrackById(id);
         return ResponseEntity.ok(sleepTrack);
@@ -67,13 +67,13 @@ public class SleepTrackController {
         return ResponseEntity.ok(createdSleepTrack);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<SleepTrack> updateSleepTrack(@PathVariable Long id, @RequestBody SleepTrack sleepTrackDetails) {
         SleepTrack updatedSleepTrack = sleepTrackService.updateSleepTrack(id, sleepTrackDetails);
         return ResponseEntity.ok(updatedSleepTrack);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteSleepTrack(@PathVariable Long id) {
         sleepTrackService.deleteSleepTrack(id);
         return ResponseEntity.ok().build();

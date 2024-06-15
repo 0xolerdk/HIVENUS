@@ -1,6 +1,7 @@
 import Donut from "../Donut";
 import React, { useState, useEffect  } from "react";
 import dayjs from "dayjs";
+import SummaryDonut from "../SummaryDonut";
 
 const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -10,12 +11,12 @@ const data = {
       data: [90,10],
       backgroundColor: [
         '#4caf50',
-        '#333333'
+        'rgba(0, 0, 0, 0.1)'
 
 
       ],
       borderWidth: 1.2,
-      borderColor: "#333333",
+      borderColor: "rgba(0, 0, 0, 0.1)",
       borderRadius: 10
     },
     {
@@ -23,12 +24,12 @@ const data = {
       data: [60,40],
       backgroundColor: [
         '#00bcd4',
-        '#333333'
+        'rgba(0, 0, 0, 0.1)'
 
 
       ],
       borderWidth: 1,
-      borderColor: "#333333",
+      borderColor: "rgba(0, 0, 0, 0.1)",
       borderRadius: 10
     },
     {
@@ -36,12 +37,12 @@ const data = {
       data: [70,30],
       backgroundColor: [
         '#e91e63',
-        '#333333'
+        'rgba(0, 0, 0, 0.1)'
 
 
       ],
       borderWidth: 1.5,
-      borderColor: "#333333",
+      borderColor: "rgba(0, 0, 0, 0.1)",
       borderRadius: 10
     }
   ]
@@ -105,8 +106,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
   return (
     <div className="calendar">
       <div onClick={() => subtractDay(3)}>
-        <Donut
-          data={data}
+        <SummaryDonut
+            date={date.subtract(3, "day")}
           options={options1}
           width="60px"
           height="60px"
@@ -115,8 +116,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
         />
       </div>
       <div onClick={() => subtractDay(2)}>
-        <Donut
-          data={data}
+        <SummaryDonut
+          date={date.subtract(2, "day")}
           options={options2}
           width="100px"
           height="100px"
@@ -127,8 +128,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
       </div>
       <div onClick={() => subtractDay(1)}>
         {" "}
-        <Donut
-          data={data}
+        <SummaryDonut
+          date={date.subtract(1, "day")}
           options={options3}
           width="110px"
           height="110px"
@@ -139,21 +140,21 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
       </div>
       <div>
         {" "}
-        <Donut
-          data={data}
+        <SummaryDonut
           options={options4}
           width="120px"
           height="120px"
           text={date.format("DD")}
           font_size={2}
           tooltip={false}
+          date={date}
 
         />
       </div>
       <div onClick={() => addDay(1)}>
         {" "}
-        <Donut
-          data={data}
+        <SummaryDonut
+            date={date.add(1, "day")}
           options={options3}
           width="110px"
           height="110px"
@@ -164,8 +165,8 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
       </div>
       <div onClick={() => addDay(2)}>
         {" "}
-        <Donut
-          data={data}
+        <SummaryDonut
+            date={date.add(2, "day")}
           options={options2}
           width="100px"
           height="100px"
@@ -175,9 +176,9 @@ export default function Calendar_Bottom({ selectedDate, onDateChange }) {
         />
       </div>
       <div onClick={() => addDay(3)}>
-        <Donut
-          data={data}
-          options={options1}
+        <SummaryDonut
+        date={date.add(3, "day")}
+        options={options1}
           width="60px"
           height="60px"
           text={date.add(3, "day").format("DD")}

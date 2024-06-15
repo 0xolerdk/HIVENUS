@@ -3,6 +3,10 @@ import axios from "axios";
 class AuthService{
     static BASE_URL = "http://localhost:8080"
 
+    static getToken(){
+        return localStorage.getItem('token'); // Or wherever you store the token
+    }
+
     static async login(email, password){
         try{
             const response = await axios.post(`${AuthService.BASE_URL}/auth/login`, {email, password})
@@ -13,7 +17,7 @@ class AuthService{
         }
     }
 
-    static async register(userData, token){
+    static async register(userData){
         try{
             const response = await axios.post(`${AuthService.BASE_URL}/auth/register`, userData, 
             )
@@ -36,11 +40,11 @@ class AuthService{
     }
 
 
-    static async getYourProfile(token){
+    static async getYourProfile(){
         try{
             const response = await axios.get(`${AuthService.BASE_URL}/public/get-profile`, 
             {
-                headers: {Authorization: `Bearer ${token}`}
+                headers: {Authorization: `Bearer ${this.getToken()}`}
             })
             return response.data;
         }catch(err){
@@ -91,9 +95,7 @@ class AuthService{
         localStorage.removeItem('role')
     }
 
-    static getToken(){
-        return localStorage.getItem('token'); // Or wherever you store the token
-      }
+
 
     static isAuthenticated(){
         const token = localStorage.getItem('token')

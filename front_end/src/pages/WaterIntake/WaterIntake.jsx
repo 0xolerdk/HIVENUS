@@ -9,6 +9,7 @@ import WaterHistory from "../../components/WaterIntake/WaterHistory";
 import BasicSpeedDial from "../../components/WaterIntake/Add.js"; // Ensure the correct import path
 import Container from '@mui/material/Container';
 import CustomSnackbar from "../../components/CustomSnackbar"; // Import Custom Snackbar
+import SettingsService from "../../services/SettingsService"; // Import SettingsService
 
 const dataTemplate = {
   labels: ["Consumed", "Remaining"],
@@ -16,9 +17,9 @@ const dataTemplate = {
     {
       label: "Water Intake",
       data: [0, 100],
-      backgroundColor: ["#00bcd4", "#333333"],
+      backgroundColor: ["#00bcd4", "rgba(0, 0, 0, 0.1)"],
       borderWidth: 0,
-      borderColor: "#333333",
+      borderColor: "rgba(0, 0, 0, 0.1)",
       borderRadius: 50,
     }
   ],
@@ -44,34 +45,28 @@ export default function WaterIntake() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [dailyWaterGoal, setDailyWaterGoal] = useState(null); // Initially null
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    fetchWaterData(newDate);
   };
 
-  const fetchWaterData = async (date) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found");
-      return;
-    }
-
+  const fetchWaterData = async (date, dailyGoal) => {
     try {
-      const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'), token);
+      const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
       const waterIntakes = response.data;
 
       const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
-      const cappedIntake = Math.min(totalIntake, 2000); // Cap the intake at 2000ml
+      const cappedIntake = Math.min(totalIntake, dailyGoal); // Cap the intake at user's daily goal
 
-      setPercent(((cappedIntake / 2000) * 100)); // Update percent here
+      setPercent(((cappedIntake / dailyGoal) * 100)); // Update percent here
 
       setData({
         ...dataTemplate,
         datasets: [
           {
             ...dataTemplate.datasets[0],
-            data: [cappedIntake, 2000 - cappedIntake], // Assuming daily goal is 2000ml
+            data: [cappedIntake, dailyGoal - cappedIntake], // Using user's daily goal
           }
         ],
       });
@@ -83,10 +78,11 @@ export default function WaterIntake() {
   };
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem("token");
     try {
-      await WaterIntakeService.deleteWaterDataById(id, token);
-      fetchWaterData(date); // Refresh data after deletion
+      await WaterIntakeService.deleteWaterDataById(id);
+      if (dailyWaterGoal) {
+        fetchWaterData(date, dailyWaterGoal); // Refresh data after deletion
+      }
       setSnackbarMessage("Water intake record deleted successfully");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -102,7 +98,9 @@ export default function WaterIntake() {
     setSnackbarMessage("Water intake record added successfully");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
-    fetchWaterData(date); // Refresh data after adding
+    if (dailyWaterGoal) {
+      fetchWaterData(date, dailyWaterGoal); // Refresh data after adding
+    }
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -113,26 +111,41 @@ export default function WaterIntake() {
   };
 
   useEffect(() => {
-    fetchWaterData(date);
-  }, [date]);
+    const fetchUserSettings = async () => {
+      try {
+        const settings = await SettingsService.getSettings();
+        setDailyWaterGoal(settings.maxWater); // Set user's daily water goal
+      } catch (error) {
+        console.error("Error fetching user settings:", error);
+      }
+    };
+
+    fetchUserSettings();
+  }, []);
+
+  useEffect(() => {
+    if (dailyWaterGoal !== null) {
+      fetchWaterData(date, dailyWaterGoal);
+    }
+  }, [date, dailyWaterGoal]);
 
   return (
-    <div>
-      <Top_Bar pageValue={4} />
-      <div className="calendar">
-        <Calendar selectedDate={date} onDateChange={handleDateChange} />
+      <div>
+        <Top_Bar pageValue={4} />
+        <div className="calendar">
+          <Calendar selectedDate={date} onDateChange={handleDateChange} />
+        </div>
+        <DonutWaves data={data} options={options1} text={""} percent={percent} />
+        <BasicSpeedDial selectedDate={date} refreshData={handleAddSuccess} />
+        <Container maxWidth="md">
+          <WaterHistory history={history} onDelete={handleDelete} />
+        </Container>
+        <CustomSnackbar
+            open={snackbarOpen}
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+            severity={snackbarSeverity}
+        />
       </div>
-      <DonutWaves data={data} options={options1} text={""} percent={percent}/>
-      <BasicSpeedDial selectedDate={date} refreshData={handleAddSuccess} />
-      <Container maxWidth="md">
-        <WaterHistory history={history} onDelete={handleDelete} />
-      </Container>
-      <CustomSnackbar
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-      />
-    </div>
   );
 }

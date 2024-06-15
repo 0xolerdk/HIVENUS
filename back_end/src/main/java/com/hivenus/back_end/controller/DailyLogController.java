@@ -26,13 +26,13 @@ public class DailyLogController {
     private UsersManagementService usersManagementService;
 
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value = "/admin", produces = "application/json")
     public ResponseEntity<List<DailyLogDto>> getAllDailyLogs() {
         List<DailyLogDto> dailyLogs = dailyLogManagmentService.getAllDailyLogs();
         return ResponseEntity.ok(dailyLogs);
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/admin/{id}", produces = "application/json")
     public ResponseEntity<DailyLogDto> getDailyLogById(@PathVariable Long id) {
         DailyLogDto dailyLog = dailyLogManagmentService.getDailyLogById(id);
         return ResponseEntity.ok(dailyLog);
@@ -61,7 +61,7 @@ public class DailyLogController {
         }
     }
 
-    @PostMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/admin/{userId}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<DailyLogDto> createDailyLog(@RequestBody DailyLogDto dailyLog, @PathVariable Long userId) {
         DailyLogDto createdDailyLog = dailyLogManagmentService.createDailyLog(dailyLog, userId);
         return ResponseEntity.ok(createdDailyLog);
@@ -82,7 +82,7 @@ public class DailyLogController {
         return ResponseEntity.ok(updatedDailyLog);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @DeleteMapping(value = "/admin/{id}", produces = "application/json")
     public ResponseEntity<Void> deleteDailyLog(@PathVariable Long id) {
         dailyLogManagmentService.deleteDailyLog(id);
         return ResponseEntity.ok().build();

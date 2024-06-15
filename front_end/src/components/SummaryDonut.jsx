@@ -1,0 +1,159 @@
+import React, { useEffect, useState } from "react";
+import Donut from "./Donut";
+import dayjs from "dayjs";
+import FCD from "../services/FCDLogic";
+import WaterIntakeService from "../services/WaterIntakeService";
+import SleepTrackService from "../services/SleepTrackService";
+import UserSettingsService from "./../services/SettingsService"; // Assuming you have a UserSettingsService to fetch user settings
+
+const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, userSettings) => {
+    const recommendedSleep = userSettings.minSleep * 60; // Convert hours to minutes
+    const recommendedWater = userSettings.maxWater;
+
+    // Recommended values for nutrients
+    const recommendedCalories = userSettings.maxEnergy;
+    const recommendedProtein = userSettings.maxProtein;
+    const recommendedFat = userSettings.maxFat;
+    const recommendedCarbohydrates = userSettings.maxCarbs;
+
+    // Calculate the percentage achievement for each nutrient
+    const calorieAchievement = (nutrientData.Energy / recommendedCalories) * 100;
+    const proteinAchievement = (nutrientData.Protein / recommendedProtein) * 100;
+    const fatAchievement = (nutrientData['Total lipid (fat)'] / recommendedFat) * 100;
+    const carbAchievement = (nutrientData['Carbohydrate, by difference'] / recommendedCarbohydrates) * 100;
+
+    // Combine all nutrient achievements into one number (average)
+    const totalNutrientAchievement = (calorieAchievement + proteinAchievement + fatAchievement + carbAchievement) / 4;
+
+    return {
+        labels: ["Water Intake", "Food Intake", "Sleep"],
+        datasets: [
+            {
+                label: "Food Intake",
+                data: [
+                    Math.min(totalNutrientAchievement, 100),
+                    Math.max(100 - totalNutrientAchievement, 0),
+                    Math.max(totalNutrientAchievement - 100, 0)
+                ],
+                backgroundColor: ["#4caf50", "rgba(0, 0, 0, 0.1)", "#f44336"],
+                borderWidth: 1,
+                borderRadius: 50,
+                borderColor: "rgba(0, 0, 0, 0.1)"
+            },
+            {
+                label: "Sleep",
+                data: [
+                    Math.min(sleepDuration, recommendedSleep),
+                    Math.max(recommendedSleep - sleepDuration, 0),
+                    Math.max(sleepDuration - recommendedSleep, 0)
+                ],
+                backgroundColor: ["#9674bc", "rgba(0, 0, 0, 0.1)", "#f44336"],
+                borderWidth: 1,
+                borderRadius: 50,
+                borderColor: "rgba(0, 0, 0, 0.1)"
+            },
+            {
+                label: "Water Intake",
+                data: [
+                    Math.min(waterData.consumed, recommendedWater),
+                    Math.max(recommendedWater - waterData.consumed, 0),
+                    Math.max(waterData.consumed - recommendedWater, 0)
+                ],
+                backgroundColor: ["#00bcd4", "rgba(0, 0, 0, 0.1)", "#f44336"],
+                borderWidth: 1,
+                borderRadius: 50,
+                borderColor: "rgba(0, 0, 0, 0.1)"
+            }
+        ]
+    };
+};
+
+const SummaryDonut = ({ date, options, width, height, text }) => {
+    const [totalNutrients, setTotalNutrients] = useState({});
+    const [waterData, setWaterData] = useState({ consumed: 0, remaining: 2000 });
+    const [sleepDuration, setSleepDuration] = useState(0);
+    const [userSettings, setUserSettings] = useState({
+        maxEnergy: 2000,
+        maxProtein: 50,
+        maxFat: 70,
+        maxCarbs: 300,
+        maxWater: 2000,
+        minSleep: 8
+    });
+
+    useEffect(() => {
+        const fetchUserSettings = async () => {
+            try {
+                const settings = await UserSettingsService.getSettings();
+                setUserSettings(settings);
+            } catch (error) {
+                console.error("Error fetching user settings:", error);
+            }
+        };
+
+        const fetchData = async () => {
+            try {
+                const nutrient = await FCD.calculateDailyNutrients(date.format("YYYY-MM-DD"));
+                setTotalNutrients(nutrient);
+            } catch (error) {
+                console.error("Error fetching daily nutrients:", error);
+            }
+        };
+
+        const fetchWaterData = async (date) => {
+            try {
+                const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
+                const waterIntakes = response.data;
+                const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
+                const cappedIntake = Math.min(totalIntake, userSettings.maxWater);
+                setWaterData({ consumed: cappedIntake, remaining: userSettings.maxWater - cappedIntake });
+            } catch (error) {
+                console.error("Error fetching water data:", error);
+            }
+        };
+
+        const fetchSleepData = async (date) => {
+            try {
+                const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
+                const sleepData = response.data;
+
+                if (sleepData) {
+                    const duration = calculateSleepDuration(sleepData.startTime, sleepData.endTime);
+                    setSleepDuration(duration);
+                } else {
+                    setSleepDuration(0);
+                }
+            } catch (error) {
+                console.error("Error fetching sleep data:", error);
+            }
+        };
+
+        const calculateSleepDuration = (startMinutes, endMinutes) => {
+            if (endMinutes < startMinutes) {
+                return (1440 - startMinutes) + endMinutes;
+            }
+            return endMinutes - startMinutes;
+        };
+
+        fetchUserSettings();
+        fetchData();
+        fetchWaterData(date);
+        fetchSleepData(date);
+    }, [date, userSettings.maxWater]);
+
+    const summaryData = generateDataForSummaryDonut(waterData, totalNutrients, sleepDuration, userSettings);
+
+    return (
+        <div>
+            <Donut
+                data={summaryData}
+                options={options}
+                width={width}
+                height={height}
+                text={text}
+            />
+        </div>
+    );
+};
+
+export default SummaryDonut;

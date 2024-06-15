@@ -14,14 +14,14 @@ const actions = [
 
 export default function BasicSpeedDial({ selectedDate, refreshData }) {
   const handleAddWaterIntake = async (amount) => {
-    const token = localStorage.getItem("token"); // Replace with your token logic
+     // Replace with your token logic
     const data = {
       amount,
       date: selectedDate.format('YYYY-MM-DD') // Ensure the date format matches your backend expectations
     };
 
     try {
-      await WaterIntakeService.createWaterDataByDate(data, token);
+      await WaterIntakeService.createWaterDataByDate(data);
       refreshData(); // Call the refresh function to update the data
     } catch (error) {
       console.error("Error adding water intake:", error);

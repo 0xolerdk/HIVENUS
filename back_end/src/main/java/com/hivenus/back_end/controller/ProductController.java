@@ -28,13 +28,13 @@ public class ProductController {
         @Autowired
 private DailyLogManagmentService dailyLogManagmentService;
 
-    @GetMapping
+    @GetMapping(value = "/admin")
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(product);
@@ -43,7 +43,17 @@ private DailyLogManagmentService dailyLogManagmentService;
     @GetMapping("/date")
     public ResponseEntity<List<Product>> getProductsByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<Product> products = productService.getProductsByDate(date);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        List<Product> products = productService.getProductsByDate(date, userDto.getOurUsers().getId());
         return ResponseEntity.ok(products);
     }
 
@@ -64,25 +74,25 @@ private DailyLogManagmentService dailyLogManagmentService;
         return ResponseEntity.ok(createdProduct);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
         return ResponseEntity.ok(createdProduct);
     }
 
-    @PostMapping("/create/batch")
+    @PostMapping("/admin/create/batch")
     public ResponseEntity<List<Product>> createProducts(@RequestBody List<Product> products) {
         List<Product> createdProducts = productService.createProducts(products);
         return ResponseEntity.ok(createdProducts);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Product updatedProduct = productService.updateProduct(id, productDetails);
         return ResponseEntity.ok(updatedProduct);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();

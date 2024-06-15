@@ -32,8 +32,8 @@ public class WaterIntakeService {
         return waterIntakeRepository.findById(id).orElse(null);
     }
 
-    public List<WaterIntake> getWaterIntakesByDate(LocalDate date) {
-        return waterIntakeRepository.findAllByDate(date);
+    public List<WaterIntake> getWaterIntakesByDate(LocalDate date, Long userId) {
+        return waterIntakeRepository.findAllByDateAndUserId(date, userId);
     }
 
     public WaterIntake createWaterIntake(WaterIntake waterIntake, Long userId) {

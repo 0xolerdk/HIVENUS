@@ -44,7 +44,7 @@ function CaloriesIntake() {
   const handleConfirm = async () => {
     if (isFromHistory) return;
 
-    const token = localStorage.getItem("token");
+
     const data = {
       name: selectedProduct.description,
       fdcId: selectedProduct.fdcId,
@@ -55,8 +55,7 @@ function CaloriesIntake() {
 
     const response = await ProductsService.addProductByDate(
       date.format("YYYY-MM-DD"),
-      data,
-      token
+      data
     );
 
     if (response.status === 200) {
@@ -75,11 +74,10 @@ function CaloriesIntake() {
   };
 
   const handleDelete = async (productId) => {
-    const token = localStorage.getItem("token");
+    
     const response = await ProductsService.deleteProductByDate(
       productId,
-      date.format("YYYY-MM-DD"),
-      token
+      date.format("YYYY-MM-DD")
     );
 
     if (response.status === 200) {
@@ -98,10 +96,9 @@ function CaloriesIntake() {
   };
 
   const fetchHistory = async (date) => {
-    const token = localStorage.getItem("token");
+    
     const response = await ProductsService.getProductsByDate(
-      date.format("YYYY-MM-DD"),
-      token
+      date.format("YYYY-MM-DD")
     );
     if (response.status === 200) {
       const data = await response.data;
@@ -118,12 +115,11 @@ function CaloriesIntake() {
   }, [date]);
 
   const fetchAllNutrients = async () => {
-    const token = localStorage.getItem("token");
+    
 
     try {
       const nutrient = await FCD.calculateDailyNutrients(
-        date.format("YYYY-MM-DD"),
-        token
+        date.format("YYYY-MM-DD")
       );
       setTotalNutrients(nutrient);
     } catch (error) {

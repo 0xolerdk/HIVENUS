@@ -8,7 +8,8 @@ import { Button, Grid, Typography, Container, Box } from '@mui/material';
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import CustomSnackbar from '../../components/CustomSnackbar'; // Adjust the import path as needed
+import CustomSnackbar from '../../components/CustomSnackbar';
+import SettingsService from "../../services/SettingsService"; // Adjust the import path as needed
 
 const options1 = {
   height: 120,
@@ -52,8 +53,8 @@ export default function SleepTrack() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'), token);
+        
+        const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
         setSleepData(response.data);
         if (response.data) {
           const { startTime, endTime } = response.data;
@@ -104,8 +105,8 @@ export default function SleepTrack() {
     };
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await SleepTrackService.addSleepDataByDate(data, token);
+      
+      const response = await SleepTrackService.addSleepDataByDate(data);
       setSleepData(response.data);
       setDisplayStartTime(startTime);
       setDisplayEndTime(endTime);
@@ -130,14 +131,7 @@ export default function SleepTrack() {
         </div>
 
         <SleepDonut duration={sleepDuration} options={options1} width={400} height={400} />
-        <Typography
-            variant="h6"
-            align="center"
-            mb="10px"
-            color={sleepDuration > 480 ? "#ff0000" : "white"}
-        >
-          Sleep Duration: {formattedDuration}
-        </Typography>
+
         <Box my={2}>
           <form onSubmit={handleAddSleepData}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

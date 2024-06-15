@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Donut from "../Donut"; // Assuming you have a Donut component
 import PropTypes from 'prop-types';
 import {Typography} from "@mui/material";
 import SleepCircle from "./SleepCircle";
+import UserSettingsService from "../../services/SettingsService";
+import SettingsService from "../../services/SettingsService"; // Assuming you have a UserSettingsService to fetch user settings
 
 const calculateRemaining = (duration, recommended) => {
     return duration > recommended ? 0 : recommended - duration;
@@ -12,8 +14,7 @@ const calculateExcess = (duration, recommended) => {
     return duration > recommended ? duration - recommended : 0;
 };
 
-const generateDataForSleepCircle = (duration) => {
-    const recommendedSleep = 480; // 8 hours in minutes
+const generateDataForSleepCircle = (duration, recommendedSleep) => {
     const sleepData = [
         duration > recommendedSleep ? recommendedSleep : duration, // Consumed
         calculateRemaining(duration, recommendedSleep), // Left
@@ -26,9 +27,9 @@ const generateDataForSleepCircle = (duration) => {
             {
                 label: "Sleep Data",
                 data: sleepData,
-                backgroundColor: ["#e91e63", "rgba(0, 0, 0, 0.1)", "#ff0000"],
+                backgroundColor: ["#9674bc", "rgba(0, 0, 0, 0.1)", "#f44336"],
                 borderWidth: 5,
-                borderColor: "#333333",
+                borderColor: "rgba(0, 0, 0, 0.1)",
                 borderRadius: 50,
             },
         ],
@@ -42,17 +43,41 @@ const formatDuration = (minutes) => {
 };
 
 const SleepDonut = ({ duration, options, width, height }) => {
-    const circleData = generateDataForSleepCircle(duration);
+    const [recommendedSleep, setRecommendedSleep] = useState(480); // Default to 8 hours in minutes
+
+    useEffect(() => {
+        const fetchUserSettings = async () => {
+            try {
+                const settings = await UserSettingsService.getSettings();
+                setRecommendedSleep(settings.minSleep * 60); // Convert hours to minutes
+            } catch (error) {
+                console.error("Error fetching user settings:", error);
+            }
+        };
+
+        fetchUserSettings();
+    }, []);
+
+    const circleData = generateDataForSleepCircle(duration, recommendedSleep);
     const formattedDuration = formatDuration(duration);
 
     return (
         <div>
+
             <SleepCircle
                 data={circleData}
                 options={options}
                 width={width}
                 height={height}
             />
+            <Typography
+                variant="h6"
+                align="center"
+                mb="10px"
+                color={duration > recommendedSleep? "#f44336" : "white"}
+            >
+                Sleep Duration: {formattedDuration}
+            </Typography>
         </div>
     );
 };
