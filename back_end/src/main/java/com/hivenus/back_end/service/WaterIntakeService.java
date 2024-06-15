@@ -6,6 +6,7 @@ import com.hivenus.back_end.entity.WaterIntake;
 import com.hivenus.back_end.repository.DailyLogRepository;
 import com.hivenus.back_end.repository.UserRepository;
 import com.hivenus.back_end.repository.WaterIntakeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +63,8 @@ public class WaterIntakeService {
     public WaterIntake updateWaterIntake(Long id, WaterIntake waterIntakeDetails) {
         return waterIntakeRepository.save(waterIntakeDetails);
     }
-
-    public void deleteWaterIntake(Long id) {
-        waterIntakeRepository.deleteById(id);
+        @Transactional
+    public void deleteWaterIntake(Long id, Long userId) {
+        waterIntakeRepository.deleteByIdAndUserId(id, userId);
     }
 }

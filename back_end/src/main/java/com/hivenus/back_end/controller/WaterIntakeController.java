@@ -73,9 +73,18 @@ public class WaterIntakeController {
         return ResponseEntity.ok(updatedWaterIntake);
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWaterIntake(@PathVariable Long id) {
-        waterIntakeService.deleteWaterIntake(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = authentication.getName();
+        UserDto userDto = usersManagementService.getMyInfo(email);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        waterIntakeService.deleteWaterIntake(id, userDto.getOurUsers().getId());
         return ResponseEntity.ok().build();
     }
 }

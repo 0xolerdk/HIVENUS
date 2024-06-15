@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WaterIntakeRepository extends JpaRepository<WaterIntake, Long> {
-    WaterIntake findByDate(LocalDate date);
-    Optional<WaterIntake> findByUserAndDate(OurUser user, LocalDate date);
- List<WaterIntake> findAllByDate(LocalDate date);
 
     List<WaterIntake> findAllByDateAndUserId(LocalDate date, Long userId);
+
+    void deleteByIdAndUserId(Long id, Long userId);
 }
 

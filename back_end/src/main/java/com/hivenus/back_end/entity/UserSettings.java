@@ -21,10 +21,10 @@ public class UserSettings {
     @JoinColumn(name = "user_id", nullable = false)
     private OurUser user;
 
-    private int maxEnergy;
-    private int maxProtein;
-    private int maxFat;
-    private int maxCarbs;
-    private int maxWater;
-    private int minSleep;
+    private int maxEnergy = 2500;
+    private int maxProtein = 50;
+    private int maxFat = 50;
+    private int maxCarbs = 70;
+    private int maxWater = 2000;
+    private int minSleep = 8;
 }

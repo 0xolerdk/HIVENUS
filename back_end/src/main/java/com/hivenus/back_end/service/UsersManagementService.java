@@ -4,8 +4,10 @@ import com.hivenus.back_end.config.JWTAuthFilter;
 import com.hivenus.back_end.dto.UserDto;
 import com.hivenus.back_end.entity.DailyLog;
 import com.hivenus.back_end.entity.OurUser;
+import com.hivenus.back_end.entity.UserSettings;
 import com.hivenus.back_end.repository.DailyLogRepository;
 import com.hivenus.back_end.repository.UserRepository;
+import com.hivenus.back_end.repository.UserSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +31,8 @@ public class UsersManagementService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private DailyLogRepository dailyLogRepository;
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
 
     public UserDto register(UserDto registrationRequest) {
         UserDto resp = new UserDto();
@@ -41,6 +45,7 @@ public class UsersManagementService {
                 resp.setMessage("A user with this email already exists");
             } else {
                 OurUser ourUser = new OurUser();
+                UserSettings userSettings = new UserSettings();
 
                 DailyLog dailyLog = new DailyLog();
                 ourUser.setEmail(registrationRequest.getEmail());
@@ -57,8 +62,10 @@ public class UsersManagementService {
                 var jwt = jwtUtils.generateToken(user);
                 resp.setToken(jwt);
                 resp.setExpirationTime("24Hrs");
+                userSettings.setUser(savedUser);
                 dailyLog.setUser(savedUser);
                 dailyLogRepository.save(dailyLog);
+                userSettingsRepository.save(userSettings);
             }
         } catch (Exception e) {
             resp.setStatusCode(500);

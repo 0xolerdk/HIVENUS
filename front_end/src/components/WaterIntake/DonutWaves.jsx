@@ -54,7 +54,7 @@ function DonutWaves({ data, options, width = '400px', height = '400px', text, fo
       <Link to={link}>
         <div className="donut" style={{ width: width, height: height, position: 'relative' }}>
           <div className="wave-wrapper">
-            {/* <WavesCircle targetWaveHeight={percent}/> */}
+            <WavesCircle targetWaveHeight={percent}/>
           </div>
           <Doughnut data={data} options={updatedOptions} plugins={plugins} key={text} />
         </div>
