@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./CaloriesIntake.css";
 import NutrientDonut from "../../components/CaloriesIntake/NutrientDonut";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
-import FCD from "../../services/FCDLogic";
+import FCDService from "../../services/FCDLogic"; // Ensure the correct path
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import ProductsService from "../../services/ProductsService";
@@ -12,7 +12,7 @@ import ProductHistory from "../../components/CaloriesIntake/ProductHistory";
 import TextField from "@mui/material/TextField";
 import { Select, MenuItem } from "@mui/material";
 import Calendar from "../../components/Calendar/Calendar";
-import CustomSnackbar from "../../components/CustomSnackbar"; // Import Custom Snackbar
+import CustomSnackbar from "../../components/CustomSnackbar";
 
 const options = {
   borderWidth: 1,
@@ -40,7 +40,83 @@ function CaloriesIntake() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [severity, setSeverity] = useState("success");
   const [isFromHistory, setIsFromHistory] = useState(false);
-  const [calendarKey, setCalendarKey] = useState(0); // Add state to track Calendar re-render
+  const [calendarKey, setCalendarKey] = useState(0);
+  const productSearchRef = useRef();
+
+  useEffect(() => {
+    fetchHistory(date);
+    fetchAllNutrients();
+  }, [date]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      const fetchPortionsAndNutrients = async () => {
+        try {
+          const portionsObj = await FCDService.get_measures(selectedProduct.fdcId);
+          const portions = Object.keys(portionsObj);
+          setPortions(portions);
+          if (portions.length === 0) {
+            calculateNutrients(selectedProduct, "", grams, quantity);
+          } else {
+            calculateNutrients(selectedProduct, selectedPortion, grams, quantity);
+          }
+        } catch (error) {
+          console.error("Error fetching portions and nutrients:", error);
+        }
+      };
+      fetchPortionsAndNutrients();
+    }
+  }, [selectedProduct, selectedPortion, grams, quantity]);
+
+  const fetchHistory = async (date) => {
+    try {
+      const response = await ProductsService.getProductsByDate(date.format("YYYY-MM-DD"));
+      if (response.status === 200) {
+        const data = response.data;
+        setHistory(data);
+        setTotalNutrients(await FCDService.fetchNutrientsForProducts(data, selectedProduct));
+      } else {
+        console.error(`Error fetching history: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching history: ${error}`);
+    }
+  };
+
+  const fetchAllNutrients = async () => {
+    try {
+      const nutrient = await FCDService.calculateDailyNutrients(date.format("YYYY-MM-DD"));
+      setTotalNutrients(nutrient);
+    } catch (error) {
+      console.error("Error fetching daily nutrients:", error);
+    }
+  };
+
+  const calculateNutrients = async (product, portion, grams=0, quantity) => {
+    try {
+      let nutrientsArr;
+      if (grams > 0) {
+        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams);
+      } else if (portion) {
+        nutrientsArr = await FCDService.calculate_nutrients(product.fdcId, portion, quantity);
+      } else {
+        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams);
+      }
+
+      if (!Array.isArray(nutrientsArr)) {
+        throw new Error("Invalid response from FCD service");
+      }
+
+      const nutrients = nutrientsArr.reduce((acc, nutrient) => {
+        acc[nutrient.nutrient.name] = nutrient.intake;
+        return acc;
+      }, {});
+      setNutrients(nutrients);
+    } catch (error) {
+      console.error("Error calculating nutrients:", error);
+      setNutrients({});
+    }
+  };
 
   const handleConfirm = async () => {
     if (isFromHistory) return;
@@ -53,143 +129,73 @@ function CaloriesIntake() {
       gram: grams,
     };
 
-    const response = await ProductsService.addProductByDate(
-        date.format("YYYY-MM-DD"),
-        data
-    );
-
-    if (response.status === 200) {
-      setMessage("Product successfully added to statistics");
-      setSeverity("success");
-      setSnackbarOpen(true);
-      fetchHistory(date);
-      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
-    } else {
-      setMessage(
-          `Error posting data: ${response.status} ${response.statusText}`
-      );
+    try {
+      const response = await ProductsService.addProductByDate(date.format("YYYY-MM-DD"), data);
+      if (response.status === 200) {
+        setMessage("Product successfully added to statistics");
+        setSeverity("success");
+        setSnackbarOpen(true);
+        fetchHistory(date);
+        setCalendarKey((prevKey) => prevKey + 1);
+      } else {
+        setMessage(`Error posting data: ${response.status} ${response.statusText}`);
+        setSeverity("error");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error(`Error posting data: ${error}`);
+      setMessage(`Error posting data: ${error.message}`);
       setSeverity("error");
       setSnackbarOpen(true);
     }
+
+    setSelectedProduct(null);
+    setSelectedPortion("");
+    setQuantity(1);
+    setGrams(0);
+    productSearchRef.current.clearInput();
+
     fetchAllNutrients();
+  };
+
+  const handleProductSelect = (productId) => {
+    const product = history.find((item) => item.id === productId);
+    if (product) {
+      setSelectedProduct(product);
+      setNutrients({});
+      setIsFromHistory(true);
+      if (product.portion) {
+        setSelectedPortion(product.portion);
+      }
+      setQuantity(product.quantity);
+      setGrams(product.gram);
+      calculateNutrients(product, product.portion, product.gram, product.quantity);
+    } else {
+      setSelectedProduct(null);
+      setIsFromHistory(false);
+    }
   };
 
   const handleDelete = async (productId) => {
-    const response = await ProductsService.deleteProductByDate(
-        productId,
-        date.format("YYYY-MM-DD")
-    );
-
-    if (response.status === 200) {
-      setMessage("Product successfully deleted from history");
-      setSeverity("success");
-      setSnackbarOpen(true);
-      fetchHistory(date);
-      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
-    } else {
-      setMessage(
-          `Error deleting data: ${response.status} ${response.statusText}`
-      );
+    try {
+      const response = await ProductsService.deleteProductByDate(productId, date.format("YYYY-MM-DD"));
+      if (response.status === 200) {
+        setMessage("Product successfully deleted from history");
+        setSeverity("success");
+        setSnackbarOpen(true);
+        fetchHistory(date);
+        setCalendarKey((prevKey) => prevKey + 1);
+      } else {
+        setMessage(`Error deleting data: ${response.status} ${response.statusText}`);
+        setSeverity("error");
+        setSnackbarOpen(true);
+      }
+      fetchAllNutrients();
+    } catch (error) {
+      console.error(`Error deleting data: ${error}`);
+      setMessage(`Error deleting data: ${error.message}`);
       setSeverity("error");
       setSnackbarOpen(true);
-    }
-    fetchAllNutrients();
-  };
-
-  const fetchHistory = async (date) => {
-    const response = await ProductsService.getProductsByDate(
-        date.format("YYYY-MM-DD")
-    );
-    if (response.status === 200) {
-      const data = await response.data;
-      setHistory(data);
-      setTotalNutrients(FCD.fetchNutrientsForProducts(data, selectedProduct));
-    } else {
-      console.error(`Error fetching history: ${response.statusText}`);
-    }
-  };
-
-  useEffect(() => {
-    fetchHistory(date);
-    fetchAllNutrients();
-  }, [date]);
-
-  const fetchAllNutrients = async () => {
-    try {
-      const nutrient = await FCD.calculateDailyNutrients(
-          date.format("YYYY-MM-DD")
-      );
-      setTotalNutrients(nutrient);
-    } catch (error) {
-      console.error("Error fetching daily nutrients:", error);
-    }
-  };
-
-  const calculateNutrients = async (product, portion, grams, quantity) => {
-    try {
-      let nutrientsArr;
-      if (grams > 0) {
-        nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
-      } else if (portion) {
-        nutrientsArr = await FCD.calculate_nutrients(
-            product.fdcId,
-            portion,
-            quantity
-        );
-      } else {
-        nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
-      }
-
-      if (!Array.isArray(nutrientsArr)) {
-        throw new Error("Invalid response from FCD service");
-      }
-
-      const nutrients = nutrientsArr.reduce((acc, nutrient) => {
-        acc[nutrient.label] = nutrient.intake;
-        return acc;
-      }, {});
-      setNutrients(nutrients);
-    } catch (error) {
-      console.error("Error calculating nutrients:", error);
-      setNutrients({});
-    }
-  };
-
-  useEffect(() => {
-    if (selectedProduct) {
-      const fetchPortionsAndNutrients = async () => {
-        const portionsObj = await FCD.get_measures(selectedProduct.fdcId);
-        const portions = Object.keys(portionsObj);
-        setPortions(portions);
-        if (portions.length === 0) {
-          calculateNutrients(selectedProduct, "", grams, quantity);
-        } else {
-          calculateNutrients(selectedProduct, selectedPortion, grams, quantity);
-        }
-      };
-      fetchPortionsAndNutrients();
-    }
-  }, [selectedProduct, selectedPortion, grams, quantity]);
-
-  const handleProductSelect = (productId) => {
-    if (selectedProduct) {
-      setSelectedProduct(null);
-      setIsFromHistory(false);
-      setSelectedPortion("");
-      setQuantity(1);
-      setGrams(0);
-    } else {
-      const product = history.find((item) => item.id === productId);
-      if (product) {
-        setSelectedProduct(product);
-        setIsFromHistory(true); // Mark as selected from history
-        if (product.portion) {
-          console.log("Portion selected:", product.portion);
-          setSelectedPortion(product.portion);
-        }
-        setQuantity(product.quantity);
-        setGrams(product.gram); // Adjust grams calculation here
-      }
     }
   };
 
@@ -197,7 +203,7 @@ function CaloriesIntake() {
       <div>
         <Top_Bar pageValue={1} />
         <div className="calendar">
-          <Calendar key={calendarKey} date={date} onDateChange={setDate} /> {/* Add key to Calendar */}
+          <Calendar key={calendarKey} date={date} onDateChange={setDate} />
         </div>
         <div className="donut">
           <NutrientDonut
@@ -213,89 +219,64 @@ function CaloriesIntake() {
         </div>
         <div className="menu">
           <ProductSearch
-              onProductSelect={(product) => {
+              ref={productSearchRef}
+              onProductSelect={async (product) => {
                 setSelectedProduct(product);
                 setIsFromHistory(false);
                 setSelectedPortion("");
                 setQuantity(1);
                 setGrams(product.servingSize);
+                setNutrients({});
+                await calculateNutrients(product, "", product.servingSize, 1); // Trigger nutrient calculation immediately
               }}
           />
           <div className="search-box">
             {selectedProduct && (
                 <div>
-                  {!isFromHistory && portions.length > 0 ? (
+                  {!isFromHistory && (
                       <>
-                        <Select
-                            className="center"
-                            label="Portion"
-                            value={selectedPortion}
-                            sx={{ marginTop: 3, height: 55, marginLeft: 2 }}
-                            onChange={(event) => setSelectedPortion(event.target.value)}
-                        >
-                          {portions.map((portion) => (
-                              <MenuItem key={portion} value={portion}>
-                                {portion}
-                              </MenuItem>
-                          ))}
-                        </Select>
+                        {portions.length > 0 && (
+                            <Select
+                                className="center"
+                                label="Portion"
+                                value={selectedPortion}
+                                sx={{ marginTop: 3, height: 55, marginLeft: 2 }}
+                                onChange={async (event) => {
+                                  const newPortion = event.target.value;
+                                  setSelectedPortion(newPortion);
+                                  await calculateNutrients(selectedProduct, newPortion, grams, quantity);
+                                }}
+                            >
+                              {portions.map((portion) => (
+                                  <MenuItem key={portion} value={portion}>
+                                    {portion}
+                                  </MenuItem>
+                              ))}
+                            </Select>
+                        )}
                         <TextField
                             type="number"
                             label="Quantity"
                             value={quantity}
                             sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
-                            onChange={(event) =>
-                                setQuantity(Number(event.target.value))
-                            }
+                            onChange={async (event) => {
+                              const newQuantity = Number(event.target.value);
+                              setQuantity(newQuantity);
+                              await calculateNutrients(selectedProduct, selectedPortion, grams, newQuantity);
+                            }}
                         />
                         <TextField
                             type="number"
                             label="Grams"
                             value={grams}
-                            onChange={(event) => setGrams(Number(event.target.value))}
+                            onChange={async (event) => {
+                              const newGrams = Number(event.target.value);
+                              setGrams(newGrams);
+                              await calculateNutrients(selectedProduct, selectedPortion, newGrams, quantity);
+                            }}
                             sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
                         />
-                        <div className="center" style={{ height: 30 }}>
-                          <Button
-                              variant="contained"
-                              onClick={handleConfirm}
-                              sx={{
-                                flex: "center",
-                                marginTop: 3,
-                                marginLeft: 2,
-                                width: 225,
-                              }}
-                          >
-                            Confirm
-                          </Button>
-                        </div>
                       </>
-                  ) : (
-                      !isFromHistory && (
-                          <div>
-                            <TextField
-                                type="number"
-                                label="Grams"
-                                value={grams}
-                                onChange={(event) => setGrams(Number(event.target.value))}
-                                sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
-                            />
-                            <div className="center" style={{ height: 30 }}>
-                              <Button
-                                  variant="contained"
-                                  onClick={handleConfirm}
-                                  sx={{
-                                    flex: "center",
-                                    marginTop: 3,
-                                    marginLeft: 2,
-                                    width: 225,
-                                  }}
-                              >
-                                Confirm
-                              </Button>
-                            </div>
-                          </div>
-                      )
                   )}
                 </div>
             )}
@@ -316,9 +297,7 @@ function CaloriesIntake() {
             />
           </div>
           <div className="right-container">
-            <NutrientTable
-                nutrients={selectedProduct ? nutrients : totalNutrients}
-            />
+            <NutrientTable nutrients={selectedProduct ? nutrients : totalNutrients} />
           </div>
         </div>
       </div>

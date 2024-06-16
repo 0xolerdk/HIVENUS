@@ -1,98 +1,138 @@
 package com.hivenus.back_end.service;
 
+import com.hivenus.back_end.entity.Product;
+import com.hivenus.back_end.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
-import java.util.*;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class FCDService {
-    private static final String API_KEY = "FPSzFJBUD8wUKeGA5qaFggDIlu7k4pcN9mP6qdx7";
-    private static final String API_URL = "https://api.nal.usda.gov/fdc/v1/";
 
-    private RestTemplate restTemplate = new RestTemplate();
+    @Value("${fcd.api.key}")
+    private String apiKey;
 
-    public String get_url(String command) {
-        return (API_URL + command + "?api_key=" + API_KEY);
+    @Value("${fcd.api.url}")
+    private String apiUrl;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    private String getUrl(String command) {
+        return UriComponentsBuilder.fromHttpUrl(apiUrl + command)
+                .queryParam("api_key", apiKey)
+                .toUriString();
     }
 
-    public List<Object> find(String name) {
-        String base_url = get_url("foods/search");
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(base_url)
-            .queryParam("query", name);
-
-        ResponseEntity<List> response = restTemplate.getForEntity(builder.toUriString(), List.class);
-        return response.getBody();
+    public List<Map<String, Object>> find(String name) {
+        String url = getUrl("foods/search") + "&query=" + name;
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        return (List<Map<String, Object>>) response.get("foods");
     }
 
-    public Map<String, Object> get_report(String ndbno) {
-        String base_url = get_url("food/"+ndbno);
-        ResponseEntity<Map> response = restTemplate.getForEntity(base_url, Map.class);
-        return response.getBody();
+    public Map<String, Object> getReport(String ndbno) {
+        String url = getUrl("food/" + ndbno);
+        return restTemplate.getForObject(url, Map.class);
     }
 
-    // ...
-
-public List<Map<String, Object>> get_nutrients(String ndbno) {
-    Map<String, Object> report = get_report(ndbno);
-    return (List<Map<String, Object>>) report.get("foodNutrients");
-}
-
-public Map<String, Double> get_measures(String ndbno) {
-    Map<String, Object> report = get_report(ndbno);
-    List<Map<String, Object>> foodPortions = (List<Map<String, Object>>) report.get("foodPortions");
-
-    Map<String, Double> measures = new HashMap<>();
-    for (Map<String, Object> portion : foodPortions) {
-        measures.put((String) portion.get("portionDescription"), (Double) portion.get("gramWeight"));
+    public List<Map<String, Object>> getNutrients(String ndbno) {
+        Map<String, Object> report = getReport(ndbno);
+        return (List<Map<String, Object>>) report.get("foodNutrients");
     }
 
-    return measures;
-}
-
-public List<Map<String, Object>> calculate_nutrients(String ndbno, String portion_description) {
-    Map<String, Object> report = get_report(ndbno);
-    List<Map<String, Object>> foodNutrients = (List<Map<String, Object>>) report.get("foodNutrients");
-    List<Map<String, Object>> foodPortions = (List<Map<String, Object>>) report.get("foodPortions");
-
-    // Find the chosen portion and its gram weight
-    Map<String, Object> chosen_portion = null;
-    for (Map<String, Object> portion : foodPortions) {
-        if (portion.get("portionDescription").equals(portion_description)) {
-            chosen_portion = portion;
-            break;
+    public Map<String, Double> getMeasures(String ndbno) {
+        Map<String, Object> report = getReport(ndbno);
+        List<Map<String, Object>> portions = (List<Map<String, Object>>) report.get("foodPortions");
+        Map<String, Double> measures = new HashMap<>();
+        for (Map<String, Object> portion : portions) {
+            String portionDescription = (String) portion.get("portionDescription");
+            if (portionDescription != null) {
+                measures.put(portionDescription, ((Number) portion.get("gramWeight")).doubleValue());
+            }
         }
+        return measures;
     }
 
-    if (chosen_portion == null) {
-        return null; // Portion description not found
+    public List<Map<String, Object>> calculateNutrients(String ndbno, String portionDescription, double quantity) {
+        Map<String, Object> report = getReport(ndbno);
+        List<Map<String, Object>> nutrients = (List<Map<String, Object>>) report.get("foodNutrients");
+        List<Map<String, Object>> portions = (List<Map<String, Object>>) report.get("foodPortions");
+
+        Map<String, Object> chosenPortion = portions.stream()
+                .filter(portion -> portionDescription.equals(portion.get("portionDescription")))
+                .findFirst()
+                .orElse(null);
+
+        if (chosenPortion == null) {
+            throw new IllegalArgumentException("Portion description not found");
+        }
+
+        double chosenGramWeight = ((Number) chosenPortion.get("gramWeight")).doubleValue();
+
+        for (Map<String, Object> nutrient : nutrients) {
+            double amountPer100g = ((Number) nutrient.get("amount")).doubleValue();
+            double amountPerGram = amountPer100g / 100;
+            double amountForChosenPortion = amountPerGram * chosenGramWeight * quantity;
+            nutrient.put("intake", amountForChosenPortion);
+        }
+
+        return nutrients;
     }
 
-    double chosen_gram_weight = (Double) chosen_portion.get("gramWeight");
+    public List<Map<String, Object>> calculateNutrientsGram(String ndbno, double grams) {
+        Map<String, Object> report = getReport(ndbno);
+        List<Map<String, Object>> nutrients = (List<Map<String, Object>>) report.get("foodNutrients");
 
-    // Calculate nutrients for the chosen portion
-    List<Map<String, Object>> nutrients_for_chosen_portion = new ArrayList<>();
-    for (Map<String, Object> nutrient : foodNutrients) {
-        Map<String, Object> nutrientData = (Map<String, Object>) nutrient.get("nutrient");
-        String nutrient_name = (String) nutrientData.get("name");
-        String nutrient_unit = (String) nutrientData.get("unitName");
-        double nutrient_amount_per_100g = (Double) nutrient.get("amount");
+        for (Map<String, Object> nutrient : nutrients) {
+            double amountPer100g = ((Number) nutrient.get("amount")).doubleValue();
+            double amountPerGram = amountPer100g / 100;
+            double amountForGivenGrams = amountPerGram * grams;
+            nutrient.put("intake", amountForGivenGrams);
+        }
 
-        // Convert nutrient amount to per gram
-        double nutrient_amount_per_gram = nutrient_amount_per_100g / 100;
-
-        double nutrient_amount_for_chosen_portion = nutrient_amount_per_gram * chosen_gram_weight;
-        Map<String, Object> nutrientForPortion = new HashMap<>();
-        nutrientForPortion.put("intake", nutrient_amount_for_chosen_portion);
-        nutrientForPortion.put("label", nutrient_name);
-        nutrientForPortion.put("unit", nutrient_unit);
-
-        nutrients_for_chosen_portion.add(nutrientForPortion);
+        return nutrients;
     }
 
-    return nutrients_for_chosen_portion;
+    public Map<String, Double> calculateDailyNutrients(LocalDate date, List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            throw new IllegalArgumentException("No products found for the given date");
+        }
+
+        Map<String, Double> totalNutrients = new HashMap<>();
+
+        for (Product product : products) {
+            String ndbno = product.getFdcId();
+            double quantity = product.getQuantity();
+            double gram = product.getGram();
+            String portionDescription = product.getPortion();
+
+            List<Map<String, Object>> nutrients;
+            if (gram > 0) {
+                nutrients = calculateNutrientsGram(ndbno, gram * quantity);
+            } else if (portionDescription != null) {
+                nutrients = calculateNutrients(ndbno, portionDescription, quantity);
+            } else {
+                throw new IllegalArgumentException("Invalid product data");
+            }
+
+            for (Map<String, Object> nutrient : nutrients) {
+                Map<String, Object> nutrientDetails = (Map<String, Object>) nutrient.get("nutrient");
+                String label = (String) nutrientDetails.get("name");
+                if (label != null) {
+                    double intake = ((Number) nutrient.get("intake")).doubleValue();
+                    totalNutrients.put(label, totalNutrients.getOrDefault(label, 0.0) + intake);
+                }
+            }
+        }
+        return totalNutrients;
+    }
 }
-
-}
-

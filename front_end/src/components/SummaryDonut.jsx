@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Donut from "./Donut";
-import dayjs from "dayjs";
-import FCD from "../services/FCDLogic";
+import FCDService from "../services/FCDLogic";
 import WaterIntakeService from "../services/WaterIntakeService";
 import SleepTrackService from "../services/SleepTrackService";
-import UserSettingsService from "./../services/SettingsService"; // Assuming you have a UserSettingsService to fetch user settings
+import UserSettingsService from "../services/SettingsService";
 
 const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, userSettings) => {
     const recommendedSleep = userSettings.minSleep * 60; // Convert hours to minutes
     const recommendedWater = userSettings.maxWater;
 
-    // Recommended values for nutrients
     const recommendedCalories = userSettings.maxEnergy;
     const recommendedProtein = userSettings.maxProtein;
     const recommendedFat = userSettings.maxFat;
     const recommendedCarbohydrates = userSettings.maxCarbs;
 
-    // Calculate the percentage achievement for each nutrient
     const calorieAchievement = nutrientData && nutrientData.Energy ? (nutrientData.Energy / recommendedCalories) * 100 : 0;
     const proteinAchievement = nutrientData && nutrientData.Protein ? (nutrientData.Protein / recommendedProtein) * 100 : 0;
     const fatAchievement = nutrientData && nutrientData['Total lipid (fat)'] ? (nutrientData['Total lipid (fat)'] / recommendedFat) * 100 : 0;
     const carbAchievement = nutrientData && nutrientData['Carbohydrate, by difference'] ? (nutrientData['Carbohydrate, by difference'] / recommendedCarbohydrates) * 100 : 0;
 
-    // Combine all nutrient achievements into one number (average)
     const totalNutrientAchievement = (calorieAchievement + proteinAchievement + fatAchievement + carbAchievement) / 4 || 0;
 
     const waterConsumed = waterData && waterData.consumed ? waterData.consumed : 0;
@@ -71,7 +67,6 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
     };
 };
 
-
 const SummaryDonut = ({ date, options, width, height, text }) => {
     const [totalNutrients, setTotalNutrients] = useState({});
     const [waterData, setWaterData] = useState({ consumed: 0, remaining: 2000 });
@@ -95,55 +90,58 @@ const SummaryDonut = ({ date, options, width, height, text }) => {
             }
         };
 
-        const fetchData = async () => {
-            try {
-                const nutrient = await FCD.calculateDailyNutrients(date.format("YYYY-MM-DD"));
-                setTotalNutrients(nutrient);
-            } catch (error) {
-                console.error("Error fetching daily nutrients:", error);
-            }
-        };
-
-        const fetchWaterData = async (date) => {
-            try {
-                const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
-                const waterIntakes = response.data;
-                const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
-                const cappedIntake = Math.min(totalIntake, userSettings.maxWater);
-                setWaterData({ consumed: cappedIntake, remaining: userSettings.maxWater - cappedIntake });
-            } catch (error) {
-                console.error("Error fetching water data:", error);
-            }
-        };
-
-        const fetchSleepData = async (date) => {
-            try {
-                const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
-                const sleepData = response.data;
-
-                if (sleepData) {
-                    const duration = calculateSleepDuration(sleepData.startTime, sleepData.endTime);
-                    setSleepDuration(duration);
-                } else {
-                    setSleepDuration(0);
-                }
-            } catch (error) {
-                console.error("Error fetching sleep data:", error);
-            }
-        };
-
-        const calculateSleepDuration = (startMinutes, endMinutes) => {
-            if (endMinutes < startMinutes) {
-                return (1440 - startMinutes) + endMinutes;
-            }
-            return endMinutes - startMinutes;
-        };
-
         fetchUserSettings();
-        fetchData();
-        fetchWaterData(date);
-        fetchSleepData(date);
+    }, []);
+
+    const fetchData = useCallback(async () => {
+        try {
+            const nutrient = await FCDService.calculateDailyNutrients(date.format("YYYY-MM-DD"));
+            setTotalNutrients(nutrient);
+        } catch (error) {
+            console.error("Error fetching daily nutrients:", error);
+        }
+    }, [date]);
+
+    const fetchWaterData = useCallback(async () => {
+        try {
+            const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
+            const waterIntakes = response.data;
+            const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
+            const cappedIntake = Math.min(totalIntake, userSettings.maxWater);
+            setWaterData({ consumed: cappedIntake, remaining: userSettings.maxWater - cappedIntake });
+        } catch (error) {
+            console.error("Error fetching water data:", error);
+        }
     }, [date, userSettings.maxWater]);
+
+    const fetchSleepData = useCallback(async () => {
+        try {
+            const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
+            const sleepData = response.data;
+
+            if (sleepData) {
+                const duration = calculateSleepDuration(sleepData.startTime, sleepData.endTime);
+                setSleepDuration(duration);
+            } else {
+                setSleepDuration(0);
+            }
+        } catch (error) {
+            console.error("Error fetching sleep data:", error);
+        }
+    }, [date]);
+
+    const calculateSleepDuration = (startMinutes, endMinutes) => {
+        if (endMinutes < startMinutes) {
+            return (1440 - startMinutes) + endMinutes;
+        }
+        return endMinutes - startMinutes;
+    };
+
+    useEffect(() => {
+        fetchData();
+        fetchWaterData();
+        fetchSleepData();
+    }, [date, fetchData, fetchWaterData, fetchSleepData]);
 
     const summaryData = generateDataForSummaryDonut(waterData, totalNutrients, sleepDuration, userSettings);
 
