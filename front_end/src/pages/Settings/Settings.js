@@ -15,6 +15,7 @@ import { TabContext, TabPanel, TabList } from "@mui/lab";
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import "./Settings.css";
 import SettingsService from "../../services/SettingsService"; // Import your SettingsService
+import CustomSnackbar from "../../components/CustomSnackbar"; // Import CustomSnackbar
 
 const Settings = () => {
   const [norms, setNorms] = useState({
@@ -41,6 +42,11 @@ const Settings = () => {
   });
 
   const [tabValue, setTabValue] = useState("1");
+
+  // Snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   useEffect(() => {
     fetchSettings();
@@ -95,14 +101,24 @@ const Settings = () => {
         minSleep: norms.sleep,
       });
       console.log("Settings updated successfully");
+      setSnackbarMessage("Settings updated successfully");
+      setSnackbarSeverity("success");
       await fetchSettings(); // Fetch updated settings
     } catch (error) {
       console.error("Failed to update settings", error);
+      setSnackbarMessage("Failed to update settings");
+      setSnackbarSeverity("error");
+    } finally {
+      setSnackbarOpen(true);
     }
   };
 
   const isNormsEmpty = !Object.values(norms).some((value) => value !== "");
   const isUserInfoEmpty = !Object.values(userInfo).some((value) => value !== "");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
       <div>
@@ -193,6 +209,13 @@ const Settings = () => {
             </TabPanel>
           </TabContext>
         </Container>
+
+        <CustomSnackbar
+            open={snackbarOpen}
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+            severity={snackbarSeverity}
+        />
       </div>
   );
 };

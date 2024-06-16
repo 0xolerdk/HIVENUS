@@ -12,6 +12,7 @@ import AuthService from '../../../services/AuthService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
+import dayjs from "dayjs";
 
 export default function Reg() {
   const navigate = useNavigate();
@@ -69,7 +70,8 @@ export default function Reg() {
         setSnackbarOpen(true);
       } else {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('selectedDate', dayjs().toString());
+
         setSnackbarSeverity('success');
         setSnackbarMessage('User registered successfully');
         setSnackbarOpen(true);

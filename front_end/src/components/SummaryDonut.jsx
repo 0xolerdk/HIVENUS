@@ -17,13 +17,16 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
     const recommendedCarbohydrates = userSettings.maxCarbs;
 
     // Calculate the percentage achievement for each nutrient
-    const calorieAchievement = (nutrientData.Energy / recommendedCalories) * 100;
-    const proteinAchievement = (nutrientData.Protein / recommendedProtein) * 100;
-    const fatAchievement = (nutrientData['Total lipid (fat)'] / recommendedFat) * 100;
-    const carbAchievement = (nutrientData['Carbohydrate, by difference'] / recommendedCarbohydrates) * 100;
+    const calorieAchievement = nutrientData && nutrientData.Energy ? (nutrientData.Energy / recommendedCalories) * 100 : 0;
+    const proteinAchievement = nutrientData && nutrientData.Protein ? (nutrientData.Protein / recommendedProtein) * 100 : 0;
+    const fatAchievement = nutrientData && nutrientData['Total lipid (fat)'] ? (nutrientData['Total lipid (fat)'] / recommendedFat) * 100 : 0;
+    const carbAchievement = nutrientData && nutrientData['Carbohydrate, by difference'] ? (nutrientData['Carbohydrate, by difference'] / recommendedCarbohydrates) * 100 : 0;
 
     // Combine all nutrient achievements into one number (average)
-    const totalNutrientAchievement = (calorieAchievement + proteinAchievement + fatAchievement + carbAchievement) / 4;
+    const totalNutrientAchievement = (calorieAchievement + proteinAchievement + fatAchievement + carbAchievement) / 4 || 0;
+
+    const waterConsumed = waterData && waterData.consumed ? waterData.consumed : 0;
+    const sleepDurationInMinutes = sleepDuration || 0;
 
     return {
         labels: ["Water Intake", "Food Intake", "Sleep"],
@@ -43,9 +46,9 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
             {
                 label: "Sleep",
                 data: [
-                    Math.min(sleepDuration, recommendedSleep),
-                    Math.max(recommendedSleep - sleepDuration, 0),
-                    Math.max(sleepDuration - recommendedSleep, 0)
+                    Math.min(sleepDurationInMinutes, recommendedSleep),
+                    Math.max(recommendedSleep - sleepDurationInMinutes, 0),
+                    Math.max(sleepDurationInMinutes - recommendedSleep, 0)
                 ],
                 backgroundColor: ["#9674bc", "rgba(0, 0, 0, 0.1)", "#f44336"],
                 borderWidth: 1,
@@ -55,9 +58,9 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
             {
                 label: "Water Intake",
                 data: [
-                    Math.min(waterData.consumed, recommendedWater),
-                    Math.max(recommendedWater - waterData.consumed, 0),
-                    Math.max(waterData.consumed - recommendedWater, 0)
+                    Math.min(waterConsumed, recommendedWater),
+                    Math.max(recommendedWater - waterConsumed, 0),
+                    Math.max(waterConsumed - recommendedWater, 0)
                 ],
                 backgroundColor: ["#00bcd4", "rgba(0, 0, 0, 0.1)", "#f44336"],
                 borderWidth: 1,
@@ -67,6 +70,7 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
         ]
     };
 };
+
 
 const SummaryDonut = ({ date, options, width, height, text }) => {
     const [totalNutrients, setTotalNutrients] = useState({});

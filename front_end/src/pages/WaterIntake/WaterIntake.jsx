@@ -45,7 +45,7 @@ export default function WaterIntake() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [dailyWaterGoal, setDailyWaterGoal] = useState(2000); // Initially null
+  const [dailyWaterGoal, setDailyWaterGoal] = useState(2500); // Initially null
 
   const handleDateChange = (newDate) => {
     setDate(newDate);

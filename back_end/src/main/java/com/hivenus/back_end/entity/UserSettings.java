@@ -24,7 +24,7 @@ public class UserSettings {
     private int maxEnergy = 2500;
     private int maxProtein = 50;
     private int maxFat = 50;
-    private int maxCarbs = 70;
-    private int maxWater = 2000;
+    private int maxCarbs = 250;
+    private int maxWater = 2500;
     private int minSleep = 8;
 }

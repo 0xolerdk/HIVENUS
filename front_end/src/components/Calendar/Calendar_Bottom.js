@@ -57,7 +57,6 @@ const options1 = {
   fullSize: false,
   radius: 20,
   cutout: "50%", // This changes the radius of the Doughnut hole.
-  rotation: 90, // This rotates the chart by 90 degrees.
   // Add other options here
 };
 
@@ -65,7 +64,6 @@ const options2 = {
   borderWidth: 1,
   radius: 30,
   cutout: "50%", // This changes the radius of the Doughnut hole.
-  rotation: 90, // This rotates the chart by 90 degrees.
   // Add other options here
 };
 
@@ -73,14 +71,12 @@ const options3 = {
   borderWidth: 1,
   radius: 40,
   cutout: "50%", // This changes the radius of the Doughnut hole.
-  rotation: 90, // This rotates the chart by 90 degrees.
   // Add other options here
 };
 const options4 = {
   borderWidth: 1,
   radius: 50,
   cutout: "50%", // This changes the radius of the Doughnut hole.
-  rotation: 90, // This rotates the chart by 90 degrees.
   // Add other options here
 };
 

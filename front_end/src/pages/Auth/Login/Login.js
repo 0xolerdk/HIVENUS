@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import AuthService from "../../../services/AuthService.js";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import dayjs from "dayjs";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function Login() {
       const data = await AuthService.login(formData.email, formData.password);
       if (data.statusCode === 200) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user_id", data.user_id);
+        localStorage.setItem('selectedDate', dayjs().toString());
         setSnackbarSeverity("success");
         setSnackbarMessage("User logged in successfully");
         setSnackbarOpen(true);

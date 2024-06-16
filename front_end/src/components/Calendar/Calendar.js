@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Calendar.css";
-import Donut from "../Donut";
 import CalendarDialogue from "./Calendar_Dialogue";
 import Calendar_Bottom from "./Calendar_Bottom";
 import dayjs from 'dayjs';

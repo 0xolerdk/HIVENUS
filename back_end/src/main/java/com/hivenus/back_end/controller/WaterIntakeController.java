@@ -84,7 +84,13 @@ public class WaterIntakeController {
         if (userDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        waterIntakeService.deleteWaterIntake(id, userDto.getOurUsers().getId());
-        return ResponseEntity.ok().build();
+        if(waterIntakeService.deleteByIdAndUserId(id, userDto.getOurUsers().getId())){
+            return ResponseEntity.ok().build();
+        }
+        else {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
     }
 }
