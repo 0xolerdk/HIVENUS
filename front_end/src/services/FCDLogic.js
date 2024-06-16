@@ -91,6 +91,12 @@ class FCDService {
     this.cache[date] = response.data;
     return response.data;
   }
+
+  static async invalidateCache(date) {
+    if (this.cache[date]) {
+      delete this.cache[date];
+    }
+  }
 }
 
 export default FCDService;

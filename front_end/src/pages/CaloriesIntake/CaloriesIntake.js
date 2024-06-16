@@ -276,7 +276,22 @@ function CaloriesIntake() {
                             }}
                             sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
                         />
+                        <div className="container">
+                          <Button
+                              variant="contained"
+                              onClick={handleConfirm}
+                              sx={{
+                                flex: "center",
+                                marginTop: 3,
+                                marginLeft: 2,
+                                width: 225,
+                              }}
+                          >
+                            Confirm
+                          </Button>
+                        </div>
                       </>
+
                   )}
                 </div>
             )}
