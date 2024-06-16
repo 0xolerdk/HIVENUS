@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Donut from "./Donut";
 import FCDService from "../services/FCDLogic";
 import WaterIntakeService from "../services/WaterIntakeService";
@@ -68,9 +68,7 @@ const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, use
 };
 
 const SummaryDonut = ({ date, options, width, height, text }) => {
-    const [totalNutrients, setTotalNutrients] = useState({});
-    const [waterData, setWaterData] = useState({ consumed: 0, remaining: 2000 });
-    const [sleepDuration, setSleepDuration] = useState(0);
+    const [cachedData, setCachedData] = useState({});
     const [userSettings, setUserSettings] = useState({
         maxEnergy: 2000,
         maxProtein: 50,
@@ -80,55 +78,41 @@ const SummaryDonut = ({ date, options, width, height, text }) => {
         minSleep: 8
     });
 
-    useEffect(() => {
-        const fetchUserSettings = async () => {
-            try {
-                const settings = await UserSettingsService.getSettings();
-                setUserSettings(settings);
-            } catch (error) {
-                console.error("Error fetching user settings:", error);
-            }
-        };
-
-        fetchUserSettings();
-    }, []);
-
-    const fetchData = useCallback(async () => {
-        try {
-            const nutrient = await FCDService.calculateDailyNutrients(date.format("YYYY-MM-DD"));
-            setTotalNutrients(nutrient);
-        } catch (error) {
-            console.error("Error fetching daily nutrients:", error);
+    const fetchAllData = useCallback(async (dateString) => {
+        if (cachedData[dateString]) {
+            return cachedData[dateString];
         }
-    }, [date]);
 
-    const fetchWaterData = useCallback(async () => {
         try {
-            const response = await WaterIntakeService.getWaterDataByDate(date.format('YYYY-MM-DD'));
-            const waterIntakes = response.data;
+            const settingsPromise = UserSettingsService.getSettings();
+            const nutrientPromise = FCDService.calculateDailyNutrients(dateString);
+            const waterDataPromise = WaterIntakeService.getWaterDataByDate(dateString);
+            const sleepDataPromise = SleepTrackService.getSleepDataByDate(dateString);
+
+            const [settings, nutrient, waterResponse, sleepResponse] = await Promise.all([settingsPromise, nutrientPromise, waterDataPromise, sleepDataPromise]);
+
+            setUserSettings(settings);
+
+            const waterIntakes = waterResponse.data;
             const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
-            const cappedIntake = Math.min(totalIntake, userSettings.maxWater);
-            setWaterData({ consumed: cappedIntake, remaining: userSettings.maxWater - cappedIntake });
-        } catch (error) {
-            console.error("Error fetching water data:", error);
-        }
-    }, [date, userSettings.maxWater]);
+            const cappedIntake = Math.min(totalIntake, settings.maxWater);
+            const waterData = { consumed: cappedIntake, remaining: settings.maxWater - cappedIntake };
 
-    const fetchSleepData = useCallback(async () => {
-        try {
-            const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
-            const sleepData = response.data;
-
-            if (sleepData) {
-                const duration = calculateSleepDuration(sleepData.startTime, sleepData.endTime);
-                setSleepDuration(duration);
-            } else {
-                setSleepDuration(0);
+            let sleepDuration = 0;
+            if (sleepResponse.data) {
+                const sleepData = sleepResponse.data;
+                sleepDuration = calculateSleepDuration(sleepData.startTime, sleepData.endTime);
             }
+
+            const fetchedData = { nutrient, waterData, sleepDuration };
+            setCachedData((prevData) => ({ ...prevData, [dateString]: fetchedData }));
+
+            return fetchedData;
         } catch (error) {
-            console.error("Error fetching sleep data:", error);
+            console.error("Error fetching data:", error);
+            return null;
         }
-    }, [date]);
+    }, [cachedData]);
 
     const calculateSleepDuration = (startMinutes, endMinutes) => {
         if (endMinutes < startMinutes) {
@@ -138,12 +122,16 @@ const SummaryDonut = ({ date, options, width, height, text }) => {
     };
 
     useEffect(() => {
-        fetchData();
-        fetchWaterData();
-        fetchSleepData();
-    }, [date, fetchData, fetchWaterData, fetchSleepData]);
+        const dateString = date.format("YYYY-MM-DD");
+        fetchAllData(dateString);
+    }, [date, fetchAllData]);
 
-    const summaryData = generateDataForSummaryDonut(waterData, totalNutrients, sleepDuration, userSettings);
+    const summaryData = useMemo(() => {
+        const dateString = date.format("YYYY-MM-DD");
+        const data = cachedData[dateString] || { nutrient: {}, waterData: {}, sleepDuration: 0 };
+
+        return generateDataForSummaryDonut(data.waterData, data.nutrient, data.sleepDuration, userSettings);
+    }, [cachedData, date, userSettings]);
 
     return (
         <div>

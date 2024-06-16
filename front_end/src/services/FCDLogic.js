@@ -2,6 +2,7 @@ import axios from "axios";
 
 class FCDService {
   static API_URL = process.env.REACT_APP_BACKEND_API_URL;
+  static cache = {};
 
   static async find(name) {
     const url = `${this.API_URL}/find?name=${name}`;
@@ -77,9 +78,17 @@ class FCDService {
   }
 
   static async calculateDailyNutrients(date) {
+    // Check cache
+    if (this.cache[date]) {
+      return this.cache[date];
+    }
+
     const response = await axios.get(`${this.API_URL}/calculate-daily-nutrients`, {
       params: { date },
     });
+
+    // Store in cache
+    this.cache[date] = response.data;
     return response.data;
   }
 }

@@ -103,11 +103,11 @@ public class FCDService {
     }
 
     public Map<String, Double> calculateDailyNutrients(LocalDate date, List<Product> products) {
+        Map<String, Double> totalNutrients = new HashMap<>();
         if (products == null || products.isEmpty()) {
-            throw new IllegalArgumentException("No products found for the given date");
+            return totalNutrients;
         }
 
-        Map<String, Double> totalNutrients = new HashMap<>();
 
         for (Product product : products) {
             String ndbno = product.getFdcId();
