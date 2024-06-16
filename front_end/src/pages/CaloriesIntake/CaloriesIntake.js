@@ -282,7 +282,8 @@ function CaloriesIntake() {
                               onClick={handleConfirm}
                               sx={{
                                 flex: "center",
-                                marginTop: 3,
+                                marginTop: -4,
+                                marginBottom: 1,
                                 marginLeft: 2,
                                 width: 225,
                               }}
