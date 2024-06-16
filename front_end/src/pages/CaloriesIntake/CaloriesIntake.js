@@ -40,10 +40,10 @@ function CaloriesIntake() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [severity, setSeverity] = useState("success");
   const [isFromHistory, setIsFromHistory] = useState(false);
+  const [calendarKey, setCalendarKey] = useState(0); // Add state to track Calendar re-render
 
   const handleConfirm = async () => {
     if (isFromHistory) return;
-
 
     const data = {
       name: selectedProduct.description,
@@ -54,8 +54,8 @@ function CaloriesIntake() {
     };
 
     const response = await ProductsService.addProductByDate(
-      date.format("YYYY-MM-DD"),
-      data
+        date.format("YYYY-MM-DD"),
+        data
     );
 
     if (response.status === 200) {
@@ -63,9 +63,10 @@ function CaloriesIntake() {
       setSeverity("success");
       setSnackbarOpen(true);
       fetchHistory(date);
+      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
     } else {
       setMessage(
-        `Error posting data: ${response.status} ${response.statusText}`
+          `Error posting data: ${response.status} ${response.statusText}`
       );
       setSeverity("error");
       setSnackbarOpen(true);
@@ -74,10 +75,9 @@ function CaloriesIntake() {
   };
 
   const handleDelete = async (productId) => {
-    
     const response = await ProductsService.deleteProductByDate(
-      productId,
-      date.format("YYYY-MM-DD")
+        productId,
+        date.format("YYYY-MM-DD")
     );
 
     if (response.status === 200) {
@@ -85,9 +85,10 @@ function CaloriesIntake() {
       setSeverity("success");
       setSnackbarOpen(true);
       fetchHistory(date);
+      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
     } else {
       setMessage(
-        `Error deleting data: ${response.status} ${response.statusText}`
+          `Error deleting data: ${response.status} ${response.statusText}`
       );
       setSeverity("error");
       setSnackbarOpen(true);
@@ -96,9 +97,8 @@ function CaloriesIntake() {
   };
 
   const fetchHistory = async (date) => {
-    
     const response = await ProductsService.getProductsByDate(
-      date.format("YYYY-MM-DD")
+        date.format("YYYY-MM-DD")
     );
     if (response.status === 200) {
       const data = await response.data;
@@ -115,11 +115,9 @@ function CaloriesIntake() {
   }, [date]);
 
   const fetchAllNutrients = async () => {
-    
-
     try {
       const nutrient = await FCD.calculateDailyNutrients(
-        date.format("YYYY-MM-DD")
+          date.format("YYYY-MM-DD")
       );
       setTotalNutrients(nutrient);
     } catch (error) {
@@ -134,9 +132,9 @@ function CaloriesIntake() {
         nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
       } else if (portion) {
         nutrientsArr = await FCD.calculate_nutrients(
-          product.fdcId,
-          portion,
-          quantity
+            product.fdcId,
+            portion,
+            quantity
         );
       } else {
         nutrientsArr = await FCD.calculate_nutrients_gram(product.fdcId, grams);
@@ -196,134 +194,134 @@ function CaloriesIntake() {
   };
 
   return (
-    <div>
-      <Top_Bar pageValue={1} />
-      <div className="calendar">
-        <Calendar date={date} onDateChange={setDate} />
-      </div>
-      <div className="donut">
-        <NutrientDonut
-          selectedDate={date}
-          options={options}
-          text={""}
-          height={"500px"}
-          width={"500px"}
-          tooltip={true}
-          anim={false}
-          totalNutrients={totalNutrients}
-        />
-      </div>
-      <div className="menu">
-        <ProductSearch
-          onProductSelect={(product) => {
-            setSelectedProduct(product);
-            setIsFromHistory(false);
-            setSelectedPortion("");
-            setQuantity(1);
-            setGrams(product.servingSize);
-          }}
-        />
-        <div className="search-box">
-          {selectedProduct && (
-            <div>
-              {!isFromHistory && portions.length > 0 ? (
-                <>
-                  <Select
-                    className="center"
-                    label="Portion"
-                    value={selectedPortion}
-                    sx={{ marginTop: 3, height: 55, marginLeft: 2 }}
-                    onChange={(event) => setSelectedPortion(event.target.value)}
-                  >
-                    {portions.map((portion) => (
-                      <MenuItem key={portion} value={portion}>
-                        {portion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <TextField
-                    type="number"
-                    label="Quantity"
-                    value={quantity}
-                    sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
-                    onChange={(event) =>
-                      setQuantity(Number(event.target.value))
-                    }
-                  />
-                  <TextField
-                    type="number"
-                    label="Grams"
-                    value={grams}
-                    onChange={(event) => setGrams(Number(event.target.value))}
-                    sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
-                  />
-                  <div className="center" style={{ height: 30 }}>
-                    <Button
-                      variant="contained"
-                      onClick={handleConfirm}
-                      sx={{
-                        flex: "center",
-                        marginTop: 3,
-                        marginLeft: 2,
-                        width: 225,
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                !isFromHistory && (
-                  <div>
-                    <TextField
-                      type="number"
-                      label="Grams"
-                      value={grams}
-                      onChange={(event) => setGrams(Number(event.target.value))}
-                      sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
-                    />
-                    <div className="center" style={{ height: 30 }}>
-                      <Button
-                        variant="contained"
-                        onClick={handleConfirm}
-                        sx={{
-                          flex: "center",
-                          marginTop: 3,
-                          marginLeft: 2,
-                          width: 225,
-                        }}
-                      >
-                        Confirm
-                      </Button>
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
-          )}
-          <CustomSnackbar
-            open={snackbarOpen}
-            onClose={() => setSnackbarOpen(false)}
-            message={message}
-            severity={severity}
+      <div>
+        <Top_Bar pageValue={1} />
+        <div className="calendar">
+          <Calendar key={calendarKey} date={date} onDateChange={setDate} /> {/* Add key to Calendar */}
+        </div>
+        <div className="donut">
+          <NutrientDonut
+              selectedDate={date}
+              options={options}
+              text={""}
+              height={"500px"}
+              width={"500px"}
+              tooltip={true}
+              anim={false}
+              totalNutrients={totalNutrients}
           />
         </div>
-      </div>
-      <div className="main-container">
-        <div className="left-container">
-          <ProductHistory
-            history={history}
-            onDelete={handleDelete}
-            onProductSelect={handleProductSelect}
+        <div className="menu">
+          <ProductSearch
+              onProductSelect={(product) => {
+                setSelectedProduct(product);
+                setIsFromHistory(false);
+                setSelectedPortion("");
+                setQuantity(1);
+                setGrams(product.servingSize);
+              }}
           />
+          <div className="search-box">
+            {selectedProduct && (
+                <div>
+                  {!isFromHistory && portions.length > 0 ? (
+                      <>
+                        <Select
+                            className="center"
+                            label="Portion"
+                            value={selectedPortion}
+                            sx={{ marginTop: 3, height: 55, marginLeft: 2 }}
+                            onChange={(event) => setSelectedPortion(event.target.value)}
+                        >
+                          {portions.map((portion) => (
+                              <MenuItem key={portion} value={portion}>
+                                {portion}
+                              </MenuItem>
+                          ))}
+                        </Select>
+                        <TextField
+                            type="number"
+                            label="Quantity"
+                            value={quantity}
+                            sx={{ marginLeft: 2, marginTop: 3, width: 110 }}
+                            onChange={(event) =>
+                                setQuantity(Number(event.target.value))
+                            }
+                        />
+                        <TextField
+                            type="number"
+                            label="Grams"
+                            value={grams}
+                            onChange={(event) => setGrams(Number(event.target.value))}
+                            sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
+                        />
+                        <div className="center" style={{ height: 30 }}>
+                          <Button
+                              variant="contained"
+                              onClick={handleConfirm}
+                              sx={{
+                                flex: "center",
+                                marginTop: 3,
+                                marginLeft: 2,
+                                width: 225,
+                              }}
+                          >
+                            Confirm
+                          </Button>
+                        </div>
+                      </>
+                  ) : (
+                      !isFromHistory && (
+                          <div>
+                            <TextField
+                                type="number"
+                                label="Grams"
+                                value={grams}
+                                onChange={(event) => setGrams(Number(event.target.value))}
+                                sx={{ marginLeft: 2, marginRight: 2, marginTop: 3 }}
+                            />
+                            <div className="center" style={{ height: 30 }}>
+                              <Button
+                                  variant="contained"
+                                  onClick={handleConfirm}
+                                  sx={{
+                                    flex: "center",
+                                    marginTop: 3,
+                                    marginLeft: 2,
+                                    width: 225,
+                                  }}
+                              >
+                                Confirm
+                              </Button>
+                            </div>
+                          </div>
+                      )
+                  )}
+                </div>
+            )}
+            <CustomSnackbar
+                open={snackbarOpen}
+                onClose={() => setSnackbarOpen(false)}
+                message={message}
+                severity={severity}
+            />
+          </div>
         </div>
-        <div className="right-container">
-          <NutrientTable
-            nutrients={selectedProduct ? nutrients : totalNutrients}
-          />
+        <div className="main-container">
+          <div className="left-container">
+            <ProductHistory
+                history={history}
+                onDelete={handleDelete}
+                onProductSelect={handleProductSelect}
+            />
+          </div>
+          <div className="right-container">
+            <NutrientTable
+                nutrients={selectedProduct ? nutrients : totalNutrients}
+            />
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 

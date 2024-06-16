@@ -4,7 +4,7 @@ import Calendar from '../../components/Calendar/Calendar';
 import Top_Bar from "../../components/Top_Bar/Top_Bar";
 import SleepTrackService from '../../services/SleepTrackService';
 import SleepDonut from '../../components/SleepTrack/SleepDonut'; // Import the new SleepDonut component
-import { Button, Grid, Typography, Container, Box } from '@mui/material';
+import { Button, Grid, Typography, Box } from '@mui/material';
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -49,11 +49,12 @@ export default function SleepTrack() {
   const [displayEndTime, setDisplayEndTime] = useState(dayjs().hour(0).minute(0));
   const [sleepDuration, setSleepDuration] = useState(0);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [calendarKey, setCalendarKey] = useState(0); // Add state to track Calendar re-render
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
+
         const response = await SleepTrackService.getSleepDataByDate(date.format('YYYY-MM-DD'));
         setSleepData(response.data);
         if (response.data) {
@@ -105,12 +106,13 @@ export default function SleepTrack() {
     };
 
     try {
-      
+
       const response = await SleepTrackService.addSleepDataByDate(data);
       setSleepData(response.data);
       setDisplayStartTime(startTime);
       setDisplayEndTime(endTime);
       setSnackbar({ open: true, message: "Sleep data added successfully!", severity: "success" });
+      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
     } catch (error) {
       console.error("Error adding sleep data:", error);
       setSnackbar({ open: true, message: "Error adding sleep data. Please try again.", severity: "error" });
@@ -127,7 +129,7 @@ export default function SleepTrack() {
       <div>
         <Top_Bar pageValue={2} />
         <div className="calendar">
-          <Calendar selectedDate={date} onDateChange={setDate} />
+          <Calendar key={calendarKey} selectedDate={date} onDateChange={setDate} />
         </div>
 
         <SleepDonut duration={sleepDuration} options={options1} width={400} height={400} />

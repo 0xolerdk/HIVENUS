@@ -46,6 +46,7 @@ export default function WaterIntake() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [dailyWaterGoal, setDailyWaterGoal] = useState(2500); // Initially null
+  const [calendarKey, setCalendarKey] = useState(0); // Add state to track Calendar re-render
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -86,6 +87,7 @@ export default function WaterIntake() {
       setSnackbarMessage("Water intake record deleted successfully");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
+      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
     } catch (error) {
       console.error("Error deleting water data:", error);
       setSnackbarMessage("Error deleting water intake record");
@@ -101,6 +103,7 @@ export default function WaterIntake() {
     if (dailyWaterGoal) {
       fetchWaterData(date, dailyWaterGoal); // Refresh data after adding
     }
+    setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -133,7 +136,7 @@ export default function WaterIntake() {
       <div>
         <Top_Bar pageValue={4} />
         <div className="calendar">
-          <Calendar selectedDate={date} onDateChange={handleDateChange} />
+          <Calendar key={calendarKey} selectedDate={date} onDateChange={handleDateChange} />
         </div>
         <DonutWaves data={data} options={options1} text={""} percent={percent} />
         <BasicSpeedDial selectedDate={date} refreshData={handleAddSuccess} />
