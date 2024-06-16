@@ -80,7 +80,7 @@ export default function WaterIntake() {
 
   const handleDelete = async (id) => {
     try {
-      await WaterIntakeService.deleteWaterDataById(id);
+      await WaterIntakeService.deleteWaterDataById(id, date.format('YYYY-MM-DD'));
       if (dailyWaterGoal) {
         fetchWaterData(date, dailyWaterGoal); // Refresh data after deletion
       }
