@@ -96,11 +96,11 @@ function CaloriesIntake() {
     try {
       let nutrientsArr;
       if (grams > 0) {
-        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams);
+        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams*quantity);
       } else if (portion) {
         nutrientsArr = await FCDService.calculate_nutrients(product.fdcId, portion, quantity);
       } else {
-        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams);
+        nutrientsArr = await FCDService.calculate_nutrients_gram(product.fdcId, grams*quantity);
       }
 
       if (!Array.isArray(nutrientsArr)) {

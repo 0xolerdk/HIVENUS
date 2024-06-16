@@ -19,21 +19,21 @@ import CustomSnackbar from "../../components/CustomSnackbar"; // Import CustomSn
 
 const Settings = () => {
   const [norms, setNorms] = useState({
-    energy: "",
-    protein: "",
-    fat: "",
-    carb: "",
-    water: "",
-    sleep: "",
+    energy: { value: "", unit: "kcal" },
+    protein: { value: "", unit: "g" },
+    fat: { value: "", unit: "g" },
+    carb: { value: "", unit: "g" },
+    water: { value: "", unit: "ml" },
+    sleep: { value: "", unit: "h" },
   });
 
   const [currentNorms, setCurrentNorms] = useState({
-    energy: "",
-    protein: "",
-    fat: "",
-    carb: "",
-    water: "",
-    sleep: "",
+    energy: { value: "", unit: "kcal" },
+    protein: { value: "", unit: "g" },
+    fat: { value: "", unit: "g" },
+    carb: { value: "", unit: "g" },
+    water: { value: "", unit: "ml" },
+    sleep: { value: "", unit: "h" },
   });
 
   const [userInfo, setUserInfo] = useState({
@@ -56,12 +56,12 @@ const Settings = () => {
     try {
       const settings = await SettingsService.getSettings();
       setCurrentNorms({
-        energy: settings.maxEnergy || "",
-        protein: settings.maxProtein || "",
-        fat: settings.maxFat || "",
-        carb: settings.maxCarbs || "",
-        water: settings.maxWater || "",
-        sleep: settings.minSleep || "",
+        energy: { value: settings.maxEnergy || "", unit: "kcal" },
+        protein: { value: settings.maxProtein || "", unit: "g" },
+        fat: { value: settings.maxFat || "", unit: "g" },
+        carb: { value: settings.maxCarbs || "", unit: "g" },
+        water: { value: settings.maxWater || "", unit: "ml" },
+        sleep: { value: settings.minSleep || "", unit: "h" },
       });
     } catch (error) {
       console.error("Failed to fetch settings", error);
@@ -70,10 +70,10 @@ const Settings = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name in norms) {
+    if (norms[name]) {
       setNorms((prevNorms) => ({
         ...prevNorms,
-        [name]: value,
+        [name]: { ...prevNorms[name], value },
       }));
     } else {
       setUserInfo((prevUserInfo) => ({
@@ -93,12 +93,12 @@ const Settings = () => {
 
     try {
       await SettingsService.setSettings({
-        maxEnergy: norms.energy,
-        maxProtein: norms.protein,
-        maxFat: norms.fat,
-        maxCarbs: norms.carb,
-        maxWater: norms.water,
-        minSleep: norms.sleep,
+        maxEnergy: norms.energy.value,
+        maxProtein: norms.protein.value,
+        maxFat: norms.fat.value,
+        maxCarbs: norms.carb.value,
+        maxWater: norms.water.value,
+        minSleep: norms.sleep.value,
       });
       console.log("Settings updated successfully");
       setSnackbarMessage("Settings updated successfully");
@@ -113,7 +113,7 @@ const Settings = () => {
     }
   };
 
-  const isNormsEmpty = !Object.values(norms).some((value) => value !== "");
+  const isNormsEmpty = !Object.values(norms).some((norm) => norm.value !== "");
   const isUserInfoEmpty = !Object.values(userInfo).some((value) => value !== "");
 
   const handleSnackbarClose = () => {
@@ -141,14 +141,14 @@ const Settings = () => {
                           <TextField
                               fullWidth
                               name={key}
-                              label={`New ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-                              value={norms[key]}
+                              label={`${key.charAt(0).toUpperCase() + key.slice(1)} (${norms[key].unit})`}
+                              value={norms[key].value}
                               onChange={handleChange}
                               variant="outlined"
                               sx={{ mb: 1 }}
                           />
                           <Typography variant="body2">
-                            Current: {currentNorms[key] || "Not set"}
+                            Current: {currentNorms[key].value || "Not set"} {currentNorms[key].unit}
                           </Typography>
                         </Box>
                       </Grid>
@@ -175,12 +175,13 @@ const Settings = () => {
                         name="email"
                         label="Email"
                         value={userInfo.email}
+                        disabled={true}
                         onChange={handleChange}
                         variant="outlined"
                         type="email"
                     />
                     <Typography variant="body2" sx={{ mt: 1 }}>
-                      Current: {userInfo.email || "Not set"}
+                      Current: {userInfo.email || " "}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
@@ -189,6 +190,7 @@ const Settings = () => {
                         name="password"
                         label="Password"
                         value={userInfo.password}
+                        disabled={true}
                         onChange={handleChange}
                         variant="outlined"
                         type="password"
