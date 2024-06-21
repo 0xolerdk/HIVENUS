@@ -44,4 +44,6 @@ public class DailyLog {
         inverseJoinColumns = @JoinColumn(name = "water_intake_id")
     )
     private List<WaterIntake> waterIntakes;
+
+
 }

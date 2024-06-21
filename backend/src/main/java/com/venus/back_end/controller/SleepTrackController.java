@@ -1,5 +1,6 @@
 package com.venus.back_end.controller;
 
+import com.github.javafaker.Faker;
 import com.venus.back_end.dto.UserDto;
 import com.venus.back_end.entity.SleepTrack;
 import com.venus.back_end.service.SleepTrackService;
@@ -23,6 +24,9 @@ public class SleepTrackController {
     private SleepTrackService sleepTrackService;
     @Autowired
     private UsersManagementService usersManagementService;
+
+    private Faker faker;
+
 
     @GetMapping(value = "/admin")
     public ResponseEntity<List<SleepTrack>> getAllSleepTracks() {

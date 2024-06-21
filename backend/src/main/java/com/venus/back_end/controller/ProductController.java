@@ -113,7 +113,7 @@ private DailyLogManagmentService dailyLogManagmentService;
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         }
         } catch (Exception e) {
             e.printStackTrace();
