@@ -15,12 +15,10 @@ import java.util.Collections;
 public class OurUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository usersRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        OurUser ourUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        return new User(ourUser.getUsername(), ourUser.getPassword(), Collections.emptyList());
+ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usersRepo.findByEmail(username).orElseThrow();
     }
 }

@@ -70,6 +70,6 @@ public class FCDController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.ok(fcdService.calculateDailyNutrients(date, productRepository.findByDailyLogDateAndUserId(date, userDto.getOurUsers().getId()) ));
+        return ResponseEntity.ok(fcdService.calculateDailyNutrients(date, productRepository.findByDailyLogDateAndUserId(date, userDto.getOurUsers().getId())));
     }
 }
