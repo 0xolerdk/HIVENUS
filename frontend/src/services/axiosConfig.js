@@ -19,6 +19,7 @@ const setupAxiosInterceptors = (navigate) => {
     response => {
       return response;
     },
+      
     error => {
       if (error.response && error.response.status === 403) {
         AuthService.logout();
