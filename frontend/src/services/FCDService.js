@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class FCDService {
-  static API_URL = process.env.REACT_APP_BACKEND_API_URL;
+  static API_URL = "http://localhost:8080";
   static cache = {};
 
   static async find(name) {
