@@ -16,10 +16,10 @@ import java.util.Map;
 @Service
 public class FCDService {
 
-    @Value("${fcd.api.key}")
+    @Value("${FCD_API_KEY}")
     private String apiKey;
 
-    @Value("${fcd.api.url}")
+    @Value("${FCD_API_URL}")
     private String apiUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
