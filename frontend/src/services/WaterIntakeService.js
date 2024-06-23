@@ -6,7 +6,6 @@ const WaterIntakeService = {
   cache: {},
 
   async getWaterDataByDate(date) {
-    // Check cache
     if (this.cache[date]) {
       return this.cache[date];
     }
@@ -20,7 +19,6 @@ const WaterIntakeService = {
         }
     );
 
-    // Store in cache
     this.cache[date] = response;
     return response;
   },
@@ -35,7 +33,6 @@ const WaterIntakeService = {
         }
     );
 
-    // Invalidate cache
     if (date) {
       delete this.cache[date];
     }
@@ -51,7 +48,6 @@ const WaterIntakeService = {
       }
     });
 
-    // Invalidate cache
     delete this.cache[date];
     return response;
   },

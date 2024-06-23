@@ -37,7 +37,6 @@ public class UsersManagementService {
         UserDto resp = new UserDto();
 
         try {
-            // Check if a user with the same email already exists
             Optional<OurUser> existingUser = usersRepo.findByEmail(registrationRequest.getEmail());
             if (existingUser.isPresent()) {
                 resp.setStatusCode(400);
@@ -183,9 +182,7 @@ public class UsersManagementService {
                 existingUser.setName(updatedUser.getName());
                 existingUser.setRole(updatedUser.getRole());
 
-                // Check if password is present in the request
                 if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                    // Encode the password and update it
                     existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
                 }
 

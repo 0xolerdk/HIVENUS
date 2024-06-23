@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import FCDService from '../../services/FCDService'; // Ensure the correct path
+import FCDService from '../../services/FCDService';
 
 const ProductSearch = forwardRef(({ onProductSelect }, ref) => {
     const [options, setOptions] = useState([]);
@@ -46,7 +46,7 @@ const ProductSearch = forwardRef(({ onProductSelect }, ref) => {
                     ? `${option.description} (Serving Size: ${option.servingSize}g)`
                     : option.description
             }
-            style={{ width: 400 }} // Increase the width of the input
+            style={{ width: 400 }}
             renderInput={(params) => <TextField {...params} label="Search Product" variant="outlined" />}
             renderOption={(props, option) => (
                 <li {...props} style={{ whiteSpace: 'normal' }}>

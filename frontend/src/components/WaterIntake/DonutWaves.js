@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Chart, ArcElement, Tooltip, DoughnutController } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Link } from 'react-router-dom';
-import WavesCircle from './WavesCircle'; // Ensure correct import path
+import WavesCircle from './WavesCircle';
 import "./DonutWaves.css";
 
 Chart.register(ArcElement, Tooltip, DoughnutController);

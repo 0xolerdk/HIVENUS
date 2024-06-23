@@ -6,10 +6,10 @@ import "./WaterIntake.css";
 import DonutWaves from "../../components/WaterIntake/DonutWaves.js";
 import WaterIntakeService from "../../services/WaterIntakeService";
 import WaterHistory from "../../components/WaterIntake/WaterHistory";
-import BasicSpeedDial from "../../components/WaterIntake/Add.js"; // Ensure the correct import path
+import BasicSpeedDial from "../../components/WaterIntake/Add.js";
 import Container from '@mui/material/Container';
-import CustomSnackbar from "../../components/CustomSnackbar"; // Import Custom Snackbar
-import SettingsService from "../../services/SettingsService"; // Import SettingsService
+import CustomSnackbar from "../../components/CustomSnackbar";
+import SettingsService from "../../services/SettingsService";
 
 const dataTemplate = {
   labels: ["Consumed", "Remaining"],
@@ -45,8 +45,8 @@ export default function WaterIntake() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [dailyWaterGoal, setDailyWaterGoal] = useState(2500); // Initially null
-  const [calendarKey, setCalendarKey] = useState(0); // Add state to track Calendar re-render
+  const [dailyWaterGoal, setDailyWaterGoal] = useState(2500);
+  const [calendarKey, setCalendarKey] = useState(0);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -58,16 +58,16 @@ export default function WaterIntake() {
       const waterIntakes = response.data;
 
       const totalIntake = waterIntakes.reduce((sum, intake) => sum + intake.amount, 0);
-      const cappedIntake = Math.min(totalIntake, dailyGoal); // Cap the intake at user's daily goal
+      const cappedIntake = Math.min(totalIntake, dailyGoal);
 
-      setPercent(((cappedIntake / dailyGoal) * 100)); // Update percent here
+      setPercent(((cappedIntake / dailyGoal) * 100));
 
       setData({
         ...dataTemplate,
         datasets: [
           {
             ...dataTemplate.datasets[0],
-            data: [cappedIntake, dailyGoal - cappedIntake], // Using user's daily goal
+            data: [cappedIntake, dailyGoal - cappedIntake],
           }
         ],
       });
@@ -82,12 +82,12 @@ export default function WaterIntake() {
     try {
       await WaterIntakeService.deleteWaterDataById(id, date.format('YYYY-MM-DD'));
       if (dailyWaterGoal) {
-        fetchWaterData(date, dailyWaterGoal); // Refresh data after deletion
+        fetchWaterData(date, dailyWaterGoal);
       }
       setSnackbarMessage("Water intake record deleted successfully");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
-      setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
+      setCalendarKey(prevKey => prevKey + 1);
     } catch (error) {
       console.error("Error deleting water data:", error);
       setSnackbarMessage("Error deleting water intake record");
@@ -101,9 +101,9 @@ export default function WaterIntake() {
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
     if (dailyWaterGoal) {
-      fetchWaterData(date, dailyWaterGoal); // Refresh data after adding
+      fetchWaterData(date, dailyWaterGoal);
     }
-    setCalendarKey(prevKey => prevKey + 1); // Trigger Calendar re-render
+    setCalendarKey(prevKey => prevKey + 1);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -117,7 +117,7 @@ export default function WaterIntake() {
     const fetchUserSettings = async () => {
       try {
         const settings = await SettingsService.getSettings();
-        setDailyWaterGoal(settings.maxWater); // Set user's daily water goal
+        setDailyWaterGoal(settings.maxWater);
       } catch (error) {
         console.error("Error fetching user settings:", error);
       }

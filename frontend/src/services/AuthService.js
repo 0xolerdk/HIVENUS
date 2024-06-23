@@ -4,7 +4,7 @@ class AuthService{
     static BASE_URL = "http://localhost:8080"
 
     static getToken(){
-        return localStorage.getItem('token'); // Or wherever you store the token
+        return localStorage.getItem('token');
     }
 
     static async login(email, password){

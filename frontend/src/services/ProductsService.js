@@ -26,7 +26,7 @@ const ProductsService = {
     });
 
     if (response.status === 200) {
-      await FCDService.invalidateCache(date); // Invalidate cache
+      await FCDService.invalidateCache(date);
     }
 
     return response;
@@ -43,7 +43,7 @@ const ProductsService = {
     );
 
     if (response.status === 200) {
-      await FCDService.invalidateCache(date); // Invalidate cache
+      await FCDService.invalidateCache(date);
     }
 
     return response;

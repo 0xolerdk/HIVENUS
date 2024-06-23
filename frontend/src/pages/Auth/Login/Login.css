@@ -1,10 +1,9 @@
-/* Ensure that the background color is set for autofill */
 input:-webkit-autofill {
   box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.178) inset !important;
   -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.192) inset !important;
 }
 
-/* Style for autofilled text color */
+
 input:-webkit-autofill {
   -webkit-text-fill-color: black !important;
 }

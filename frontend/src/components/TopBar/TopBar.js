@@ -13,7 +13,6 @@ function TopBar() {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  // Function to determine the current tab based on the path
   const getTabValue = () => {
     switch (location.pathname) {
       case "/main":
@@ -42,7 +41,7 @@ function TopBar() {
   const handleLogout = () => {
     AuthService.logout();
     handleMenuClose();
-    window.location.href = "/auth"; // Redirect to login page after logout
+    window.location.href = "/auth";
   };
 
   return (

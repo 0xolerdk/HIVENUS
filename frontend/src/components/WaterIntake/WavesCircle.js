@@ -7,15 +7,15 @@ export default function WavesCircle({ targetWaveHeight }) {
 
     const debouncedSetWaveHeight = debounce((height) => {
         setWaveHeight(height);
-    }, 100); // Adjust debounce delay as needed
+    }, 100);
 
     useEffect(() => {
         debouncedSetWaveHeight(targetWaveHeight);
     }, [targetWaveHeight]);
 
     const heightPercentage = waveHeight / 100;
-    const circleHeight = 200; // Assuming the SVG viewBox height is 200
-    const waveYPosition = circleHeight * (1 - heightPercentage); // The y-coordinate where the wave starts
+    const circleHeight = 200;
+    const waveYPosition = circleHeight * (1 - heightPercentage);
 
     return (
         <div className="waves-circle">
@@ -36,7 +36,7 @@ export default function WavesCircle({ targetWaveHeight }) {
                                 position: 'absolute',
                                 bottom: `${-waveYPosition}px`,
                                 left: 0,
-                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)', // Smooth transition easing
+                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)'
                             }}
                         />
                         <Wave
@@ -48,7 +48,7 @@ export default function WavesCircle({ targetWaveHeight }) {
                                 position: 'absolute',
                                 bottom: `${-waveYPosition}px`,
                                 left: 0,
-                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)', // Smooth transition easing
+                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
                             }}
                         />
                         <Wave
@@ -60,7 +60,7 @@ export default function WavesCircle({ targetWaveHeight }) {
                                 position: 'absolute',
                                 bottom: `${-waveYPosition}px`,
                                 left: 0,
-                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)', // Smooth transition easing
+                                transition: 'bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
                             }}
                         />
                     </div>

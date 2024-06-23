@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import WaterIntakeService from "../../services/WaterIntakeService";
 import SleepTrackService from "../../services/SleepTrackService";
 import SleepDonut from "../SleepTrack/SleepDonutStat";
-import SettingsService from "../../services/SettingsService"; // Import SettingsService
+import SettingsService from "../../services/SettingsService";
 
 const optionsW = {
   height: 120,
@@ -46,7 +46,7 @@ function Statistics({ selectedDate }) {
     maxFat: 70,
     maxCarbs: 300,
     maxWater: 2000,
-    minSleep: 8 * 60, // Default to 8 hours in minutes
+    minSleep: 8 * 60,
   });
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function Statistics({ selectedDate }) {
           maxFat: fetchedSettings.maxFat,
           maxCarbs: fetchedSettings.maxCarbs,
           maxWater: fetchedSettings.maxWater,
-          minSleep: fetchedSettings.minSleep * 60, // Convert hours to minutes
+          minSleep: fetchedSettings.minSleep * 60,
         });
       } catch (error) {
         console.error("Error fetching user settings:", error);

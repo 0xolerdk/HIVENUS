@@ -4,7 +4,6 @@ import "./SleepCircle.css";
 import { Link } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import FoxCircle from "./FoxCircle";
-import ToggleSwitch from "./ToggleSwitch";
 
 Chart.register(ArcElement, Tooltip, DoughnutController);
 
@@ -51,7 +50,7 @@ function SleepCircle({ data, options, width, height, text, font_size, link, tool
     ...options,
     plugins: {
       tooltip: {
-        enabled: tooltip, // Enable tooltips
+        enabled: tooltip,
       },
     },
   };
