@@ -2,7 +2,7 @@ import axios from "axios";
 import AuthService from "./AuthService"
 
 class FCDService {
-  static API_URL = "http://localhost:8080";
+  static API_URL = "http://localhost:8080/fcd";
   static cache = {};
 
   static async find(name) {
