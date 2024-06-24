@@ -6,7 +6,6 @@ const SleepTrackService = {
   cache: {},
 
   async getSleepDataByDate(date) {
-    // Check cache
     if (this.cache[date]) {
       return this.cache[date];
     }
@@ -26,7 +25,7 @@ const SleepTrackService = {
   },
 
   async addSleepDataByDate(data) {
-    const date = data.date; // Assuming the data contains the date
+    const date = data.date;
     const response = await axios.post(`${this.BASE_URL}/sleeptracks/create`, data, {
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +33,6 @@ const SleepTrackService = {
       }
     });
 
-    // Invalidate cache
     delete this.cache[date];
     return response;
   },

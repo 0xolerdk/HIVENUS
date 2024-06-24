@@ -33,7 +33,6 @@ public class SleepTrackService {
     }
 
     public SleepTrack getSleepTracksByDate(LocalDate date, Long userId) {
-        // Assuming a method exists in the repository to find sleep tracks by date
         return sleepTrackRepository.findByDateAndUserId(date, userId);
     }
 
@@ -41,11 +40,9 @@ public class SleepTrackService {
         OurUser user = usersRepo.findById(userId).orElse(null);
 
         if (user == null) {
-            // Handle the case where the user is not found
             throw new IllegalArgumentException("User not found");
         }
 
-        // Check if there's an existing record for the same user and date
         LocalDate date = sleepTrack.getDate();
         Optional<SleepTrack> existingSleepTrack = sleepTrackRepository.findByUserAndDate(user, date);
         DailyLog dailyLog = dailyLogRepository.findByUserIdAndDate(userId, date).orElseGet(() -> {
@@ -57,7 +54,6 @@ public class SleepTrackService {
         });
 
         if (existingSleepTrack.isPresent()) {
-            // Replace the existing record
             SleepTrack existing = existingSleepTrack.get();
             existing.setStartTime(sleepTrack.getStartTime());
             existing.setEndTime(sleepTrack.getEndTime());
@@ -66,7 +62,6 @@ public class SleepTrackService {
             dailyLogRepository.save(dailyLog);
             return newSleepTrack;
         } else {
-            // Create a new record
             sleepTrack.setUser(user);
             SleepTrack newSleepTrack = sleepTrackRepository.save(sleepTrack);
             dailyLog.setSleepTrack(newSleepTrack);

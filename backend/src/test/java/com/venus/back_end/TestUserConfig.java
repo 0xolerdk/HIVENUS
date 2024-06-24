@@ -46,7 +46,7 @@ public class TestUserConfig {
 
         UserDto user = new UserDto();
         user.setName(username);
-        user.setPassword(passwordEncoder.encode(password)); // Encode the password
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
         user.setRole("-");
 

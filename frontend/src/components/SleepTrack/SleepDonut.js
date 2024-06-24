@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Donut from "../Donut"; // Assuming you have a Donut component
 import PropTypes from 'prop-types';
 import {Typography} from "@mui/material";
 import SleepCircle from "./SleepCircle";
 import UserSettingsService from "../../services/SettingsService";
-import SettingsService from "../../services/SettingsService"; // Assuming you have a UserSettingsService to fetch user settings
 
 const calculateRemaining = (duration, recommended) => {
     return duration > recommended ? 0 : recommended - duration;
@@ -16,9 +14,9 @@ const calculateExcess = (duration, recommended) => {
 
 const generateDataForSleepCircle = (duration, recommendedSleep) => {
     const sleepData = [
-        duration > recommendedSleep ? recommendedSleep : duration, // Consumed
-        calculateRemaining(duration, recommendedSleep), // Left
-        calculateExcess(duration, recommendedSleep), // Excess
+        duration > recommendedSleep ? recommendedSleep : duration,
+        calculateRemaining(duration, recommendedSleep),
+        calculateExcess(duration, recommendedSleep),
     ];
 
     return {
@@ -43,13 +41,13 @@ const formatDuration = (minutes) => {
 };
 
 const SleepDonut = ({ duration, options, width, height }) => {
-    const [recommendedSleep, setRecommendedSleep] = useState(480); // Default to 8 hours in minutes
+    const [recommendedSleep, setRecommendedSleep] = useState(480);
 
     useEffect(() => {
         const fetchUserSettings = async () => {
             try {
                 const settings = await UserSettingsService.getSettings();
-                setRecommendedSleep(settings.minSleep * 60); // Convert hours to minutes
+                setRecommendedSleep(settings.minSleep * 60);
             } catch (error) {
                 console.error("Error fetching user settings:", error);
             }

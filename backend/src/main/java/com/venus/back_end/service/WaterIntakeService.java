@@ -39,7 +39,6 @@ public class WaterIntakeService {
     public WaterIntake createWaterIntake(WaterIntake waterIntake, Long userId) {
         OurUser user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Check if there's an existing DailyLog for the user and date
         LocalDate date = waterIntake.getDate();
         DailyLog dailyLog = dailyLogRepository.findByUserIdAndDate(userId, date).orElseGet(() -> {
             DailyLog newDailyLog = new DailyLog();
@@ -50,7 +49,6 @@ public class WaterIntakeService {
             return newDailyLog;
         });
 
-        // Save the water intake and add it to the daily log
         waterIntake.setUser(user);
         WaterIntake newWaterIntake = waterIntakeRepository.save(waterIntake);
         dailyLog.getWaterIntakes().add(newWaterIntake);

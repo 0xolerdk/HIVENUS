@@ -6,7 +6,7 @@ import SleepTrackService from "../services/SleepTrackService";
 import UserSettingsService from "../services/SettingsService";
 
 const generateDataForSummaryDonut = (waterData, nutrientData, sleepDuration, userSettings) => {
-    const recommendedSleep = userSettings.minSleep * 60; // Convert hours to minutes
+    const recommendedSleep = userSettings.minSleep * 60;
     const recommendedWater = userSettings.maxWater;
 
     const recommendedCalories = userSettings.maxEnergy;

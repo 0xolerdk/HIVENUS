@@ -3,13 +3,12 @@ import dayjs from 'dayjs';
 import Calendar from '../../components/Calendar/Calendar';
 import TopBar from "../../components/TopBar/TopBar";
 import SleepTrackService from '../../services/SleepTrackService';
-import SleepDonut from '../../components/SleepTrack/SleepDonut'; // Import the new SleepDonut component
+import SleepDonut from '../../components/SleepTrack/SleepDonut';
 import { Button, Grid, Typography, Box } from '@mui/material';
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CustomSnackbar from '../../components/CustomSnackbar';
-import SettingsService from "../../services/SettingsService"; // Adjust the import path as needed
 
 const options1 = {
   height: 120,
@@ -25,7 +24,6 @@ const calculateSleepDuration = (startHour, startMinute, endHour, endMinute) => {
   const endMinutes = endHour * 60 + endMinute;
 
   if (endMinutes < startMinutes) {
-    // Sleep period crosses midnight
     return (1440 - startMinutes) + endMinutes;
   }
   return endMinutes - startMinutes;

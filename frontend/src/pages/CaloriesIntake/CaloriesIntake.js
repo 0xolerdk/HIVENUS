@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "./CaloriesIntake.css";
 import NutrientDonut from "../../components/CaloriesIntake/NutrientDonut";
 import TopBar from "../../components/TopBar/TopBar";
-import FCDService from "../../services/FCDService"; // Ensure the correct path
+import FCDService from "../../services/FCDService";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import ProductsService from "../../services/ProductsService";

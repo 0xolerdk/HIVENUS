@@ -56,7 +56,7 @@ function ProductHistory({ history, onDelete, onProductSelect }) {
                   edge="end"
                   aria-label="delete"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering row click event
+                    e.stopPropagation();
                     onDelete(item.id);
                   }}
                 >

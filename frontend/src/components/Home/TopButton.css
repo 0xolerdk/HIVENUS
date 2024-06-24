@@ -22,8 +22,8 @@ a.my-button {
   width: 12vw;
   z-index: 4;
   border-radius: 10vw;
-  background-color: #F8A89A; /* Changed to light coral color */
-  color: white; /* Changed to white color */
+  background-color: #F8A89A;
+  color: white;
   font-family: 'Koulen';
   font-style: normal;
   font-weight: 400;
@@ -47,7 +47,7 @@ a.my-button span {
 }
 
 a.my-button:hover {
-  background-color: darksalmon; /* Changed to a darker shade of coral for hover effect */
+  background-color: darksalmon;
 }
 
 a.my-button:active {

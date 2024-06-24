@@ -52,12 +52,10 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
         if (optionalExistingLog.isPresent()) {
             dailyLog = optionalExistingLog.get();
 
-            // Initialize products list if it is null
             if (dailyLog.getProducts() == null) {
                 dailyLog.setProducts(new ArrayList<>());
             }
 
-            // Append new products to the existing list of products
             List<Product> newProducts = dailyLogDto.getProducts().stream()
                 .map(product -> {
                     if (product.getId() == null) {
@@ -69,15 +67,11 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 .collect(Collectors.toList());
             dailyLog.getProducts().addAll(newProducts);
 
-            // Handle SleepTrack and WaterIntake replacements similarly
-            // (Same as before, ensure to check for null values)
 
         } else {
-            // Create a new DailyLog if none exists for the given date
             dailyLog = convertToEntity(dailyLogDto);
             dailyLog.setUser(user);
 
-            // Save all products if they are not already saved
             List<Product> savedProducts = dailyLog.getProducts().stream()
                 .map(product -> {
                     if (product.getId() == null) {
@@ -89,7 +83,6 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 .collect(Collectors.toList());
             dailyLog.setProducts(savedProducts);
 
-            // Save SleepTrack if provided
             if (dailyLogDto.getSleepTrack() != null) {
                 SleepTrack newSleepTrack = dailyLogDto.getSleepTrack();
                 if (newSleepTrack.getId() == null) {
@@ -106,7 +99,6 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
             return convertToDto(savedDailyLog);
         } catch (Exception e) {
             e.printStackTrace();
-            // Log the error or throw a custom exception
             return null;
         }
     } else {
@@ -123,7 +115,6 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
             DailyLog dailyLog = optionalDailyLog.get();
             dailyLog.setDate(dailyLogDto.getDate());
 
-            // Save all products if they are not already saved
             List<Product> savedProducts = dailyLogDto.getProducts().stream()
                     .map(product -> {
                         if (product.getId() == null) {
@@ -135,7 +126,6 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                     .collect(Collectors.toList());
             dailyLog.setProducts(savedProducts);
 
-            // Replace existing SleepTrack if provided
             if (dailyLogDto.getSleepTrack() != null) {
                 SleepTrack newSleepTrack = dailyLogDto.getSleepTrack();
                 if (dailyLog.getSleepTrack() != null) {
@@ -154,7 +144,6 @@ public DailyLogDto createDailyLog(DailyLogDto dailyLogDto, Long userId) {
                 return convertToDto(updatedDailyLog);
             } catch (Exception e) {
                 e.printStackTrace();
-                // Log the error or throw a custom exception
                 return null;
             }
         } else {
@@ -192,7 +181,6 @@ private DailyLog convertToEntity(DailyLogDto dailyLogDto) {
     DailyLog dailyLog = new DailyLog();
     dailyLog.setDate(dailyLogDto.getDate());
 
-    // Initialize products list if it is null
     if (dailyLogDto.getProducts() != null) {
         dailyLog.setProducts(dailyLogDto.getProducts());
     } else {

@@ -29,7 +29,7 @@ function Donut({ data, options, width, height, text, font_size, link, tooltip = 
         ctx.font = fontSize + "em sans-serif";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "white";
-        var txt = textRef.current, // Use the current value of the ref here
+        var txt = textRef.current,
           textX = Math.round((width - ctx.measureText(txt).width) / 2),
           textY = height / 2;
 
@@ -43,7 +43,7 @@ function Donut({ data, options, width, height, text, font_size, link, tooltip = 
     ...options,
     plugins: {
       tooltip: {
-        enabled: tooltip, // Enable tooltips
+        enabled: tooltip,
       },
     },
   };

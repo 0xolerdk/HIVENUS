@@ -1,4 +1,5 @@
 import axios from "axios";
+import AuthService from "./AuthService"
 
 class FCDService {
   static API_URL = "http://localhost:8080";
@@ -6,19 +7,25 @@ class FCDService {
 
   static async find(name) {
     const url = `${this.API_URL}/find?name=${name}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {headers: {
+      'Authorization': `Bearer ${AuthService.getToken()}`
+    }});
     return response.data;
   }
 
   static async get_nutrients(ndbno) {
     const url = `${this.API_URL}/nutrients/${String(ndbno)}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {headers: {
+      'Authorization': `Bearer ${AuthService.getToken()}`
+    }});
     return response.data;
   }
 
   static async get_measures(ndbno) {
     const url = `${this.API_URL}/measures/${String(ndbno)}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {headers: {
+      'Authorization': `Bearer ${AuthService.getToken()}`
+    }});
     return response.data;
   }
 
@@ -27,7 +34,10 @@ class FCDService {
     const response = await axios.post(url, {
       ndbno: String(ndbno),
       portion_description,
-      quantity
+      quantity,
+      headers: {
+        'Authorization': `Bearer ${AuthService.getToken()}`
+      }
     });
     return response.data;
   }
@@ -36,7 +46,10 @@ class FCDService {
     const url = `${this.API_URL}/calculate-nutrients-gram`;
     const response = await axios.post(url, {
       ndbno: String(ndbno),
-      grams
+      grams,
+      headers: {
+        'Authorization': `Bearer ${AuthService.getToken()}`
+      }
     });
     return response.data;
   }
@@ -85,6 +98,9 @@ class FCDService {
 
     const response = await axios.get(`${this.API_URL}/calculate-daily-nutrients`, {
       params: { date },
+      headers: {
+        'Authorization': `Bearer ${AuthService.getToken()}`
+      }
     });
 
     // Store in cache

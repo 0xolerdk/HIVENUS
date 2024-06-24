@@ -4,7 +4,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import { LocalDrink, Opacity, WaterDrop } from '@mui/icons-material';
-import WaterIntakeService from '../../services/WaterIntakeService'; // Ensure the correct import path
+import WaterIntakeService from '../../services/WaterIntakeService';
 
 const actions = [
   { icon: <LocalDrink />, name: '200ml', amount: 200 },
@@ -14,15 +14,14 @@ const actions = [
 
 export default function BasicSpeedDial({ selectedDate, refreshData }) {
   const handleAddWaterIntake = async (amount) => {
-     // Replace with your token logic
     const data = {
       amount,
-      date: selectedDate.format('YYYY-MM-DD') // Ensure the date format matches your backend expectations
+      date: selectedDate.format('YYYY-MM-DD')
     };
 
     try {
       await WaterIntakeService.createWaterDataByDate(data);
-      refreshData(); // Call the refresh function to update the data
+      refreshData();
     } catch (error) {
       console.error("Error adding water intake:", error);
     }

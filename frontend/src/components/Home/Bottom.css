@@ -3,16 +3,16 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  position: fixed; /* Змінено на fixed, щоб елемент завжди залишався унизу */
+  position: fixed;
   z-index: 3;
   height: 1.7vw;
   width: 110vw;
   bottom: 0;
-  left: 50%; /* Центруємо по горизонталі */
-  transform: translateX(-50%); /* Зміщуємо на половину ширини, щоб центрувати */
-  display: flex; /* Використовуємо flex для центрування вмісту */
-  justify-content: center; /* Центруємо вміст по горизонталі */
-  align-items: center; /* Центруємо вміст по вертикалі */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bottle{

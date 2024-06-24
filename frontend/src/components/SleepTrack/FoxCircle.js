@@ -1,4 +1,3 @@
-// FoxCircle.js
 import React, { useState, useEffect } from 'react';
 import './FoxCircle.css';
 
@@ -10,7 +9,6 @@ export default function FoxCircle() {
       setIsChecked(prevChecked => !prevChecked);
     }, 10000); // 10 seconds
 
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
 

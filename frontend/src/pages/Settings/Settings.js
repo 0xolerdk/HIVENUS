@@ -6,7 +6,6 @@ import {
   Typography,
   Container,
   Grid,
-  Tabs,
   Tab,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -14,8 +13,8 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { TabContext, TabPanel, TabList } from "@mui/lab";
 import TopBar from "../../components/TopBar/TopBar";
 import "./Settings.css";
-import SettingsService from "../../services/SettingsService"; // Import your SettingsService
-import CustomSnackbar from "../../components/CustomSnackbar"; // Import CustomSnackbar
+import SettingsService from "../../services/SettingsService";
+import CustomSnackbar from "../../components/CustomSnackbar";
 
 const Settings = () => {
   const [norms, setNorms] = useState({
