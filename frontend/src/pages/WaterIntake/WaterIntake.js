@@ -82,7 +82,7 @@ export default function WaterIntake() {
     try {
       await WaterIntakeService.deleteWaterDataById(id, date.format('YYYY-MM-DD'));
       if (dailyWaterGoal) {
-        fetchWaterData(date, dailyWaterGoal);
+        await fetchWaterData(date, dailyWaterGoal);
       }
       setSnackbarMessage("Water intake record deleted successfully");
       setSnackbarSeverity("success");

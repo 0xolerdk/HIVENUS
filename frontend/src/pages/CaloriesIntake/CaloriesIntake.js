@@ -56,9 +56,9 @@ function CaloriesIntake() {
           const portions = Object.keys(portionsObj);
           setPortions(portions);
           if (portions.length === 0) {
-            calculateNutrients(selectedProduct, "", grams, quantity);
+            await calculateNutrients(selectedProduct, "", grams, quantity);
           } else {
-            calculateNutrients(selectedProduct, selectedPortion, grams, quantity);
+            await calculateNutrients(selectedProduct, selectedPortion, grams, quantity);
           }
         } catch (error) {
           console.error("Error fetching portions and nutrients:", error);
@@ -135,7 +135,7 @@ function CaloriesIntake() {
         setMessage("Product successfully added to statistics");
         setSeverity("success");
         setSnackbarOpen(true);
-        fetchHistory(date);
+        await fetchHistory(date);
         setCalendarKey((prevKey) => prevKey + 1);
       } else {
         setMessage(`Error posting data: ${response.status} ${response.statusText}`);
@@ -155,7 +155,7 @@ function CaloriesIntake() {
     setGrams(0);
     productSearchRef.current.clearInput();
 
-    fetchAllNutrients();
+    await fetchAllNutrients();
   };
 
   const handleProductSelect = (productId) => {
@@ -183,14 +183,14 @@ function CaloriesIntake() {
         setMessage("Product successfully deleted from history");
         setSeverity("success");
         setSnackbarOpen(true);
-        fetchHistory(date);
+        await fetchHistory(date);
         setCalendarKey((prevKey) => prevKey + 1);
       } else {
         setMessage(`Error deleting data: ${response.status} ${response.statusText}`);
         setSeverity("error");
         setSnackbarOpen(true);
       }
-      fetchAllNutrients();
+      await fetchAllNutrients();
     } catch (error) {
       console.error(`Error deleting data: ${error}`);
       setMessage(`Error deleting data: ${error.message}`);

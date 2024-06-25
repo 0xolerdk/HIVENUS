@@ -3,7 +3,7 @@ import logo from "../../assets/images/logo.svg";
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { LocalDining, Settings, DataUsage, LocalDrink, Hotel, MonitorWeight } from "@mui/icons-material";
+import { LocalDining, Settings, DataUsage, LocalDrink, Hotel } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";

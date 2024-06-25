@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { Chart, ArcElement, Tooltip, DoughnutController } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import "./Donut.css";

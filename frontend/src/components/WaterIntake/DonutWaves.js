@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import React, { useEffect, useRef } from 'react';
 import { Chart, ArcElement, Tooltip, DoughnutController } from "chart.js";
 import { Doughnut } from "react-chartjs-2";

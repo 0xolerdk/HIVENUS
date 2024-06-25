@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import React, { useState, useEffect } from "react";
 import Donut from "../Donut";
 import PropTypes from 'prop-types';

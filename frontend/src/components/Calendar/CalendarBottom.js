@@ -1,4 +1,3 @@
-import Donut from "../Donut";
 import React, { useState, useEffect  } from "react";
 import dayjs from "dayjs";
 import SummaryDonut from "../SummaryDonut";

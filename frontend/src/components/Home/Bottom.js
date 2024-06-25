@@ -1,5 +1,4 @@
 import './Bottom.css';
-import tabel from '../../assets/images/tabel.svg';
 import bowl from '../../assets/images/bowl.svg';
 import bowl_1 from '../../assets/images/bowl_1.svg';
 import dumb_bell from '../../assets/images/dumb-bell.svg';

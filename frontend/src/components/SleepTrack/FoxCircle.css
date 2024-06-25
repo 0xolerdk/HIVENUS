@@ -161,7 +161,7 @@
     border-radius: 100%;
     /* border: 8px solid #34A87C; */
     background: #DDDDDD;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.25) inset;
+    box-shadow: 0 0 5px rgba(0,0,0,0.25) inset;
     overflow: hidden;
 }
 
@@ -220,7 +220,7 @@
 .c-window .the-fox:before {
     width: 0;
     height: 0;
-    border-left: 0px solid transparent;
+    border-left: 0 solid transparent;
     border-right: 60px solid transparent;
     border-bottom: 30px solid #E86A47;
     top: -30px;
@@ -236,7 +236,7 @@
 .c-window .the-fox:after {
     width: 0;
     height: 0;
-    border-right: 0px solid transparent;
+    border-right: 0 solid transparent;
     border-left: 60px solid transparent;
     border-bottom: 30px solid #E86A47;
     top: -30px;
@@ -300,8 +300,8 @@
 .c-window .the-fox .white-part {
     display: block;
     position: relative;
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     top: 55px;
     border-style: solid;
     border-width: 60px 70px 0 65px;

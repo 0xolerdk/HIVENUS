@@ -30,7 +30,7 @@ class BackEndApplicationTests {
     @BeforeEach
     public void setUp() {
         UserDetails userDetails = new User("user", "password", new ArrayList<>()); // Adjust as needed
-        jwtToken = jwtUtils.generateToken(userDetails); // Generate a token for testing
+        jwtToken = jwtUtils.generateToken(userDetails);
     }
 
 

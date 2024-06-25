@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import {Typography} from "@mui/material";

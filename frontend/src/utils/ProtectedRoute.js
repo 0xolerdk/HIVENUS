@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import AuthService from '../services/AuthService.js';
 
 const ProtectedComponent = ({ children }) => {
